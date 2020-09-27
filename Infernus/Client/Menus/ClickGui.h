@@ -7,10 +7,10 @@ public:
 	ClickGui() : VModule::VModule("ClickGui", "Renders a UI which can be used to manage modules") {};
 	void onRender();
 	void onEnable();
-	void onMouseMove();
 	void onVButtonClick(VWindowObj* Obj);
 private:
 	std::vector<VWindow*> Windows;
+	bool isDragingWindow = false;
 };
 
 void ClickGui::onRender() {
@@ -35,19 +35,6 @@ void ClickGui::onEnable() {
 			};
 			Windows.push_back(newWindow);
 			indexSpace++;
-		};
-	};
-};
-
-void ClickGui::onMouseMove() {
-	for (auto Window : Windows) {
-		if (Window->hoveringOverTitleBar() && Utils::mouseState[1]) {
-			int x = VWindow::getMouseX();
-			int y = VWindow::getMouseY();
-
-			Window->setPosition(Vec2(x, y));
-
-			break;
 		};
 	};
 };
