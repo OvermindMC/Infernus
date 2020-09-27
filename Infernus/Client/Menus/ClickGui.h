@@ -46,6 +46,8 @@ void ClickGui::onMouseMove() {
 			int y = VWindow::getMouseY();
 
 			Window->setPosition(Vec2(x, y));
+
+			break;
 		};
 	};
 };
@@ -53,7 +55,10 @@ void ClickGui::onMouseMove() {
 void ClickGui::onVButtonClick(VWindowObj* Obj) {
 	if (Obj->objType == 2) {
 		for (auto Module : ClientHandler::GetModules()) {
-			if (Module->name == Obj->text) Module->isEnabled = Obj->toggleState;
+			if (Module->name == Obj->text) {
+				Module->isEnabled = Obj->toggleState;
+				break;
+			};
 		};
 	};
 };
