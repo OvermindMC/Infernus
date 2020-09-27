@@ -133,11 +133,13 @@ public:
 
 	std::string name;
 	Vec4 position;
+	Vec2 scale;
 	MC_Colour backgroundColour;
 	MC_Colour textColour;
 	float backgroundTransparency;
 	float textTransparency;
 	bool isHidden;
+	bool isBeingDragged = false;
 	MC_Colour windowTitleBarColour;
 
 	std::vector<VWindowObj*> WindowObjects;
@@ -145,6 +147,7 @@ public:
 	VWindow(std::string name, Vec4 position, MC_Colour backgroundColour = MC_Colour(120, 120, 120), MC_Colour textColour = MC_Colour(255, 255, 255), float backgroundAlpha = 1.0f, float textAlpha = 1.0f, bool isHidden = false) {
 		this->name = name;
 		this->position = position;
+		this->scale = Vec2((position.z - position.x), (position.w - position.y));
 		this->backgroundColour = backgroundColour;
 		this->textColour = textColour;
 		this->backgroundTransparency = backgroundAlpha;
