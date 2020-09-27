@@ -11,6 +11,22 @@ _InputMouse InputMouse;
 
 void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint64_t a5, short a6, short a7, byte a8) {
 
+	if (action == 1) {
+		if (isDown) {
+			for (auto Window : VWindow::FetchWindows()) {
+				if (Window->hoveringOverTitleBar()) {
+					Window->isBeingDragged = true;
+					break;
+				};
+			};
+		}
+		else {
+			for (auto Window : VWindow::FetchWindows()) {
+				if (Window->isBeingDragged) Window->isBeingDragged = false;
+			};
+		};
+	};
+
 	if (action) {
 		if (Utils::mouseState[action] != isDown) {
 			Utils::mouseState[action] = isDown;
@@ -20,6 +36,17 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 	}
 	else {
 		for (auto Module : ClientHandler::GetModules()) if (Module->isEnabled) Module->onMouseMove();
+
+		for (auto Window : VWindow::FetchWindows()) {
+			if (Window->isBeingDragged) {
+				int x = VWindow::getMouseX();
+				int y = VWindow::getMouseY();
+
+				Window->setPosition(Vec2(x, y));
+
+				break;
+			};
+		};
 	};
 
 	if (action == 1 && isDown) {
