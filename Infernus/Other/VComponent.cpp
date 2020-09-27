@@ -44,11 +44,10 @@ std::vector<VWindow*> VWindow::FetchWindows() {
 };
 
 void VWindow::setPosition(Vec2 pos) {
-	position.x = pos.x - 10;
-	position.y = pos.y - 4;
-	position.z = pos.x + 100;
-	position.w = pos.y + 200;
-
+	position.x = pos.x - 15;
+	position.y = pos.y - 10;
+	position.z = pos.x + scale.x;
+	position.w = pos.y + scale.y;
 };
 
 void VWindow::Render() {
