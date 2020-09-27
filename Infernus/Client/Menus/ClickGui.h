@@ -14,7 +14,9 @@ private:
 };
 
 void ClickGui::onRender() {
-	for (auto Window : Windows) { Window->Render(); };
+	for (auto Window : Windows) {
+		Window->Render();
+	};
 };
 
 void ClickGui::onEnable() {
