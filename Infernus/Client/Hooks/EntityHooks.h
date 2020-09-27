@@ -1,0 +1,63 @@
+#pragma once
+#include "../../Other/VComponent.h"
+
+class EntityHooks : public VHook {
+public:
+	void Init();
+};
+
+typedef void(__thiscall* _LerpMotion)(Actor* Entity, Vec3* Velocity);
+_LerpMotion LerpMotion;
+
+typedef float(__thiscall* _GetJumpPower)(Actor* Entity, Vec3 moveToPos);
+_GetJumpPower GetJumpPower;
+
+void LerpMotionCallback(Actor* Entity, Vec3* Velocity) {
+	LocalPlayer* Player = Minecraft::GetLocalPlayer();
+	if(Player != nullptr && Entity == Player->toActor()) ClientHandler::TickOnLerp(Velocity);
+	LerpMotion(Entity, Velocity);
+};
+
+float GetJumpPowerCallback(Actor* Entity, Vec3 moveToPos) {
+	LocalPlayer* Player = Minecraft::GetLocalPlayer();
+	if (Entity == Player->toActor()) {
+		for (auto Module : ClientHandler::GetModules()) {
+			if (Module->isEnabled) {
+				float retVal = 0.0f;
+				Module->onJump(&retVal);
+				if (retVal > 0.0f) return retVal;
+			};
+		};
+	};
+	return GetJumpPower(Entity, moveToPos);
+};
+
+void EntityHooks::Init() {
+	uintptr_t signatureAddr = Utils::FindSignature("48 8D 05 ? ? ? ? 48 89 07 33 C9 48 89 8F ? ? ? ? 48 89 8F ? ? ? ? 48 89 8F ? ? ? ? 48 89 8F ? ? ? ? 48 89 8F ? ? ? ? C6 87 ? ? ? ? ? 48 89 8F ? ? ? ? 48 89 8F ? ? ? ? 48 89 8F ? ? ? ? 48 89 8F ? ? ? ");
+	if (signatureAddr != NULL) {
+		Utils::DebugFileLog("Found the address needed for the Entity Hooks, Preparing Hooks now...");
+		int offset = *reinterpret_cast<int*>(signatureAddr + 3);
+		uintptr_t** VTable = reinterpret_cast<uintptr_t**>(signatureAddr + offset + 7);
+
+		void* lerpMotionAddr = (void*)VTable[37];
+		if (MH_CreateHook(lerpMotionAddr, &LerpMotionCallback, reinterpret_cast<LPVOID*>(&LerpMotion)) == MH_OK) {
+			Utils::DebugFileLog("Successfully created Lerp Motion Hook, Enabling Hook now...");
+			MH_EnableHook(lerpMotionAddr);
+		}
+		else {
+			Utils::DebugFileLog("Failed to create hook for Lerp Motion!");
+		};
+
+		void* getJumpPowerAddr = (void*)VTable[271];
+		if (MH_CreateHook(getJumpPowerAddr, &GetJumpPowerCallback, reinterpret_cast<LPVOID*>(&GetJumpPower)) == MH_OK) {
+			Utils::DebugFileLog("Successfully created GetJumpPower Hook, Enabling Hook now...");
+			MH_EnableHook(getJumpPowerAddr);
+		}
+		else {
+			Utils::DebugFileLog("Failed to create hook for GetJumpPower!");
+		};
+	}
+	else {
+		Utils::DebugFileLog("Could not find the address needed for the Entity Hooks");
+	};
+};
