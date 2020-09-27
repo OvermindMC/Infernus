@@ -1,0 +1,16 @@
+.vs/
+/.vs/
+.vs/*
+/.vs/*
+*/Debug/
+*/Release/
+*/x64
+*/obj/
+*.obj
+*.ilk
+*/*/Debug
+*/*/Release
+Debug/
+Release/
+*.lib
+glm.0.9.9.800/
