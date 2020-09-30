@@ -43,17 +43,22 @@ void ClientHandler::InitCategories() {
 /* Combat */
 #include "Modules/Killaura.h"
 #include "Modules/Hitbox.h"
+#include "Modules/Triggerbot.h"
 /* Movement */
 #include "Modules/AirJump.h"
 #include "Modules/Jetpack.h"
 #include "Modules/AutoSprint.h"
 #include "Modules/HighJump.h"
+#include "Modules/Speed.h"
+#include "Modules/NoWeb.h"
 /* Player */
 #include "Modules/Velocity.h"
+#include "Modules/Phase.h"
 /* Visuals */
 #include "Menus/TabGui.h"
 #include "Menus/ClickGui.h"
 #include "Menus/ModuleList.h"
+#include "Menus/HUD.h"
 /* World */
 #include "Modules/Scaffold.h"
 /* Other */
@@ -64,17 +69,22 @@ void ClientHandler::InitModules() {
 	/*Combat*/
 	PushModule(_Combat, new Killaura());
 	PushModule(_Combat, new Hitbox());
+	PushModule(_Combat, new Triggerbot());
 	/*Movement*/
 	PushModule(_Movement, new AirJump());
 	PushModule(_Movement, new Jetpack());
 	PushModule(_Movement, new AutoSprint());
 	PushModule(_Movement, new HighJump());
+	PushModule(_Movement, new Speed());
+	PushModule(_Movement, new NoWeb());
 	/*Player*/
 	PushModule(_Player, new Velocity());
+	PushModule(_Player, new Phase());
 	/*Visuals*/
 	PushModule(_Visuals, new TabGui());
 	PushModule(_Visuals, new ClickGui());
 	PushModule(_Visuals, new ModuleList());
+	PushModule(_Visuals, new HUD());
 	/*World*/
 	PushModule(_World, new Scaffold());
 	/*Other*/
@@ -132,19 +142,4 @@ std::vector<std::string> ClientHandler::ModulesToString(std::vector<VModule*> Mo
 	for (auto Module : ModulesArr) tempArr.push_back(Module->name);
 
 	return tempArr;
-};
-
-
-/* Hook Events */
-
-void ClientHandler::TickRender() {
-	for (auto Module : ModulesList) {
-		if (Module->isEnabled) Module->onRender();
-	};
-};
-
-void ClientHandler::TickGameMode() {
-	for (auto Module : ModulesList) {
-		if (Module->isEnabled) Module->onGmTick();
-	};
 };

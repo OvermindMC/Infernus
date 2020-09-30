@@ -13,7 +13,9 @@ GameMode_Tick SMTick;
 void GMTickCallback(GameMode* GM) {
 	if (Minecraft::GetLocalPlayer() != nullptr && GM->Player == Minecraft::GetLocalPlayer()) {
 		CachedGameMode = GM;
-		ClientHandler::TickGameMode();
+		for (auto Module : ClientHandler::GetModules()) {
+			if (Module->isEnabled) Module->onGmTick();
+		};
 	};
 	GMTick(GM);
 };
@@ -21,7 +23,9 @@ void GMTickCallback(GameMode* GM) {
 void SMTickCallback(GameMode* GM) {
 	if (Minecraft::GetLocalPlayer() != nullptr && GM->Player == Minecraft::GetLocalPlayer()) {
 		CachedGameMode = GM;
-		ClientHandler::TickGameMode();
+		for (auto Module : ClientHandler::GetModules()) {
+			if (Module->isEnabled) Module->onGmTick();
+		};
 	};
 	SMTick(GM);
 };

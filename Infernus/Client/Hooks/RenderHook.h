@@ -13,7 +13,9 @@ _RenderUIContext RenderUIContext;
 void RenderCallback(__int64 a1, MinecraftUIRenderContext* Context) {
 	if (CachedClientInstance != nullptr) {
 		RenderUtils::SetCtx(Context);
-		ClientHandler::TickRender();
+		for (auto Module : ClientHandler::GetModules()) {
+			if (Module->isEnabled) Module->onRender();
+		};
 	};
 	RenderUIContext(a1, Context);
 };

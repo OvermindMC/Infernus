@@ -83,7 +83,7 @@ void EntityHooks::Init() {
 			MH_EnableHook(lerpMotionAddr);
 		}
 		else {
-			Utils::DebugFileLog("Failed to create hook for Lerp Motion!");
+			Utils::DebugFileLog("Failed to create hook for Lerp Motion");
 		};
 
 		void* getJumpPowerAddr = (void*)VTable[271];
@@ -92,7 +92,7 @@ void EntityHooks::Init() {
 			MH_EnableHook(getJumpPowerAddr);
 		}
 		else {
-			Utils::DebugFileLog("Failed to create hook for GetJumpPower!");
+			Utils::DebugFileLog("Failed to create hook for GetJumpPower");
 		};
 
 		void* entityTickAddr = (void*)VTable[39];

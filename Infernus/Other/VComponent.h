@@ -28,6 +28,7 @@ public:
 	virtual void onLerpMotion(Vec3* velocity) {};
 	virtual void onJump(float*) {};
 	virtual void onEntityTick(std::vector<class Actor*>*) {};
+	virtual void onSpeed(float*) {};
 
 	/* VWindow Stuff */
 	virtual void onVButtonClick(class VWindowObj*) {};

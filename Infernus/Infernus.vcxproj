@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -174,6 +174,7 @@
     <ClInclude Include="Client\Hooks\MultiPlayerLevelHook.h" />
     <ClInclude Include="Client\Hooks\RenderHook.h" />
     <ClInclude Include="Client\Menus\ClickGui.h" />
+    <ClInclude Include="Client\Menus\HUD.h" />
     <ClInclude Include="Client\Menus\ModuleList.h" />
     <ClInclude Include="Client\Menus\TabGui.h" />
     <ClInclude Include="Client\Modules\AirJump.h" />
@@ -183,7 +184,11 @@
     <ClInclude Include="Client\Modules\Hitbox.h" />
     <ClInclude Include="Client\Modules\Jetpack.h" />
     <ClInclude Include="Client\Modules\Killaura.h" />
+    <ClInclude Include="Client\Modules\NoWeb.h" />
+    <ClInclude Include="Client\Modules\Phase.h" />
     <ClInclude Include="Client\Modules\Scaffold.h" />
+    <ClInclude Include="Client\Modules\Speed.h" />
+    <ClInclude Include="Client\Modules\Triggerbot.h" />
     <ClInclude Include="Client\Modules\Uninject.h" />
     <ClInclude Include="Client\Modules\Velocity.h" />
     <ClInclude Include="Other\RenderUtils.h" />

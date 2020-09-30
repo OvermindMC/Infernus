@@ -46,8 +46,4 @@ public:
 
 	static std::vector<std::string> CategoriesToString(std::vector<VCategory*> CategoryArr);
 	static std::vector<std::string> ModulesToString(std::vector<VModule*> ModulesArr);
-
-	/* Hook Events */
-	static void TickRender();
-	static void TickGameMode();
 };
