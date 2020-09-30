@@ -148,9 +148,3 @@ void ClientHandler::TickGameMode() {
 		if (Module->isEnabled) Module->onGmTick();
 	};
 };
-
-void ClientHandler::TickOnLerp(Vec3* velocity) {
-	for (auto Module : ModulesList) {
-		if(Module->isEnabled) Module->onLerpMotion(velocity);
-	};
-};

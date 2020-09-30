@@ -50,6 +50,4 @@ public:
 	/* Hook Events */
 	static void TickRender();
 	static void TickGameMode();
-	
-	static void TickOnLerp(Vec3*);
 };

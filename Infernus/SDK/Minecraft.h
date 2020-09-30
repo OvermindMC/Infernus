@@ -5,6 +5,7 @@
 static ClientInstance* CachedClientInstance = nullptr;
 static GameMode* CachedGameMode = nullptr;
 static std::vector<Actor*>* CachedPlayers = new std::vector<Actor*>();
+static std::vector<Actor*>* CachedMobs = new std::vector<Actor*>();
 
 class Minecraft {
 public:
@@ -26,5 +27,9 @@ public:
 
     static std::vector<Actor*>* FetchPlayers() {
         return CachedPlayers;
+    };
+
+    static std::vector<Actor*>* FetchMobs() {
+        return CachedMobs;
     };
 };

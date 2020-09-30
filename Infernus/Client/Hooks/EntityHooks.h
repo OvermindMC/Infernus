@@ -6,15 +6,22 @@ public:
 	void Init();
 };
 
-typedef void(__thiscall* _LerpMotion)(Actor* Entity, Vec3* Velocity);
+typedef void(__thiscall* _LerpMotion)(Actor*, Vec3*);
 _LerpMotion LerpMotion;
 
-typedef float(__thiscall* _GetJumpPower)(Actor* Entity, Vec3 moveToPos);
+typedef float(__thiscall* _GetJumpPower)(Actor*, Vec3);
 _GetJumpPower GetJumpPower;
+
+typedef void(__thiscall* _EntityTick)(Actor*);
+_EntityTick EntityTick;
 
 void LerpMotionCallback(Actor* Entity, Vec3* Velocity) {
 	LocalPlayer* Player = Minecraft::GetLocalPlayer();
-	if(Player != nullptr && Entity == Player->toActor()) ClientHandler::TickOnLerp(Velocity);
+	if (Player != nullptr && Entity == Player->toActor()) {
+		for (auto Module : ClientHandler::GetModules()) {
+			Module->onLerpMotion(Velocity);
+		};
+	};
 	LerpMotion(Entity, Velocity);
 };
 
@@ -30,6 +37,37 @@ float GetJumpPowerCallback(Actor* Entity, Vec3 moveToPos) {
 		};
 	};
 	return GetJumpPower(Entity, moveToPos);
+};
+
+std::vector<Actor*>* TickedEntities = new std::vector<Actor*>();
+
+void EntityTickCallback(Actor* Entity) {
+	LocalPlayer* Player = Minecraft::GetLocalPlayer();
+
+	if (Player != nullptr) {
+		if (Entity->GetRuntimeID() == Player->toActor()->GetRuntimeID()) {
+			if (!TickedEntities->empty()) {
+				for (auto Module : ClientHandler::GetModules()) {
+					Module->onEntityTick(TickedEntities);
+				};
+				TickedEntities->clear();
+			};
+		}
+		else {
+			if (Entity->getEntityTypeId() != 63) {
+				bool doesExist = false;
+				for (auto Ent : *TickedEntities) {
+					if (Ent->GetRuntimeID() == Entity->GetRuntimeID()) doesExist = true;
+				};
+				if (!doesExist && Entity->isAlive() && !Entity->isInvisible() && !Entity->outOfWorld()) TickedEntities->push_back(Entity);
+			};
+		};
+	}
+	else {
+		if (!TickedEntities->empty()) TickedEntities->clear();
+	};
+
+	EntityTick(Entity);
 };
 
 void EntityHooks::Init() {
@@ -55,6 +93,15 @@ void EntityHooks::Init() {
 		}
 		else {
 			Utils::DebugFileLog("Failed to create hook for GetJumpPower!");
+		};
+
+		void* entityTickAddr = (void*)VTable[39];
+		if (MH_CreateHook(entityTickAddr, &EntityTickCallback, reinterpret_cast<LPVOID*>(&EntityTick)) == MH_OK) {
+			Utils::DebugFileLog("Successfully created hook for Entity Base Tick, Enabling hook now...");
+			MH_EnableHook(entityTickAddr);
+		}
+		else {
+			Utils::DebugFileLog("Failed to create hook for Entity Base Tick!");
 		};
 	}
 	else {
