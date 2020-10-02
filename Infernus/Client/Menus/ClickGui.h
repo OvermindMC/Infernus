@@ -4,11 +4,7 @@
 
 class ClickGui : public VModule {
 public:
-	ClickGui() : VModule::VModule("ClickGui", "Renders a UI which can be used to manage modules", 0x2D) {
-		this->addWindowObj(new VWindowText("Test"));
-		this->addWindowObj(new VWindowButton("Useless Button.."));
-		this->addWindowObj(new VWindowText("More Text..."));
-	};
+	ClickGui() : VModule::VModule("ClickGui", "Renders a UI which can be used to manage modules", 0x2D) {};
 	void onRender();
 	void onEnable();
 private:

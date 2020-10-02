@@ -107,7 +107,6 @@ void VWindow::Render() {
 									objectYPos++;
 								break;
 								case 2:
-									if(Obj->toggleState) Utils::DebugFileLog(std::to_string(Obj->toggleState));
 									RenderUtils::RenderText(Obj->text, Vec2(Obj->position.x, Obj->position.y), Obj->toggleState ? MC_Colour(200, 200, 100) : Obj->textColour, 1.0f, Obj->textAlpha);
 									RenderUtils::FillRectangle(Obj->position, Obj->backgroundColour, Obj->backgroundAlpha);
 									objectYPos++;

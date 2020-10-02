@@ -49,7 +49,7 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 		for (auto VObj : Window->WindowObjects) {
 			if (VObj->hoveringOver) {
 				if (VObj->objType == 2 && (bool)(action == 1 && isDown)) {
-					VObj->setButtonState(!VObj->toggleState);
+					VObj->toggleButtonState();
 					for (auto Module : ClientHandler::GetModules()) if (Module->isEnabled) Module->onVButtonClick(VObj);
 				}
 				else if (VObj->objType == 3) {

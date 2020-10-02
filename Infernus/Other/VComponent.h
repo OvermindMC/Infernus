@@ -73,7 +73,7 @@ public:
 	/* Button */
 	float backgroundAlpha;
 	MC_Colour backgroundColour;
-	bool toggleState;
+	bool* toggleState;
 	bool hoveringOver = false;
 
 	/* VModule Button */
@@ -100,16 +100,9 @@ public:
 	MC_Colour textColourCopy;
 	MC_Colour backgroundColourCopy;
 
-	void setButtonState(bool newState) {
-		if (objType == 2) {
-			toggleState = newState;
-		};
-		return;
-	};
-
 	void toggleButtonState() {
 		if (objType == 2) {
-			toggleState = !toggleState;
+			*toggleState = !toggleState;
 		};
 		return;
 	};
@@ -128,14 +121,14 @@ public:
 
 class VWindowButton : public VWindowObj {
 public:
-	VWindowButton(std::string text, MC_Colour textColour = MC_Colour(255, 255, 255), MC_Colour backgroundColour = MC_Colour(180, 180, 180), float textAlpha = 1.0f, float backgroundAlpha = 1.0f, bool toggle = false) {
+	VWindowButton(std::string text, bool* toggle = (bool*)false, MC_Colour textColour = MC_Colour(255, 255, 255), MC_Colour backgroundColour = MC_Colour(180, 180, 180), float textAlpha = 1.0f, float backgroundAlpha = 1.0f) {
 		this->text = text;
+		this->toggleState = toggle;
 		this->textAlpha = textAlpha;
 		this->textColour = textColour;
 		this->backgroundColour = backgroundColour;
 		this->textAlpha = textAlpha;
 		this->backgroundAlpha = backgroundAlpha;
-		this->toggleState = toggle;
 		this->objType = 2; //Button
 		this->initCopyData();
 	};
