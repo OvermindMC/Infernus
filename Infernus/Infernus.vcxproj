@@ -185,6 +185,7 @@
     <ClInclude Include="Client\Modules\Jetpack.h" />
     <ClInclude Include="Client\Modules\Killaura.h" />
     <ClInclude Include="Client\Modules\NoWeb.h" />
+    <ClInclude Include="Client\Modules\Nuker.h" />
     <ClInclude Include="Client\Modules\Phase.h" />
     <ClInclude Include="Client\Modules\Scaffold.h" />
     <ClInclude Include="Client\Modules\Speed.h" />

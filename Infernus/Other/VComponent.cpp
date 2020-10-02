@@ -4,13 +4,6 @@
 
 std::vector<VWindow*> StoredWindows;
 
-bool alreadyStoredWindow(VWindow* Window) {
-	for (auto StoredWindow : StoredWindows) {
-		if (StoredWindow == Window) return true;
-	};
-	return false;
-};
-
 void VModule::onLoop() {
 	if (this->wasEnabled != this->isEnabled) {
 		if (this->isEnabled) {
@@ -44,15 +37,19 @@ std::vector<VWindow*> VWindow::FetchWindows() {
 };
 
 void VWindow::setPosition(Vec2 pos) {
-	position.x = pos.x - 15;
-	position.y = pos.y - 10;
+	position.x = pos.x;
+	position.y = pos.y;
 	position.z = pos.x + scale.x;
 	position.w = pos.y + scale.y;
 };
 
 void VWindow::Render() {
 
-	if (!alreadyStoredWindow(this)) StoredWindows.push_back(this);
+	bool alreadyExist = false;
+	for (auto Window : StoredWindows) {
+		if (Window == this) alreadyExist = true;
+	};
+	if(!alreadyExist) StoredWindows.push_back(this);
 
 	if (!this->isHidden) {
 		RenderUtils::RenderText(name, Vec2(position.x, position.y), textColour, 1.0f, textTransparency);
@@ -64,7 +61,7 @@ void VWindow::Render() {
 			float downY = position.y + (objectYPos * 10) + 10;
 			VObj->position = Vec4(position.x, downY, position.z, downY + 10);
 
-			if (VObj->contains(getMouseX(), getMouseY())) {
+			if (VObj->contains((int)getMouseX(), (int)getMouseY())) {
 				VObj->backgroundAlpha = .3f;
 				VObj->hoveringOver = true;
 			}

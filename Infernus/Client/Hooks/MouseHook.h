@@ -39,20 +39,16 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 
 		for (auto Window : VWindow::FetchWindows()) {
 			if (Window->isBeingDragged) {
-				int x = VWindow::getMouseX();
-				int y = VWindow::getMouseY();
-
-				Window->setPosition(Vec2(x, y));
-
+				Window->setPosition(Vec2((int)(VWindow::getMouseX() - 15), (int)(VWindow::getMouseY() - 8)));
 				break;
 			};
 		};
 	};
 
-	if (action == 1 && isDown) {
-		for (auto Window : VWindow::FetchWindows()) {
-			for (auto VObj : Window->WindowObjects) {
-				if (VObj->objType == 2 && VObj->hoveringOver) {
+	for (auto Window : VWindow::FetchWindows()) {
+		for (auto VObj : Window->WindowObjects) {
+			if (VObj->hoveringOver) {
+				if (VObj->objType == 2 && (bool)(action == 1 && isDown)) {
 					VObj->setButtonState(!VObj->toggleState);
 					for (auto Module : ClientHandler::GetModules()) if (Module->isEnabled) Module->onVButtonClick(VObj);
 				};

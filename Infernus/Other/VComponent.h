@@ -30,6 +30,8 @@ public:
 	virtual void onEntityTick(std::vector<class Actor*>*) {};
 	virtual void onSpeed(float*) {};
 
+	virtual void onDestroyBlock(class GameMode*, Vec3_i*, uint8_t) {};
+
 	/* VWindow Stuff */
 	virtual void onVButtonClick(class VWindowObj*) {};
 };

@@ -61,6 +61,7 @@ void ClientHandler::InitCategories() {
 #include "Menus/HUD.h"
 /* World */
 #include "Modules/Scaffold.h"
+#include "Modules/Nuker.h"
 /* Other */
 #include "Modules/Uninject.h"
 #include "Modules/AntiBot.h"
@@ -87,6 +88,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Visuals, new HUD());
 	/*World*/
 	PushModule(_World, new Scaffold());
+	PushModule(_World, new Nuker());
 	/*Other*/
 	PushModule(_Other, new Uninject());
 	PushModule(_Other, new AntiBot());
