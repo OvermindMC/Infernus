@@ -65,6 +65,23 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 					};
 				};
 			};
+			if (VObj->objType == 3 && VObj->expandedItems) {
+				if (VObj->Module != nullptr) {
+					for (auto Obj : VObj->Module->WindowObjects) {
+						if (Obj->contains((int)VWindow::getMouseX(), (int)VWindow::getMouseY())) {
+							Obj->backgroundAlpha = .3f;
+							Obj->hoveringOver = true;
+							if (action == 1 && isDown) Obj->toggleButtonState();
+						}
+						else {
+							if (Obj->hoveringOver) {
+								Obj->backgroundAlpha = Obj->backgroundAlphaCopy;
+								Obj->hoveringOver = false;
+							};
+						};
+					};
+				};
+			};
 		};
 	};
 
