@@ -8,6 +8,12 @@ public:
 	bool isEnabled = false, wasEnabled = false;
 	VModule(std::string name, std::string description, uint64_t key = NULL) { this->name = name, this->description = description; this->key = key; };
 
+	std::vector<class VWindowObj*> WindowObjects;
+
+	void addWindowObj(VWindowObj* Obj) {
+		this->WindowObjects.push_back(Obj);
+	};
+
 	/* Events */
 	virtual void onLoop(); //For ticking each module and handling the onEnable & onDisable events
 	virtual void onTick();
@@ -33,7 +39,7 @@ public:
 	virtual void onDestroyBlock(class GameMode*, Vec3_i*, uint8_t) {};
 
 	/* VWindow Stuff */
-	virtual void onVButtonClick(class VWindowObj*) {};
+	virtual void onVButtonClick(VWindowObj*) {};
 };
 
 class VHook {
@@ -70,11 +76,15 @@ public:
 	bool toggleState;
 	bool hoveringOver = false;
 
+	/* VModule Button */
+	VModule* Module;
+	bool expandedItems = false;
+
 	bool contains(float pX, float pY) {
 		return position.x < pX && position.y < pY && position.z > pX && position.w > pY;
 	};
 
-	void updateCopyData() {
+	void initCopyData() {
 		this->textCopy = this->text;
 		this->textAlphaCopy = textAlpha;
 		this->backgroundAlphaCopy = backgroundAlpha;
@@ -112,7 +122,7 @@ public:
 		this->textColour = colour;
 		this->textAlpha = textAlpha;
 		this->objType = 1; //Text
-		this->updateCopyData();
+		this->initCopyData();
 	};
 };
 
@@ -127,7 +137,20 @@ public:
 		this->backgroundAlpha = backgroundAlpha;
 		this->toggleState = toggle;
 		this->objType = 2; //Button
-		this->updateCopyData();
+		this->initCopyData();
+	};
+};
+
+class VWindowButtonModule : public VWindowObj {
+public:
+	VWindowButtonModule(VModule* Module, MC_Colour colour = MC_Colour(255, 255, 255), MC_Colour backgroundColour = MC_Colour(180, 180, 180), float textAlpha = 1.0f, float backgroundAlpha = 1.0f) {
+		this->Module = Module;
+		this->textColour = colour;
+		this->textAlpha = textAlpha;
+		this->backgroundColour = backgroundColour;
+		this->backgroundAlpha = backgroundAlpha;
+		this->objType = 3; //Module Button
+		this->initCopyData();
 	};
 };
 
