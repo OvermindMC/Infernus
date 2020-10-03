@@ -140,6 +140,10 @@ void VWindow::Render() {
 				};
 			};
 
+			if (type == 4) {
+				VObj->updateSlider();
+			};
+
 			if (type) {
 				RenderUtils::RenderText(VObj->text, Vec2(VObj->position.x, VObj->position.y), VObj->textColour, 1.0f, VObj->textAlpha); //Applies for all
 				objectYPos++;
