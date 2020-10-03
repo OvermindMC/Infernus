@@ -67,6 +67,22 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 					};
 				};
 			};
+			if (VObj->objType == 4) {
+				if (action == 1) {
+					if (isDown) {
+						VObj->dragging = true;
+					}
+					else {
+						VObj->dragging = false;
+					};
+				};
+				if (VObj->dragging && VObj->hoveringOver) {
+					int xOff = VWindow::getMouseX() - VObj->position.x;
+					float newVal = VObj->getPixelValue() * xOff;
+					newVal += VObj->min;
+					*VObj->value = newVal;
+				};
+			};
 			if (VObj->Module != nullptr) {
 				for (auto Obj : VObj->Module->WindowObjects) {
 					if (Obj->hoveringOver) {
