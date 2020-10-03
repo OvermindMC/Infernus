@@ -153,6 +153,7 @@ void VWindow::Render() {
 			};
 		};
 
+		position.w = position.y + (objectYPos * 10) + 50; //Automatically enlarge VWindow
 		RenderUtils::FlushText();
 	}
 	else {
