@@ -19,21 +19,52 @@ void Killaura::onGmTick() {
 		GameMode* GM = Minecraft::GetGameMode();
 		LocalPlayer* Player = Minecraft::GetLocalPlayer();
 		std::vector<Actor*>* Players = Minecraft::FetchPlayers();
-
 		bool antiBot = ClientHandler::GetModule(AntiBot())->isEnabled;
 
 		if (!Players->empty()) {
-			for (auto Entity : *Players) {
-				if (Utils::distanceVec3(*Entity->getPos(), *Player->getPos()) < disRange) {
-					if (antiBot) {
-						if (Minecraft::GetClientInstance()->isValidTarget(Entity) && Entity->movedTick > 1) {
+			if (multiEnts) {
+				for (auto Entity : *Players) {
+					if (Utils::distanceVec3(*Entity->getPos(), *Player->getPos()) <= disRange) {
+						if (antiBot) {
+							if (Minecraft::GetClientInstance()->isValidTarget(Entity) && Entity->movedTick > 1) {
+								GM->attack(Entity);
+								Player->swing();
+							};
+						}
+						else {
 							GM->attack(Entity);
 							Player->swing();
 						};
+					};
+				};
+			}
+			else {
+				std::vector<float> distances;
+
+				for (auto Entity : *Players) {
+					float distance = Utils::distanceVec3(*Entity->getPos(), *Player->getPos());
+					if (antiBot) {
+						if (Minecraft::GetClientInstance()->isValidTarget(Entity) && Entity->movedTick > 1 && distance <= disRange) {
+							distances.push_back(distance);
+						};
 					}
 					else {
-						GM->attack(Entity);
-						Player->swing();
+						if (distance <= disRange) {
+							distances.push_back(distance);
+						};
+					};
+				};
+
+				std::sort(distances.begin(), distances.end());
+
+				if (multiEnts) {
+					for (auto Entity : *Players) {
+						float distance = Utils::distanceVec3(*Entity->getPos(), *Player->getPos());
+						if (distance == distances[0]) {
+							Minecraft::GetGameMode()->attack(Entity);
+							Player->swing();
+							break;
+						};
 					};
 				};
 			};
