@@ -75,10 +75,33 @@ void Killaura::onGmTick() {
 void Killaura::onEntityTick(std::vector<Actor*>* Entities) {
 	if (isEnabled) {
 		LocalPlayer* Player = Minecraft::GetLocalPlayer();
-		for (auto Entity : *Entities) {
-			if (Utils::distanceVec3(*Entity->getPos(), *Player->getPos()) < disRange) {
-				Minecraft::GetGameMode()->attack(Entity);
-				Player->swing();
+		if (multiEnts) {
+			for (auto Entity : *Entities) {
+				if (Utils::distanceVec3(*Entity->getPos(), *Player->getPos()) <= disRange) {
+					Minecraft::GetGameMode()->attack(Entity);
+					Player->swing();
+				};
+			};
+		}
+		else {
+			std::vector<float> distances;
+
+			for (auto Entity : *Entities) {
+				float distance = Utils::distanceVec3(*Entity->getPos(), *Player->getPos());
+				if (distance <= disRange) {
+					distances.push_back(distance);
+				};
+			};
+
+			std::sort(distances.begin(), distances.end());
+
+			for (auto Entity : *Entities) {
+				float distance = Utils::distanceVec3(*Entity->getPos(), *Player->getPos());
+				if (distance == distances[0]) {
+					Minecraft::GetGameMode()->attack(Entity);
+					Player->swing();
+					break;
+				};
 			};
 		};
 	};
