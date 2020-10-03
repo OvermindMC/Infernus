@@ -3,7 +3,10 @@
 
 class Speed : public VModule {
 public:
-	Speed() : VModule::VModule("Speed", "Move faster than others") {};
+	Speed() : VModule::VModule("Speed", "Move faster than others") {
+		this->addWindowObj(new VWindowText("Speed:"));
+		this->addWindowObj(new VWindowSlider(&this->speed, 0, 5.0f));
+	};
 	void onGmTick();
 public:
 	float speed = 0.6f;
