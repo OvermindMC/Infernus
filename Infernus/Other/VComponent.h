@@ -83,6 +83,8 @@ public:
 	/* Slider */
 	float* value;
 	float min, max;
+	float drawnWidth;
+	bool dragging = false;
 
 	bool contains(float pX, float pY) {
 		return position.x < pX && position.y < pY && position.z > pX && position.w > pY;
@@ -120,6 +122,11 @@ public:
 		std::ostringstream ss;
 		ss << *value;
 		text = std::string(ss.str());
+	};
+
+	float getPixelValue() {
+		float div = std::abs(min) + std::abs(max);
+		return div / (position.x - 20);
 	};
 };
 
@@ -168,9 +175,9 @@ public:
 		this->value = value;
 		this->text = std::to_string(*value);
 		this->min = min, this->max = max;
-		this->objType = 4; //Slider
 		this->textColour = MC_Colour(255, 255, 255);
 		this->textAlpha = 1.0f;
+		this->objType = 4; //Slider
 		this->initCopyData();
 	};
 };

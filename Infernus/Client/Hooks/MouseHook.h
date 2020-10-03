@@ -69,8 +69,28 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 			};
 			if (VObj->Module != nullptr) {
 				for (auto Obj : VObj->Module->WindowObjects) {
-					if (Obj->objType == 2 && Obj->hoveringOver) {
-						if (isDown && action == 1) Obj->toggleButtonState();
+					if (Obj->hoveringOver) {
+						if (Obj->objType == 2) {
+							if (isDown && action == 1) Obj->toggleButtonState();
+						};
+					};
+
+					if (Obj->objType == 4) {
+						if (action == 1) {
+							if (isDown) {
+								Obj->dragging = true;
+							}
+							else {
+								Obj->dragging = false;
+							};
+						};
+
+						if (Obj->dragging && Obj->hoveringOver) {
+							int xOff = VWindow::getMouseX() - Obj->position.x;
+							float newVal = Obj->getPixelValue() * xOff;
+							newVal += Obj->min;
+							*Obj->value = newVal;
+						};
 					};
 				};
 			};
