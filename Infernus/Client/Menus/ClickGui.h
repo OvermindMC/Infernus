@@ -22,7 +22,7 @@ void ClickGui::onEnable() {
 		for (auto Category : ClientHandler::GetCategories()) {
 			float toRight = indexSpace * 110;
 
-			VWindow* newWindow = new VWindow(Category->name, Vec4(toRight + 10, 100, toRight + 110, 230));
+			VWindow* newWindow = new VWindow(Category->name, Vec4(toRight + 10, 100, toRight + 110, 0)); //Last position entry (W) is done by the VWindow::Render
 			newWindow->textColour = MC_Colour(255, 110, 30);
 			newWindow->windowTitleBarColour = MC_Colour(0, 200, 100);
 			newWindow->backgroundTransparency = .7f;
