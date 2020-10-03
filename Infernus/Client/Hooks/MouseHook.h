@@ -33,7 +33,7 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 		if (Utils::mouseState[action] != isDown) {
 			Utils::mouseState[action] = isDown;
 
-			for (auto Module : ClientHandler::GetModules()) if (Module->isEnabled) Module->onMouse(action, (bool)(isDown));
+			for (auto Module : ClientHandler::GetModules()) if (Module->isEnabled) Module->onMouse(action, isDown);
 		};
 	}
 	else {
@@ -50,22 +50,20 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 	for (auto Window : VWindow::FetchWindows()) {
 		for (auto VObj : Window->WindowObjects) {
 			if (VObj->hoveringOver) {
-				if (VObj->objType == 2 && (bool)(action == 1 && isDown)) {
+				if (VObj->objType == 2 && action == 1 && isDown) {
 					VObj->toggleButtonState();
 					for (auto Module : ClientHandler::GetModules()) if (Module->isEnabled) Module->onVButtonClick(VObj);
 				}
-				else if (VObj->objType == 3) {
-					if (isDown) {
-						switch (action) {
-						case 1:
-							VObj->Module->isEnabled = !VObj->Module->isEnabled;
-							VObj->hoveringOver = false; //Render can update this again if current module rendering the window wasn't toggled
-							VObj->backgroundAlpha = VObj->backgroundAlphaCopy;
+				else if (VObj->objType == 3 && isDown && action) {
+					switch (action) {
+					case 1:
+						VObj->Module->isEnabled = !VObj->Module->isEnabled;
+						VObj->hoveringOver = false; //Render can update this again if current module rendering the window wasn't toggled
+						VObj->backgroundAlpha = VObj->backgroundAlphaCopy;
 						break;
-						case 2:
-							VObj->expandedItems = !VObj->expandedItems;
+					case 2:
+						VObj->expandedItems = !VObj->expandedItems;
 						break;
-						};
 					};
 				};
 			};
