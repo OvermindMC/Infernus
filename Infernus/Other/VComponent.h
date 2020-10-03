@@ -65,7 +65,7 @@ public:
 	int objType = 0;
 	Vec4 position; //Gets updated by VWindow
 
-	/* Both */
+	/* All */
 	std::string text;
 	float textAlpha;
 	MC_Colour textColour;
@@ -90,15 +90,13 @@ public:
 		return position.x < pX && position.y < pY && position.z > pX && position.w > pY;
 	};
 
-	void initCopyData() {
+	void initData() {
 		this->textCopy = this->text;
 		this->textAlphaCopy = textAlpha;
 		this->backgroundAlphaCopy = backgroundAlpha;
 		this->textColourCopy = textColourCopy;
 		this->backgroundColourCopy = backgroundColour;
 	};
-
-	/* Mostly for event related stuff */
 
 	std::string textCopy;
 	float textAlphaCopy;
@@ -147,7 +145,7 @@ public:
 		this->textColour = colour;
 		this->textAlpha = textAlpha;
 		this->objType = 1; //Text
-		this->initCopyData();
+		this->initData();
 	};
 };
 
@@ -162,7 +160,7 @@ public:
 		this->textAlpha = textAlpha;
 		this->backgroundAlpha = backgroundAlpha;
 		this->objType = 2; //Button
-		this->initCopyData();
+		this->initData();
 	};
 };
 
@@ -175,7 +173,7 @@ public:
 		this->backgroundColour = backgroundColour;
 		this->backgroundAlpha = backgroundAlpha;
 		this->objType = 3; //Module Button
-		this->initCopyData();
+		this->initData();
 	};
 };
 
@@ -188,7 +186,7 @@ public:
 		this->textColour = MC_Colour(255, 255, 255);
 		this->textAlpha = 1.0f;
 		this->objType = 4; //Slider
-		this->initCopyData();
+		this->initData();
 	};
 };
 
@@ -209,6 +207,7 @@ public:
 	MC_Colour windowTitleBarColour;
 
 	std::vector<VWindowObj*> WindowObjects;
+	std::chrono::time_point<std::chrono::steady_clock> lastTicked;
 
 	VWindow(std::string name, Vec4 position, MC_Colour backgroundColour = MC_Colour(120, 120, 120), MC_Colour textColour = MC_Colour(255, 255, 255), float backgroundAlpha = 1.0f, float textAlpha = 1.0f, bool isHidden = false) {
 		this->name = name;
@@ -229,4 +228,5 @@ public:
 	bool hoveringOverTitleBar();
 	static short getMouseX();
 	static short getMouseY();
+	bool renderedRecently();
 };

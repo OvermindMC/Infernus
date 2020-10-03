@@ -4,6 +4,7 @@
 class HighJump : public VModule {
 public:
 	HighJump() : VModule::VModule("HighJump", "Jump Higher") {
+		this->addWindowObj(new VWindowText("Height:"));
 		this->addWindowObj(new VWindowSlider(&this->jumpValue));
 	};
 	void onJump(float*);

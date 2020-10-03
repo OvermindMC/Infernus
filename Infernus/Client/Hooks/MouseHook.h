@@ -19,7 +19,6 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 					Window->isBeingDragged = true;
 					break;
 				};
-				if(Window->isHoveringOver) returnOrigin = false;
 			};
 		}
 		else {
@@ -111,7 +110,7 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 				};
 			};
 		};
-		if (Window->isHoveringOver && isDown && action) returnOrigin = false;
+		if (Window->isHoveringOver && isDown && action && Window->renderedRecently()) returnOrigin = false;
 	};
 
 	if(returnOrigin) InputMouse(a1, action, isDown, a4, a5, a6, a7, a8);

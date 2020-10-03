@@ -52,6 +52,7 @@ void VWindow::Render() {
 	if(!alreadyExist) StoredWindows.push_back(this);
 
 	if (!this->isHidden) {
+		this->lastTicked = std::chrono::high_resolution_clock::now();
 		RenderUtils::RenderText(name, Vec2(position.x, position.y), textColour, 1.0f, textTransparency);
 		RenderUtils::FillRectangle(position, backgroundColour, backgroundTransparency);
 		RenderUtils::FillRectangle(Vec4(position.x, position.y, position.z, position.y + 10), windowTitleBarColour, 1.0f);
@@ -183,4 +184,8 @@ short VWindow::getMouseY() {
 	short my = float(GuiData->mouseY()) / GuiData->GuiScale();
 	if (my < 0 || my > GuiData->ScaledResolution.y) my = 0;
 	return (int)(my + 1);
+};
+
+bool VWindow::renderedRecently() {
+	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - lastTicked) <= std::chrono::milliseconds(50);
 };
