@@ -18,7 +18,7 @@ public:
 private:
 	bool multiEnts = true;
 	bool menuOpen = true;
-	float disRange = 10.0f;
+	float disRange = 8.0f;
 };
 
 void Killaura::onGmTick() {
