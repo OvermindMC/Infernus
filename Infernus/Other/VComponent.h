@@ -106,7 +106,12 @@ public:
 
 	void toggleButtonState() {
 		if (objType == 2) {
-			*toggleState = !toggleState;
+			if (*toggleState) {
+				*toggleState = false;
+			}
+			else {
+				*toggleState = true;
+			};
 		};
 		return;
 	};

@@ -110,16 +110,15 @@ void VWindow::Render() {
 										Obj->hoveringOver = false;
 									};
 								};
-								switch (Obj->objType) {
-								case 1:
+
+								if (Obj->objType == 2) {
+									Obj->textColour = *Obj->toggleState ? MC_Colour(200, 200, 100) : Obj->textColourCopy;
+									RenderUtils::FillRectangle(Obj->position, Obj->backgroundColour, Obj->backgroundAlpha);
+								};
+
+								if (Obj->objType) {
 									RenderUtils::RenderText(Obj->text, Vec2(Obj->position.x, Obj->position.y), Obj->textColour, 1.0f, Obj->textAlpha);
 									objectYPos++;
-									break;
-								case 2:
-									RenderUtils::RenderText(Obj->text, Vec2(Obj->position.x, Obj->position.y), Obj->toggleState ? MC_Colour(200, 200, 100) : Obj->textColour, 1.0f, Obj->textAlpha);
-									RenderUtils::FillRectangle(Obj->position, Obj->backgroundColour, Obj->backgroundAlpha);
-									objectYPos++;
-									break;
 								};
 							};
 						};

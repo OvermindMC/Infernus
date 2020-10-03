@@ -53,18 +53,25 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 					for (auto Module : ClientHandler::GetModules()) if (Module->isEnabled) Module->onVButtonClick(VObj);
 				}
 				else if (VObj->objType == 3) {
-					if (isDown && VObj->Module->isEnabled) {
+					if (isDown) {
 						switch (action) {
 						case 1:
 							VObj->Module->isEnabled = !VObj->Module->isEnabled;
+							VObj->hoveringOver = false; //Render can update this again if current module rendering the window wasn't toggled
+							VObj->backgroundAlpha = VObj->backgroundAlphaCopy;
 						break;
 						case 2:
 							VObj->expandedItems = !VObj->expandedItems;
 						break;
 						};
-
-						for (auto Obj : VObj->Module->WindowObjects) {
-							if (Obj->hoveringOver) Obj->toggleButtonState();
+					};
+				};
+			};
+			if (VObj->Module != nullptr) {
+				for (auto Obj : VObj->Module->WindowObjects) {
+					if (Obj->objType == 2 && Obj->hoveringOver) {
+						if (isDown && action == 1) {
+							Obj->toggleButtonState();
 						};
 					};
 				};

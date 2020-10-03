@@ -1,16 +1,18 @@
 #pragma once
 #include "../../Other/VComponent.h"
+#include "AntiBot.h"
 
 class Killaura : public VModule {
 public:
-	Killaura() : VModule::VModule("Killaura", "Automatically attack nearby entities") {};
+	Killaura() : VModule::VModule("Killaura", "Automatically attack nearby entities") {
+		this->addWindowObj(new VWindowButton("Multi Ents", &this->multiEnts));
+	};
 	void onGmTick();
 	void onEntityTick(std::vector<Actor*>*);
 private:
+	bool multiEnts = true;
 	float disRange = 10.0f;
 };
-
-#include "AntiBot.h"
 
 void Killaura::onGmTick() {
 	if (Minecraft::GetLocalPlayer() != nullptr) {
