@@ -10,6 +10,7 @@ typedef void(__fastcall* _InputMouse)(uint64_t param_1, char param_2, uint64_t p
 _InputMouse InputMouse;
 
 void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint64_t a5, short a6, short a7, byte a8) {
+	bool returnOrigin = true;
 
 	if (action == 1) {
 		if (isDown) {
@@ -18,6 +19,7 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 					Window->isBeingDragged = true;
 					break;
 				};
+				if(Window->isHoveringOver) returnOrigin = false;
 			};
 		}
 		else {
@@ -70,16 +72,15 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 			if (VObj->Module != nullptr) {
 				for (auto Obj : VObj->Module->WindowObjects) {
 					if (Obj->objType == 2 && Obj->hoveringOver) {
-						if (isDown && action == 1) {
-							Obj->toggleButtonState();
-						};
+						if (isDown && action == 1) Obj->toggleButtonState();
 					};
 				};
 			};
 		};
+		if (Window->isHoveringOver && isDown && action) returnOrigin = false;
 	};
 
-	InputMouse(a1, action, isDown, a4, a5, a6, a7, a8);
+	if(returnOrigin) InputMouse(a1, action, isDown, a4, a5, a6, a7, a8);
 }
 
 void MouseHook::Init() {

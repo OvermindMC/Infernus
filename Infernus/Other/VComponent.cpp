@@ -56,6 +56,16 @@ void VWindow::Render() {
 		RenderUtils::FillRectangle(position, backgroundColour, backgroundTransparency);
 		RenderUtils::FillRectangle(Vec4(position.x, position.y, position.z, position.y + 10), windowTitleBarColour, 1.0f);
 
+		int pX = (int)getMouseX();
+		int pY = (int)getMouseY();
+
+		if (position.x < pX && position.y < pY && position.z > pX && position.w > pY) {
+			isHoveringOver = true;
+		}
+		else {
+			isHoveringOver = false;
+		};
+
 		int objectYPos = 0;
 		for (auto VObj : this->WindowObjects) {
 			
@@ -126,10 +136,6 @@ void VWindow::Render() {
 				};
 			};
 
-			if (type == 4) {
-				VObj->text = "Hello World"; //Rendering the text is done below..
-			};
-
 			if (type) {
 				RenderUtils::RenderText(VObj->text, Vec2(VObj->position.x, VObj->position.y), VObj->textColour, 1.0f, VObj->textAlpha); //Applies for all
 				objectYPos++;
@@ -137,7 +143,10 @@ void VWindow::Render() {
 		};
 
 		RenderUtils::FlushText();
-	};
+	}
+	else {
+		isHoveringOver = false;
+	}
 };
 
 void VWindow::addObject(VWindowObj* object) {

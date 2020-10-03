@@ -177,6 +177,7 @@ public:
 	float backgroundTransparency;
 	float textTransparency;
 	bool isHidden;
+	bool isHoveringOver = false;
 	bool isBeingDragged = false;
 	MC_Colour windowTitleBarColour;
 
