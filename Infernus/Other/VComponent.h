@@ -126,7 +126,7 @@ public:
 
 	float getPixelValue() {
 		float div = std::abs(min) + std::abs(max);
-		return div / (position.x - 20);
+		return div / (position.z - position.x);
 	};
 };
 
