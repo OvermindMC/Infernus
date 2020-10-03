@@ -22,9 +22,9 @@ void ClickGui::onEnable() {
 
 		int indexSpace = 0;
 		for (auto Category : ClientHandler::GetCategories()) {
-			float toRight = indexSpace * 100;
+			float toRight = indexSpace * 110;
 
-			VWindow* newWindow = new VWindow(Category->name, Vec4(toRight + 10, 100, toRight + 100, 230));
+			VWindow* newWindow = new VWindow(Category->name, Vec4(toRight + 10, 100, toRight + 110, 230));
 			newWindow->textColour = MC_Colour(255, 110, 30);
 			newWindow->windowTitleBarColour = MC_Colour(0, 200, 100);
 			newWindow->backgroundTransparency = .7f;
@@ -33,8 +33,6 @@ void ClickGui::onEnable() {
 				VWindowButtonModule* newObject = new VWindowButtonModule(Module);
 				newWindow->addObject(newObject);
 			};
-			VWindowSlider* newSlider = new VWindowSlider(&temp);
-			newWindow->addObject(newSlider);
 			Windows.push_back(newWindow);
 			indexSpace++;
 		};
