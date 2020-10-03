@@ -130,6 +130,7 @@ void VWindow::Render() {
 									}
 									else  if (Obj->objType == 4) {
 										Obj->updateSlider();
+										RenderUtils::FillRectangle(Vec4(Obj->position.x, Obj->position.y, (Obj->position.x + Obj->drawnWidth), Obj->position.w), MC_Colour(0, 140, 255), 1.0f);
 									};
 
 									objectYPos++;
@@ -141,6 +142,7 @@ void VWindow::Render() {
 			};
 
 			if (type == 4) {
+				RenderUtils::FillRectangle(Vec4(VObj->position.x, VObj->position.y, (VObj->position.x + VObj->drawnWidth), VObj->position.w), MC_Colour(0, 140, 255), 1.0f);
 				VObj->updateSlider();
 			};
 

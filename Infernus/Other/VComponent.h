@@ -122,6 +122,16 @@ public:
 		std::ostringstream ss;
 		ss << *value;
 		text = std::string(ss.str());
+
+		if (*value <= min) {
+			*value = min;
+		}
+		else if (*value >= max) *value = max;
+
+		if (*value + 0.2f >= max) *value = max;
+		if (*value - 0.2f <= min) *value = min;
+
+		drawnWidth = ((*value + std::abs(min))) / getPixelValue();
 	};
 
 	float getPixelValue() {
