@@ -58,6 +58,7 @@ void VWindow::Render() {
 
 		int objectYPos = 0;
 		for (auto VObj : this->WindowObjects) {
+			
 			float downY = position.y + (objectYPos * 10) + 10;
 			VObj->position = Vec4(position.x, downY, position.z, downY + 10);
 
@@ -72,12 +73,9 @@ void VWindow::Render() {
 				};
 			};
 
-			switch (VObj->objType) {
-			case 1: //Text
-				RenderUtils::RenderText(VObj->text, Vec2(VObj->position.x, VObj->position.y), VObj->textColour, 1.0f, VObj->textAlpha);
-			break;
+			int type = VObj->objType;
 
-			case 2: //Button
+			if (type == 2) {
 				if (VObj->toggleState) {
 					VObj->textColour = MC_Colour(200, 200, 100);
 				}
@@ -86,18 +84,18 @@ void VWindow::Render() {
 				};
 				RenderUtils::RenderText(VObj->text, Vec2(VObj->position.x, VObj->position.y), VObj->textColour, 1.0, VObj->textAlpha);
 				RenderUtils::FillRectangle(VObj->position, VObj->backgroundColour, VObj->backgroundAlpha);
-			break;
+			};
 
-			case 3: //Module Button
-				VModule * Module = VObj->Module;
+			if (type == 3) {
+				VModule* Module = VObj->Module;
 				if (Module != nullptr) {
 					VObj->textColour = Module->isEnabled ? MC_Colour(200, 200, 100) : VObj->textColourCopy;
-					RenderUtils::RenderText(VObj->Module->name, Vec2(VObj->position.x, VObj->position.y), VObj->textColour, 1.0, VObj->textAlpha);
+					RenderUtils::RenderText(Module->name, Vec2(VObj->position.x, VObj->position.y), VObj->textColour, 1.0, VObj->textAlpha);
 					RenderUtils::FillRectangle(VObj->position, VObj->backgroundColour, VObj->backgroundAlpha);
 
 					if (!Module->WindowObjects.empty()) {
 						RenderUtils::RenderText(VObj->expandedItems ? "-" : "+", Vec2(VObj->position.x + (this->scale.x - 10), VObj->position.y), MC_Colour(255, 255, 255), 1.0f, 1.0f);
-						
+
 						if (VObj->expandedItems) {
 							for (auto Obj : Module->WindowObjects) {
 								Obj->position = Vec4(position.x, (position.y + (objectYPos * 10) + 20), position.z, (position.y + (objectYPos * 10) + 30));
@@ -105,7 +103,7 @@ void VWindow::Render() {
 								case 1:
 									RenderUtils::RenderText(Obj->text, Vec2(Obj->position.x, Obj->position.y), Obj->textColour, 1.0f, Obj->textAlpha);
 									objectYPos++;
-								break;
+									break;
 								case 2:
 									RenderUtils::RenderText(Obj->text, Vec2(Obj->position.x, Obj->position.y), Obj->toggleState ? MC_Colour(200, 200, 100) : Obj->textColour, 1.0f, Obj->textAlpha);
 									RenderUtils::FillRectangle(Obj->position, Obj->backgroundColour, Obj->backgroundAlpha);
@@ -116,10 +114,12 @@ void VWindow::Render() {
 						};
 					};
 				};
-			break;
 			};
 
-			if(VObj->objType > 0 && VObj->objType <= 3) objectYPos++;
+			if (type) {
+				RenderUtils::RenderText(VObj->text, Vec2(VObj->position.x, VObj->position.y), VObj->textColour, 1.0f, VObj->textAlpha); //Applies for all
+				objectYPos++;
+			};
 		};
 
 		RenderUtils::FlushText();
