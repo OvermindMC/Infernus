@@ -172,6 +172,7 @@
     <ClInclude Include="Client\Hooks\KeyHook.h" />
     <ClInclude Include="Client\Hooks\MouseHook.h" />
     <ClInclude Include="Client\Hooks\MultiPlayerLevelHook.h" />
+    <ClInclude Include="Client\Hooks\NetworkHook.h" />
     <ClInclude Include="Client\Hooks\RenderHook.h" />
     <ClInclude Include="Client\Menus\ClickGui.h" />
     <ClInclude Include="Client\Menus\HUD.h" />
@@ -180,10 +181,12 @@
     <ClInclude Include="Client\Modules\AirJump.h" />
     <ClInclude Include="Client\Modules\AntiBot.h" />
     <ClInclude Include="Client\Modules\AutoSprint.h" />
+    <ClInclude Include="Client\Modules\Criticals.h" />
     <ClInclude Include="Client\Modules\HighJump.h" />
     <ClInclude Include="Client\Modules\Hitbox.h" />
     <ClInclude Include="Client\Modules\Jetpack.h" />
     <ClInclude Include="Client\Modules\Killaura.h" />
+    <ClInclude Include="Client\Modules\NoFall.h" />
     <ClInclude Include="Client\Modules\NoWeb.h" />
     <ClInclude Include="Client\Modules\Nuker.h" />
     <ClInclude Include="Client\Modules\Phase.h" />

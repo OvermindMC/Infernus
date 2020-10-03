@@ -38,6 +38,8 @@ public:
 
 	virtual void onDestroyBlock(class GameMode*, Vec3_i*, uint8_t) {};
 
+	virtual void onPacket(void*, enum class PacketType, bool*) {};
+
 	/* VWindow Stuff */
 	virtual void onVButtonClick(VWindowObj*) {};
 };

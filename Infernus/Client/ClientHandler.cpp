@@ -4,6 +4,12 @@ std::vector<VHook*> HooksList;
 std::vector<VCategory*> CategoriesList;
 std::vector<VModule*> ModulesList;
 
+UINT64 Packet::PlayerAuthInputAddr = NULL;
+UINT64 Packet::MovePlayerAddr = NULL;
+UINT64 Packet::TextAddr = NULL;
+UINT64 Packet::ActorFallAddr = NULL;
+UINT64 Packet::MobEquipmentAddr = NULL;
+
 #include "Hooks/ClientInstanceHook.h"
 #include "Hooks/KeyHook.h"
 #include "Hooks/MouseHook.h"
@@ -11,6 +17,7 @@ std::vector<VModule*> ModulesList;
 #include "Hooks/GameModeHook.h"
 #include "Hooks/MultiPlayerLevelHook.h"
 #include "Hooks/EntityHooks.h"
+#include "Hooks/NetworkHook.h"
 
 void ClientHandler::InitHooks() {
 	if (MH_Initialize() == MH_OK) {
@@ -22,6 +29,7 @@ void ClientHandler::InitHooks() {
 		HooksList.push_back(new GameModeHook());
 		HooksList.push_back(new MultiPlayerLevelHook());
 		HooksList.push_back(new EntityHooks());
+		HooksList.push_back(new NetworkHook());
 
 		/* Initialize each hooks functionality */
 		for (auto Hook : HooksList) Hook->Init();
@@ -44,6 +52,7 @@ void ClientHandler::InitCategories() {
 #include "Modules/Killaura.h"
 #include "Modules/Hitbox.h"
 #include "Modules/Triggerbot.h"
+#include "Modules/Criticals.h"
 /* Movement */
 #include "Modules/AirJump.h"
 #include "Modules/Jetpack.h"
@@ -54,6 +63,7 @@ void ClientHandler::InitCategories() {
 /* Player */
 #include "Modules/Velocity.h"
 #include "Modules/Phase.h"
+#include "Modules/NoFall.h"
 /* Visuals */
 #include "Menus/TabGui.h"
 #include "Menus/ClickGui.h"
@@ -71,6 +81,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Combat, new Killaura());
 	PushModule(_Combat, new Hitbox());
 	PushModule(_Combat, new Triggerbot());
+	PushModule(_Combat, new Criticals());
 	/*Movement*/
 	PushModule(_Movement, new AirJump());
 	PushModule(_Movement, new Jetpack());
@@ -81,6 +92,7 @@ void ClientHandler::InitModules() {
 	/*Player*/
 	PushModule(_Player, new Velocity());
 	PushModule(_Player, new Phase());
+	PushModule(_Player, new NoFall());
 	/*Visuals*/
 	PushModule(_Visuals, new TabGui());
 	PushModule(_Visuals, new ClickGui());

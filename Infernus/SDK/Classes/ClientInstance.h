@@ -7,6 +7,7 @@
 #include "ItemStack.h"
 #include "PlayerInventory.h"
 #include "InventoryTransaction.h"
+#include "Packet.h"
 
 class GuiData
 {
