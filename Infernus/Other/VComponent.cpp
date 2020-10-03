@@ -110,6 +110,8 @@ void VWindow::Render() {
 							for (auto Obj : Module->WindowObjects) {
 								Obj->position = Vec4(position.x, (position.y + (objectYPos * 10) + 20), position.z, (position.y + (objectYPos * 10) + 30));
 
+								RenderUtils::RenderText(Obj->text, Vec2(Obj->position.x, Obj->position.y), Obj->textColour, 1.0f, Obj->textAlpha);
+
 								if (Obj->contains((int)VWindow::getMouseX(), (int)VWindow::getMouseY())) {
 									Obj->backgroundAlpha = .3f;
 									Obj->hoveringOver = true;
@@ -121,13 +123,15 @@ void VWindow::Render() {
 									};
 								};
 
-								if (Obj->objType == 2) {
-									Obj->textColour = *Obj->toggleState ? MC_Colour(200, 200, 100) : Obj->textColourCopy;
-									RenderUtils::FillRectangle(Obj->position, Obj->backgroundColour, Obj->backgroundAlpha);
-								};
-
 								if (Obj->objType) {
-									RenderUtils::RenderText(Obj->text, Vec2(Obj->position.x, Obj->position.y), Obj->textColour, 1.0f, Obj->textAlpha);
+									if (Obj->objType == 2) {
+										Obj->textColour = *Obj->toggleState ? MC_Colour(200, 200, 100) : Obj->textColourCopy;
+										RenderUtils::FillRectangle(Obj->position, Obj->backgroundColour, Obj->backgroundAlpha);
+									}
+									else  if (Obj->objType == 4) {
+										Obj->updateSlider();
+									};
+
 									objectYPos++;
 								};
 							};

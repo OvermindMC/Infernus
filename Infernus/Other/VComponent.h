@@ -115,6 +115,12 @@ public:
 		};
 		return;
 	};
+
+	void updateSlider() {
+		std::ostringstream ss;
+		ss << *value;
+		text = std::string(ss.str());
+	};
 };
 
 class VWindowText : public VWindowObj {
@@ -160,8 +166,12 @@ class VWindowSlider : public VWindowObj {
 public:
 	VWindowSlider(float* value = 0, float min = 0.0f, float max = 10.0f) {
 		this->value = value;
+		this->text = std::to_string(*value);
 		this->min = min, this->max = max;
 		this->objType = 4; //Slider
+		this->textColour = MC_Colour(255, 255, 255);
+		this->textAlpha = 1.0f;
+		this->initCopyData();
 	};
 };
 
