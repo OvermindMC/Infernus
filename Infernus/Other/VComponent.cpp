@@ -99,6 +99,17 @@ void VWindow::Render() {
 						if (VObj->expandedItems) {
 							for (auto Obj : Module->WindowObjects) {
 								Obj->position = Vec4(position.x, (position.y + (objectYPos * 10) + 20), position.z, (position.y + (objectYPos * 10) + 30));
+
+								if (Obj->contains((int)VWindow::getMouseX(), (int)VWindow::getMouseY())) {
+									Obj->backgroundAlpha = .3f;
+									Obj->hoveringOver = true;
+								}
+								else {
+									if (Obj->hoveringOver) {
+										Obj->backgroundAlpha = Obj->backgroundAlphaCopy;
+										Obj->hoveringOver = false;
+									};
+								};
 								switch (Obj->objType) {
 								case 1:
 									RenderUtils::RenderText(Obj->text, Vec2(Obj->position.x, Obj->position.y), Obj->textColour, 1.0f, Obj->textAlpha);
@@ -114,6 +125,10 @@ void VWindow::Render() {
 						};
 					};
 				};
+			};
+
+			if (type == 4) {
+				VObj->text = "Hello World"; //Rendering the text is done below..
 			};
 
 			if (type) {

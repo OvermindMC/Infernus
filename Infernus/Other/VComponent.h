@@ -80,6 +80,10 @@ public:
 	VModule* Module;
 	bool expandedItems = false;
 
+	/* Slider */
+	float* value;
+	float min, max;
+
 	bool contains(float pX, float pY) {
 		return position.x < pX && position.y < pY && position.z > pX && position.w > pY;
 	};
@@ -144,6 +148,15 @@ public:
 		this->backgroundAlpha = backgroundAlpha;
 		this->objType = 3; //Module Button
 		this->initCopyData();
+	};
+};
+
+class VWindowSlider : public VWindowObj {
+public:
+	VWindowSlider(float* value = 0, float min = 0.0f, float max = 10.0f) {
+		this->value = value;
+		this->min = min, this->max = max;
+		this->objType = 4; //Slider
 	};
 };
 

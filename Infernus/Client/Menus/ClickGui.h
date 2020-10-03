@@ -10,16 +10,16 @@ public:
 private:
 	std::vector<VWindow*> Windows;
 	bool isDragingWindow = false;
+	float temp = 2.0f;
 };
 
 void ClickGui::onRender() {
-	for (auto Window : Windows) {
-		Window->Render();
-	};
+	for (auto Window : Windows) Window->Render();
 };
 
 void ClickGui::onEnable() {
 	if (Windows.empty()) {
+
 		int indexSpace = 0;
 		for (auto Category : ClientHandler::GetCategories()) {
 			float toRight = indexSpace * 100;
@@ -33,6 +33,8 @@ void ClickGui::onEnable() {
 				VWindowButtonModule* newObject = new VWindowButtonModule(Module);
 				newWindow->addObject(newObject);
 			};
+			VWindowSlider* newSlider = new VWindowSlider(&temp);
+			newWindow->addObject(newSlider);
 			Windows.push_back(newWindow);
 			indexSpace++;
 		};

@@ -53,7 +53,7 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 					for (auto Module : ClientHandler::GetModules()) if (Module->isEnabled) Module->onVButtonClick(VObj);
 				}
 				else if (VObj->objType == 3) {
-					if (isDown) {
+					if (isDown && VObj->Module->isEnabled) {
 						switch (action) {
 						case 1:
 							VObj->Module->isEnabled = !VObj->Module->isEnabled;
@@ -62,22 +62,9 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 							VObj->expandedItems = !VObj->expandedItems;
 						break;
 						};
-					};
-				};
-			};
-			if (VObj->objType == 3 && VObj->expandedItems) {
-				if (VObj->Module != nullptr) {
-					for (auto Obj : VObj->Module->WindowObjects) {
-						if (Obj->contains((int)VWindow::getMouseX(), (int)VWindow::getMouseY())) {
-							Obj->backgroundAlpha = .3f;
-							Obj->hoveringOver = true;
-							if (action == 1 && isDown) Obj->toggleButtonState();
-						}
-						else {
-							if (Obj->hoveringOver) {
-								Obj->backgroundAlpha = Obj->backgroundAlphaCopy;
-								Obj->hoveringOver = false;
-							};
+
+						for (auto Obj : VObj->Module->WindowObjects) {
+							if (Obj->hoveringOver) Obj->toggleButtonState();
 						};
 					};
 				};
