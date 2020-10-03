@@ -9,8 +9,6 @@ public:
 	void onEnable();
 private:
 	std::vector<VWindow*> Windows;
-	bool isDragingWindow = false;
-	float temp = 2.0f;
 };
 
 void ClickGui::onRender() {
