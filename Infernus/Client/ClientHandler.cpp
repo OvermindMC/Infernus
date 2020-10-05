@@ -60,6 +60,7 @@ void ClientHandler::InitCategories() {
 #include "Modules/HighJump.h"
 #include "Modules/Speed.h"
 #include "Modules/NoWeb.h"
+#include "Modules/NoSlowDown.h"
 /* Player */
 #include "Modules/Velocity.h"
 #include "Modules/Phase.h"
@@ -89,6 +90,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Movement, new HighJump());
 	PushModule(_Movement, new Speed());
 	PushModule(_Movement, new NoWeb());
+	PushModule(_Movement, new NoSlowDown());
 	/*Player*/
 	PushModule(_Player, new Velocity());
 	PushModule(_Player, new Phase());
