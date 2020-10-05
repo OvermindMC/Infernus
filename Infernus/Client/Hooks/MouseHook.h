@@ -92,12 +92,7 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 
 					if (Obj->objType == 4) {
 						if (action == 1) {
-							if (isDown) {
-								Obj->dragging = true;
-							}
-							else {
-								Obj->dragging = false;
-							};
+							Obj->dragging = isDown;
 						};
 
 						if (Obj->dragging && Obj->hoveringOver) {
