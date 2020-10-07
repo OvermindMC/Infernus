@@ -206,12 +206,13 @@ public:
 	bool isHidden;
 	bool isHoveringOver = false;
 	bool isBeingDragged = false;
+	bool canBeDragged = true;
 	MC_Colour windowTitleBarColour;
 
 	std::vector<VWindowObj*> WindowObjects;
 	std::chrono::time_point<std::chrono::steady_clock> lastTicked;
 
-	VWindow(std::string name, Vec4 position, MC_Colour backgroundColour = MC_Colour(120, 120, 120), MC_Colour textColour = MC_Colour(255, 255, 255), float backgroundAlpha = 1.0f, float textAlpha = 1.0f, bool isHidden = false) {
+	VWindow(std::string name, Vec4 position, MC_Colour backgroundColour = MC_Colour(120, 120, 120), MC_Colour textColour = MC_Colour(255, 255, 255), float backgroundAlpha = 1.0f, float textAlpha = 1.0f, bool isHidden = false, bool canDrag = true) {
 		this->name = name;
 		this->position = position;
 		this->scale = Vec2((position.z - position.x), (position.w - position.y));
@@ -220,6 +221,7 @@ public:
 		this->backgroundTransparency = backgroundAlpha;
 		this->textTransparency = textAlpha;
 		this->isHidden = isHidden;
+		this->canBeDragged = canDrag;
 		this->windowTitleBarColour = MC_Colour(120, 160, 255);
 	};
 

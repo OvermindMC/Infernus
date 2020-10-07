@@ -37,10 +37,12 @@ std::vector<VWindow*> VWindow::FetchWindows() {
 };
 
 void VWindow::setPosition(Vec2 pos) {
-	position.x = pos.x;
-	position.y = pos.y;
-	position.z = pos.x + scale.x;
-	position.w = pos.y + scale.y;
+	if (this->canBeDragged) {
+		position.x = pos.x;
+		position.y = pos.y;
+		position.z = pos.x + scale.x;
+		position.w = pos.y + scale.y;
+	};
 };
 
 void VWindow::Render() {
