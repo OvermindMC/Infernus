@@ -228,6 +228,7 @@ public:
 	void setPosition(Vec2);
 	void Render();
 	void addObject(VWindowObj* object);
+	bool withinWindow(float pX, float pY);
 	bool withinWindowBar(float pX, float pY);
 	bool hoveringOverTitleBar();
 	static short getMouseX();

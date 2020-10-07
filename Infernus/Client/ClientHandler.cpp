@@ -70,6 +70,7 @@ void ClientHandler::InitCategories() {
 #include "Menus/ClickGui.h"
 #include "Menus/ModuleList.h"
 #include "Menus/HUD.h"
+#include "Menus/Radar.h"
 /* World */
 #include "Modules/Scaffold.h"
 #include "Modules/Nuker.h"
@@ -100,6 +101,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Visuals, new ClickGui());
 	PushModule(_Visuals, new ModuleList());
 	PushModule(_Visuals, new HUD());
+	PushModule(_Visuals, new Radar());
 	/*World*/
 	PushModule(_World, new Scaffold());
 	PushModule(_World, new Nuker());

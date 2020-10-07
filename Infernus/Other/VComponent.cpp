@@ -167,6 +167,10 @@ void VWindow::addObject(VWindowObj* object) {
 	this->WindowObjects.push_back(object);
 };
 
+bool VWindow::withinWindow(float pX, float pY) {
+	return position.x < pX&& position.y < pY&& position.z > pX&& position.w > pY;
+};
+
 bool VWindow::withinWindowBar(float pX, float pY) {
 	return position.x < pX&& position.y < pY&& position.z > pX && (position.y + 10) > pY;
 };
