@@ -1,5 +1,7 @@
 #pragma once
 #include "Utils.h"
+#include "RenderUtils.h"
+#include <functional>
 
 class VModule {
 public:
@@ -57,9 +59,6 @@ public:
 	std::vector<VModule*> modules;
 	VCategory(std::string name) { this->name = name; };
 };
-
-#include "RenderUtils.h"
-#include <functional>
 
 class VWindowObj {
 public:
