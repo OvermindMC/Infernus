@@ -7,8 +7,7 @@ public:
 	Killaura() : VModule::VModule("Killaura", "Automatically attack nearby entities") {
 		this->addWindowObj(new VWindowButton("Multi Ents", &this->multiEnts));
 		this->addWindowObj(new VWindowButton("Attack with UI open", &this->menuOpen));
-		this->addWindowObj(new VWindowText("Range:"));
-		this->addWindowObj(new VWindowSlider(&disRange));
+		this->addWindowObj(new VWindowSlider(&disRange, 0.0f, 12.0f, "Range: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
 	};
 	void onGmTick();
 	void onEntityTick(std::vector<Actor*>*);

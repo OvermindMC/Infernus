@@ -4,10 +4,8 @@
 class Hitbox : public VModule {
 public:
 	Hitbox() : VModule::VModule("Hitbox", "Enlarge the collision size of entities") {
-		this->addWindowObj(new VWindowText("Width:"));
-		this->addWindowObj(new VWindowSlider(&this->width));
-		this->addWindowObj(new VWindowText("Height:"));
-		this->addWindowObj(new VWindowSlider(&this->height));
+		this->addWindowObj(new VWindowSlider(&this->width, 0.0f, 20.0f, "Width: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider(&this->height, 0.0f, 20.0f, "Height: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
 	};
 	void onGmTick();
 	void onEnable() { revertMobs = true; };

@@ -4,8 +4,7 @@
 class Jetpack : public VModule {
 public:
 	Jetpack() : VModule::VModule("Jetpack", "Boost directly forward when holding the F key", 0x46) {
-		this->addWindowObj(new VWindowText("Speed:"));
-		this->addWindowObj(new VWindowSlider(&this->speed, 0, 50.0f));
+		this->addWindowObj(new VWindowSlider(&this->speed, 0, 50.0f, "Speed: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
 	};
 	void onGmTick();
 

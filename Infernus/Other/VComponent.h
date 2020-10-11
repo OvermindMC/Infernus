@@ -10,9 +10,9 @@ public:
 	bool isEnabled = false, wasEnabled = false;
 	VModule(std::string name, std::string description, uint64_t key = NULL) { this->name = name, this->description = description; this->key = key; };
 
-	std::vector<class VWindowObj*> WindowObjects;
+	std::vector<class VWindowObject*> WindowObjects;
 
-	void addWindowObj(VWindowObj* Obj) {
+	void addWindowObj(VWindowObject* Obj) {
 		this->WindowObjects.push_back(Obj);
 	};
 
@@ -43,15 +43,13 @@ public:
 	virtual void onPacket(void*, enum class PacketType, bool*) {};
 
 	/* VWindow Stuff */
-	virtual void onVButtonClick(VWindowObj*) {};
+	virtual void onVButtonClick(VWindowObject*) {};
 };
 
 class VHook {
 public:
 	virtual void Init() {};
 };
-
-/* Virtual Object Events */
 
 class VCategory {
 public:
@@ -60,177 +58,134 @@ public:
 	VCategory(std::string name) { this->name = name; };
 };
 
-class VWindowObj {
+/* Virtual Object Stuff */
+
+enum class VObjectType {
+	Text,
+	Button,
+	Slider,
+	Unknown
+};
+
+class VWindowObject {
+private:
+	std::string textC;
+	float textAlphaC, backgroundAlphaC;
+	MC_Colour textColourC, backgroundColourC;
 public:
-
-	int objType = 0;
-	Vec4 position; //Gets updated by VWindow
-
-	/* All */
 	std::string text;
-	float textAlpha;
-	MC_Colour textColour;
-
-	/* Button */
-	float backgroundAlpha;
-	MC_Colour backgroundColour;
+	Vec4 position;
+	float textSize, textAlpha, backgroundAlpha;
+	MC_Colour textColour, backgroundColour, enabledColour;
 	bool* toggleState;
 	bool hoveringOver = false;
-
-	/* VModule Button */
-	VModule* Module;
 	bool expandedItems = false;
 
-	/* Slider */
 	float* value;
-	float min, max;
-	float drawnWidth;
-	bool dragging = false;
+	float min, max, drawnWidth;
+	bool draggingSlider = false;
+	std::string sliderText;
 
-	bool contains(float pX, float pY) {
-		return position.x < pX && position.y < pY && position.z > pX && position.w > pY;
+	VObjectType type;
+	std::vector<VWindowObject*> objects;
+
+	void InitData() {
+		this->textC = text;
+		this->textAlphaC = textAlpha;
+		this->backgroundAlphaC = backgroundAlpha;
+		this->textColourC = textColour;
+		this->backgroundColourC = backgroundColour;
 	};
 
-	void initData() {
-		this->textCopy = this->text;
-		this->textAlphaCopy = textAlpha;
-		this->backgroundAlphaCopy = backgroundAlpha;
-		this->textColourCopy = textColourCopy;
-		this->backgroundColourCopy = backgroundColour;
-	};
-
-	std::string textCopy;
-	float textAlphaCopy;
-	float backgroundAlphaCopy;
-	MC_Colour textColourCopy;
-	MC_Colour backgroundColourCopy;
-
-	void toggleButtonState() {
-		if (objType == 2) {
-			if (*toggleState) {
-				*toggleState = false;
-			}
-			else {
-				*toggleState = true;
-			};
-		};
-		return;
-	};
-
-	void updateSlider() {
-		std::ostringstream ss;
-		ss << *value;
-		text = std::string(ss.str());
-
-		if (*value <= min) {
-			*value = min;
-		}
-		else if (*value >= max) *value = max;
-
-		if (*value + 0.2f >= max) *value = max;
-		if (*value - 0.2f <= min) *value = min;
-
-		drawnWidth = ((*value + std::abs(min))) / getPixelValue();
-	};
-
-	float getPixelValue() {
-		float div = std::abs(min) + std::abs(max);
-		return div / (position.z - position.x);
-	};
+	bool withinObject(Vec2);
+	void handleRenderingObject();
+	void addExpandedItem(VWindowObject*);
+	void toggle();
+	void updateSlider();
+	float getPixelValue();
 };
 
-class VWindowText : public VWindowObj {
+class VWindowText : public VWindowObject {
 public:
-	VWindowText(std::string text, MC_Colour colour = MC_Colour(255, 255, 255), float textAlpha = 1.0f) {
+	VWindowText(std::string text, MC_Colour textColour = MC_Colour(255, 255, 255), float textSize = 1.0f, float textAlpha = 1.0f) {
 		this->text = text;
-		this->textColour = colour;
+		this->textColour = textColour;
+		this->textSize = textSize;
 		this->textAlpha = textAlpha;
-		this->objType = 1; //Text
-		this->initData();
+		this->type = VObjectType::Text;
+		this->InitData();
 	};
 };
 
-class VWindowButton : public VWindowObj {
+class VWindowButton : public VWindowObject {
 public:
-	VWindowButton(std::string text, bool* toggle = (bool*)false, MC_Colour textColour = MC_Colour(255, 255, 255), MC_Colour backgroundColour = MC_Colour(180, 180, 180), float textAlpha = 1.0f, float backgroundAlpha = 1.0f) {
+	VWindowButton(std::string text, bool* toggle = (bool*)false, float textSize = 1.0f, MC_Colour textColour = MC_Colour(255, 255, 255), MC_Colour backgroundColour = MC_Colour(128, 128, 128), MC_Colour enabledColour = MC_Colour(255, 255, 0), float textAlpha = 1.0f, float backgroundAlpha = .2f) {
 		this->text = text;
 		this->toggleState = toggle;
-		this->textAlpha = textAlpha;
+		this->textSize = textSize;
 		this->textColour = textColour;
 		this->backgroundColour = backgroundColour;
+		this->enabledColour = enabledColour;
 		this->textAlpha = textAlpha;
 		this->backgroundAlpha = backgroundAlpha;
-		this->objType = 2; //Button
-		this->initData();
+		this->type = VObjectType::Button;
+		this->InitData();
 	};
 };
 
-class VWindowButtonModule : public VWindowObj {
+class VWindowSlider : public VWindowObject {
 public:
-	VWindowButtonModule(VModule* Module, MC_Colour colour = MC_Colour(255, 255, 255), MC_Colour backgroundColour = MC_Colour(180, 180, 180), float textAlpha = 1.0f, float backgroundAlpha = 1.0f) {
-		this->Module = Module;
-		this->textColour = colour;
-		this->textAlpha = textAlpha;
-		this->backgroundColour = backgroundColour;
-		this->backgroundAlpha = backgroundAlpha;
-		this->objType = 3; //Module Button
-		this->initData();
-	};
-};
-
-class VWindowSlider : public VWindowObj {
-public:
-	VWindowSlider(float* value = 0, float min = 0.0f, float max = 10.0f) {
+	VWindowSlider(float* value, float min = 0.0f, float max = 10.0f, std::string sliderText = "", MC_Colour textColour = MC_Colour(255, 255, 255), float textSize = 1.0f, float textAlpha = 1.0f, MC_Colour progressBarColour = MC_Colour(0, 255, 128), float progressBarAlpha = 1.0f) {
 		this->value = value;
-		this->text = std::to_string(*value);
 		this->min = min, this->max = max;
-		this->textColour = MC_Colour(255, 255, 255);
-		this->textAlpha = 1.0f;
-		this->objType = 4; //Slider
-		this->initData();
+		this->draggingSlider = false;
+		this->sliderText = sliderText;
+		this->textColour = textColour;
+		this->textSize = textSize;
+		this->textAlpha = textAlpha;
+		this->backgroundColour = progressBarColour;
+		this->backgroundAlpha = progressBarAlpha;
+		this->type = VObjectType::Slider;
+		this->InitData();
+		this->updateSlider();
 	};
 };
 
 class VWindow {
+private:
+	static std::vector<VWindow*> windows;
+	static Vec2 mousePos();
 public:
-	static std::vector<VWindow*> FetchWindows();
-
 	std::string name;
 	Vec4 position;
 	Vec2 scale;
-	MC_Colour backgroundColour;
-	MC_Colour textColour;
-	float backgroundTransparency;
-	float textTransparency;
-	bool isHidden;
-	bool isHoveringOver = false;
-	bool isBeingDragged = false;
-	bool canBeDragged = true;
-	MC_Colour windowTitleBarColour;
-
-	std::vector<VWindowObj*> WindowObjects;
+	MC_Colour textColour, backgroundColour, titleBarColour;
+	float textSize, textAlpha, backgroundAlpha;
+	bool isHidden = false, isHoveringOver = false, isHoveringOverTitle = false, isBeingDragged = false, canBeDragged = false;
+	std::vector<VWindowObject*> windowObjects;
 	std::chrono::time_point<std::chrono::steady_clock> lastTicked;
 
-	VWindow(std::string name, Vec4 position, MC_Colour backgroundColour = MC_Colour(120, 120, 120), MC_Colour textColour = MC_Colour(255, 255, 255), float backgroundAlpha = 1.0f, float textAlpha = 1.0f, bool isHidden = false, bool canDrag = true) {
+	VWindow(std::string name, Vec4 position, float textSize = 1.0f, MC_Colour textColour = MC_Colour(255, 255, 255), MC_Colour backgroundColour = MC_Colour(120, 120, 120), MC_Colour titleBarColour = MC_Colour(120, 160, 255), float textAlpha = 1.0f, float backgroundAlpha = 1.0f) {
 		this->name = name;
 		this->position = position;
 		this->scale = Vec2((position.z - position.x), (position.w - position.y));
-		this->backgroundColour = backgroundColour;
+		this->textSize = textSize;
 		this->textColour = textColour;
-		this->backgroundTransparency = backgroundAlpha;
-		this->textTransparency = textAlpha;
-		this->isHidden = isHidden;
-		this->canBeDragged = canDrag;
-		this->windowTitleBarColour = MC_Colour(120, 160, 255);
+		this->backgroundColour = backgroundColour;
+		this->textAlpha = textAlpha;
+		this->backgroundAlpha = backgroundAlpha;
+		this->titleBarColour = titleBarColour;
+		this->isHidden = false, this->isBeingDragged = false, this->canBeDragged = true;
 	};
 
 	void setPosition(Vec2);
-	void Render();
-	void addObject(VWindowObj* object);
-	bool withinWindow(float pX, float pY);
-	bool withinWindowBar(float pX, float pY);
-	bool hoveringOverTitleBar();
-	static short getMouseX();
-	static short getMouseY();
-	bool renderedRecently();
+	void render();
+	bool wasRenderedRecently();
+	bool posWithinWindow(Vec2);
+	bool posWithinTitleBar(Vec2);
+	bool hasTitleBar();
+	void addObject(VWindowObject*);
+
+	static std::vector<VWindow*> FetchWindows() { return windows; };
+	static Vec2 getMousePos() { return mousePos(); };
 };

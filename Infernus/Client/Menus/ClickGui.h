@@ -12,7 +12,7 @@ private:
 };
 
 void ClickGui::onRender() {
-	for (auto Window : Windows) Window->Render();
+	for (auto Window : Windows) Window->render();
 };
 
 void ClickGui::onEnable() {
@@ -22,13 +22,13 @@ void ClickGui::onEnable() {
 		for (auto Category : ClientHandler::GetCategories()) {
 			float toRight = indexSpace * 110;
 
-			VWindow* newWindow = new VWindow(Category->name, Vec4(toRight + 10, 100, toRight + 110, 0)); //Last position entry (W) is done by the VWindow::Render
-			newWindow->textColour = MC_Colour(255, 110, 30);
-			newWindow->windowTitleBarColour = MC_Colour(0, 200, 100);
-			newWindow->backgroundTransparency = .7f;
+			VWindow* newWindow = new VWindow(Category->name, Vec4(toRight + 10, 100, toRight + 110, 0), 1.0f, MC_Colour(255, 110, 30), MC_Colour(50, 50, 50), MC_Colour(50, 50, 50), 1.0f, .3f);
 
 			for (auto Module : Category->modules) {
-				VWindowButtonModule* newObject = new VWindowButtonModule(Module);
+				VWindowButton* newObject = new VWindowButton(Module->name, &Module->isEnabled);
+				for (auto VObj : Module->WindowObjects) {
+					newObject->addExpandedItem(VObj);
+				};
 				newWindow->addObject(newObject);
 			};
 			Windows.push_back(newWindow);

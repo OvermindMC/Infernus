@@ -9,25 +9,63 @@ public:
 typedef void(__fastcall* _InputMouse)(uint64_t param_1, char param_2, uint64_t param_3, uint64_t param_4, uint64_t param_5, short param_6, short param_7, byte param_8);
 _InputMouse InputMouse;
 
-void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint64_t a5, short a6, short a7, byte a8) {
-	bool returnOrigin = true;
+/*
+* Vec2 VWindow::mousePos() {
+	GuiData* GuiData = Minecraft::GetClientInstance()->GuiData();
+	short mx = float(GuiData->mouseX()) / GuiData->GuiScale();
+	short my = float(GuiData->mouseY()) / GuiData->GuiScale();
+	if (mx < 0 || mx > GuiData->ScaledResolution.x) mx = 0;
+	if (my < 0 || my > GuiData->ScaledResolution.y) my = 0;
+	return Vec2(mx, my);
+};
+*/
 
-	if (action == 1) {
-		if (isDown) {
-			for (auto Window : VWindow::FetchWindows()) {
-				if (Window->hoveringOverTitleBar()) {
-					Window->isBeingDragged = true;
-					break;
+Vec2 scaledPos(int a1, int a2) {
+	GuiData* GuiData = Minecraft::GetClientInstance()->GuiData();
+	short mx = float(a1) / GuiData->GuiScale();
+	short my = float(a2) / GuiData->GuiScale();
+	if (mx < 0 || mx > GuiData->ScaledResolution.x) mx = 0;
+	if (my < 0 || my > GuiData->ScaledResolution.y) my = 0;
+	return Vec2(mx, my);
+};
+
+Vec2 scaledMousePos = Vec2();
+bool alreadyDraggingWindow = false;
+
+void handleVObject(VWindowObject* VObj, char action, bool isDown) {
+	switch (VObj->type) {
+		case VObjectType::Button:
+			if (action && isDown && VObj->hoveringOver) {
+				if (action == 1) {
+					VObj->toggle();
+				}
+				else if (action == 2) {
+					if (!VObj->objects.empty()) VObj->expandedItems = !VObj->expandedItems;
 				};
 			};
-		}
-		else {
-			for (auto Window : VWindow::FetchWindows()) {
-				if (Window->isBeingDragged) Window->isBeingDragged = false;
-			};
-		};
-	};
+		break;
 
+		case VObjectType::Slider:
+			if (action == 1) {
+				if (VObj->hoveringOver) {
+					VObj->draggingSlider = isDown;
+				}
+				else {
+					if (VObj->draggingSlider) VObj->draggingSlider = false;
+				};
+			};
+
+			if (VObj->hoveringOver && VObj->draggingSlider) {
+				int xOff = scaledMousePos.x - VObj->position.x;
+				float newVal = VObj->getPixelValue() * xOff;
+				newVal += VObj->min;
+				*VObj->value = newVal;
+			};
+		break;
+	};
+};
+
+void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint64_t a5, short a6, short a7, byte a8) {
 	if (action) {
 		if (Utils::mouseState[action] != isDown) {
 			Utils::mouseState[action] = isDown;
@@ -37,75 +75,51 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 	}
 	else {
 		for (auto Module : ClientHandler::GetModules()) if (Module->isEnabled) Module->onMouseMove();
-
-		for (auto Window : VWindow::FetchWindows()) {
-			if (Window->isBeingDragged) {
-				Window->setPosition(Vec2((int)(VWindow::getMouseX() - 15), (int)(VWindow::getMouseY() - 8)));
-				break;
-			};
-		};
 	};
 
+	/* VWindow Stuff */
+
+	bool returnOrigin = true;
+
 	for (auto Window : VWindow::FetchWindows()) {
-		for (auto VObj : Window->WindowObjects) {
-			if (VObj->hoveringOver) {
-				if (VObj->objType == 2 && action == 1 && isDown) {
-					VObj->toggleButtonState();
-					for (auto Module : ClientHandler::GetModules()) if (Module->isEnabled) Module->onVButtonClick(VObj);
+		if (Window->wasRenderedRecently()) {
+			scaledMousePos = scaledPos(a4, a5);
+			Window->isHoveringOverTitle = Window->posWithinTitleBar(scaledMousePos);
+			Window->isHoveringOver = Window->posWithinWindow(scaledMousePos);
+
+			if (Window->wasRenderedRecently() && Window->canBeDragged && Window->isBeingDragged && Window->hasTitleBar()) {
+				Window->setPosition(Vec2(scaledMousePos.x - 10, scaledMousePos.y - 8));
+				alreadyDraggingWindow = true;
+			};
+
+			if (Window->isHoveringOverTitle && Window->hasTitleBar()) {
+				if (Utils::mouseState[1]) {
+					if (!alreadyDraggingWindow) {
+						Window->isBeingDragged = true;
+						alreadyDraggingWindow = true;
+					};
 				}
-				else if (VObj->objType == 3 && isDown && action) {
-					switch (action) {
-					case 1:
-						VObj->Module->isEnabled = !VObj->Module->isEnabled;
-						VObj->hoveringOver = false; //Render can update this again if current module rendering the window wasn't toggled
-						VObj->backgroundAlpha = VObj->backgroundAlphaCopy;
-						break;
-					case 2:
-						VObj->expandedItems = !VObj->expandedItems;
-						break;
+				else {
+					if (Window->isBeingDragged) {
+						Window->isBeingDragged = false;
+						alreadyDraggingWindow = false;
 					};
 				};
 			};
-			if (VObj->objType == 4) {
-				if (action == 1) {
-					if (isDown) {
-						VObj->dragging = true;
-					}
-					else {
-						VObj->dragging = false;
-					};
-				};
-				if (VObj->dragging && VObj->hoveringOver) {
-					int xOff = VWindow::getMouseX() - VObj->position.x;
-					float newVal = VObj->getPixelValue() * xOff;
-					newVal += VObj->min;
-					*VObj->value = newVal;
-				};
-			};
-			if (VObj->Module != nullptr) {
-				for (auto Obj : VObj->Module->WindowObjects) {
-					if (Obj->hoveringOver) {
-						if (Obj->objType == 2) {
-							if (isDown && action == 1) Obj->toggleButtonState();
-						};
-					};
 
-					if (Obj->objType == 4) {
-						if (action == 1) {
-							Obj->dragging = isDown;
-						};
-
-						if (Obj->dragging && Obj->hoveringOver) {
-							int xOff = VWindow::getMouseX() - Obj->position.x;
-							float newVal = Obj->getPixelValue() * xOff;
-							newVal += Obj->min;
-							*Obj->value = newVal;
-						};
+			if (!alreadyDraggingWindow) {
+				for (auto VObj : Window->windowObjects) {
+					VObj->hoveringOver = VObj->withinObject(scaledMousePos);
+					handleVObject(VObj, action, isDown);
+					for (auto Obj : VObj->objects) {
+						Obj->hoveringOver = Obj->withinObject(scaledMousePos);
+						handleVObject(Obj, action, isDown);
 					};
 				};
 			};
+
+			returnOrigin = false;
 		};
-		if (Window->isHoveringOver && isDown && action && Window->renderedRecently()) returnOrigin = false;
 	};
 
 	if(returnOrigin) InputMouse(a1, action, isDown, a4, a5, a6, a7, a8);
