@@ -81,6 +81,16 @@ void VWindow::render() {
 					for (auto Obj : VObj->objects) {
 						Obj->position = Vec4(position.x, (position.y + (objectYPos * 10) + 20), position.z, (position.y + (objectYPos * 10) + 30));
 						Obj->handleRenderingObject();
+						if (!Obj->objects.empty()) {
+							RenderUtils::RenderText(Obj->expandedItems ? "-" : "+", Vec2(Obj->position.z - 10, Obj->position.y), Obj->textColour, Obj->textSize, Obj->textAlpha);
+							if (Obj->expandedItems) {
+								for (auto obj : Obj->objects) {
+									obj->position = Vec4(position.x, (position.y + (objectYPos * 10) + 30), position.z, (position.y + (objectYPos * 10) + 40));
+									obj->handleRenderingObject();
+									objectYPos++;
+								};
+							};
+						};
 						objectYPos++;
 					};
 				};
@@ -136,7 +146,7 @@ void VWindowObject::handleRenderingObject() {
 };
 
 void VWindowObject::addExpandedItem(VWindowObject* Obj) {
-	if(type == VObjectType::Button) objects.push_back(Obj);
+	objects.push_back(Obj);
 };
 
 void VWindowObject::toggle() {

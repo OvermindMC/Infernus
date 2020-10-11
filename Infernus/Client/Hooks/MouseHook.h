@@ -9,17 +9,6 @@ public:
 typedef void(__fastcall* _InputMouse)(uint64_t param_1, char param_2, uint64_t param_3, uint64_t param_4, uint64_t param_5, short param_6, short param_7, byte param_8);
 _InputMouse InputMouse;
 
-/*
-* Vec2 VWindow::mousePos() {
-	GuiData* GuiData = Minecraft::GetClientInstance()->GuiData();
-	short mx = float(GuiData->mouseX()) / GuiData->GuiScale();
-	short my = float(GuiData->mouseY()) / GuiData->GuiScale();
-	if (mx < 0 || mx > GuiData->ScaledResolution.x) mx = 0;
-	if (my < 0 || my > GuiData->ScaledResolution.y) my = 0;
-	return Vec2(mx, my);
-};
-*/
-
 Vec2 scaledPos(int a1, int a2) {
 	GuiData* GuiData = Minecraft::GetClientInstance()->GuiData();
 	short mx = float(a1) / GuiData->GuiScale();
@@ -33,14 +22,18 @@ Vec2 scaledMousePos = Vec2();
 bool alreadyDraggingWindow = false;
 
 void handleVObject(VWindowObject* VObj, char action, bool isDown) {
+	
+	if (VObj->hoveringOver && action && isDown) {
+		if (action == 2) {
+			if (!VObj->objects.empty()) VObj->expandedItems = !VObj->expandedItems;
+		};
+	};
+
 	switch (VObj->type) {
 		case VObjectType::Button:
 			if (action && isDown && VObj->hoveringOver) {
 				if (action == 1) {
 					VObj->toggle();
-				}
-				else if (action == 2) {
-					if (!VObj->objects.empty()) VObj->expandedItems = !VObj->expandedItems;
 				};
 			};
 		break;
@@ -114,6 +107,10 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 					for (auto Obj : VObj->objects) {
 						Obj->hoveringOver = Obj->withinObject(scaledMousePos);
 						handleVObject(Obj, action, isDown);
+						for (auto obj : Obj->objects) {
+							obj->hoveringOver = obj->withinObject(scaledMousePos);
+							handleVObject(obj, action, isDown);
+						};
 					};
 				};
 			};
