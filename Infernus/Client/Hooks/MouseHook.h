@@ -101,18 +101,29 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 			};
 
 			if (!alreadyDraggingWindow) {
+				bool breakLoop = false;
 				for (auto VObj : Window->windowObjects) {
 					VObj->hoveringOver = VObj->withinObject(scaledMousePos);
-					handleVObject(VObj, action, isDown);
+					if (VObj->hoveringOver) {
+						handleVObject(VObj, action, isDown);
+						breakLoop = true;
+					};
 					for (auto Obj : VObj->objects) {
 						Obj->hoveringOver = Obj->withinObject(scaledMousePos);
-						handleVObject(Obj, action, isDown);
+						if (Obj->hoveringOver) {
+							handleVObject(Obj, action, isDown);
+							breakLoop = true;
+						};
 						for (auto obj : Obj->objects) {
 							obj->hoveringOver = obj->withinObject(scaledMousePos);
-							handleVObject(obj, action, isDown);
+							if (obj->hoveringOver) {
+								handleVObject(obj, action, isDown);
+								breakLoop = true;
+							};
 						};
 					};
 				};
+				if (breakLoop) break;
 			};
 			returnOrigin = false;
 		};
