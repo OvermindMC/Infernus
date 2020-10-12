@@ -146,7 +146,7 @@ public:
 	virtual void Function120();
 	virtual void Function121();
 	virtual void Function122();
-	virtual  bool shouldRender();
+	virtual bool shouldRender();
 	virtual void Function124();
 	virtual void Function125();
 	virtual void Function126();
@@ -247,7 +247,7 @@ public:
 	virtual float getJumpPower();
 	virtual void Function222();
 	virtual void Function223();
-	virtual  bool wasHurt();
+	virtual bool wasHurt();
 	virtual void Function225();
 	virtual void Function226();
 	virtual void Function227();
