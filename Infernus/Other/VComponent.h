@@ -19,19 +19,16 @@ public:
 	/* Events */
 	virtual void onLoop(); //For ticking each module and handling the onEnable & onDisable events
 	virtual void onTick();
-	virtual void onEnable();
-	virtual void onDisable();
+	virtual void onEnable() {};
+	virtual void onDisable() {};
 
 	virtual void onMouse(char, bool) {};
 	virtual void onMouseMove() {};
 
-	virtual void EnabledCall(VModule*) {};
-	virtual void DisabledCall(VModule*) {};
-
 	/* Events handled by hooks */
 	virtual void onGmTick() {};
 	virtual void onRender() {};
-	virtual void onKey(uint64_t WinKey, bool isDown) {};
+	virtual void onKey(uint64_t WinKey, bool isDown, bool* cancel) {};
 
 	virtual void onLerpMotion(Vec3* velocity) {};
 	virtual void onJump(float*) {};

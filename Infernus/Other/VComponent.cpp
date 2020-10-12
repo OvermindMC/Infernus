@@ -19,17 +19,6 @@ void VModule::onLoop() {
 
 void VModule::onTick() {};
 
-void VModule::onEnable() {
-	for (auto Module : ClientHandler::GetModules()) {
-		Module->EnabledCall(this);
-	};
-};
-void VModule::onDisable() {
-	for (auto Module : ClientHandler::GetModules()) {
-		Module->DisabledCall(this);
-	};
-};
-
 /* VWindow */
 
 std::vector<VWindow*> VWindow::windows = std::vector<VWindow*>();

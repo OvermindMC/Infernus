@@ -8,7 +8,7 @@ public:
 		this->isEnabled = true;
 	};
 	void onRender();
-	void onKey(uint64_t key, bool isDown);
+	void onKey(uint64_t, bool, bool*);
 	void handleKey(uint64_t);
 private:
 	bool categorySelected = false, moduleSelected = false;
@@ -48,7 +48,7 @@ void TabGui::onRender() {
 	RenderUtils::FlushText();
 };
 
-void TabGui::onKey(uint64_t key, bool isDown) {
+void TabGui::onKey(uint64_t key, bool isDown, bool* cancel) {
 	if (isDown) {
 		if (Minecraft::GetLocalPlayer() != nullptr) {
 			if (Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) handleKey(key);

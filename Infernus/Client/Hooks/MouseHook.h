@@ -114,7 +114,6 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 					};
 				};
 			};
-
 			returnOrigin = false;
 		};
 	};

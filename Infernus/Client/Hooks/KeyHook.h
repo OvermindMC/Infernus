@@ -5,24 +5,27 @@ public:
 	void Init();
 };
 
-typedef int(WINAPI* _KeyPress)(uint64_t WinKey, bool isDown);
+typedef void(WINAPI* _KeyPress)(uint64_t WinKey, bool isDown);
 _KeyPress KeyPress;
 
-int KeyPressCallback(uint64_t WinKey, bool isDown) {
+void KeyPressCallback(uint64_t WinKey, bool isDown) {
+	bool cancel = false;
 	Utils::keyMapping[WinKey] = isDown;
-	if (isDown) {
-		for (auto Module : ModulesList) {
-			if (Module->isEnabled) {
-				Module->onKey(WinKey, isDown);
-			};
-			if (Module->key != NULL && Module->key == WinKey) {
+
+	for (auto Module : ModulesList) {
+		if (Module->isEnabled) {
+			Module->onKey(WinKey, isDown, &cancel);
+		};
+
+		if (isDown) {
+			if (Module->key && Module->key == WinKey) {
 				if (Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) {
 					Module->isEnabled = !Module->isEnabled;
 				};
 			};
 		};
 	};
-	return KeyPress(WinKey, isDown);
+	if(!cancel) KeyPress(WinKey, isDown);
 };
 
 void KeyHook::Init() {

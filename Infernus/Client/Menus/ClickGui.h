@@ -6,13 +6,19 @@ class ClickGui : public VModule {
 public:
 	ClickGui() : VModule::VModule("ClickGui", "Renders a UI which can be used to manage modules", 0x2D) {};
 	void onRender();
+	void onKey(uint64_t key, bool isDown, bool* cancel) { *cancel = true; };
 	void onEnable();
+	void onDisable();
 private:
 	std::vector<VWindow*> Windows;
 };
 
 void ClickGui::onRender() {
-	for (auto Window : Windows) Window->render();
+	for (auto Window : Windows) {
+		Window->render();
+	};
+	
+	Minecraft::GetClientInstance()->releaseMouse();
 };
 
 void ClickGui::onEnable() {
@@ -35,4 +41,8 @@ void ClickGui::onEnable() {
 			indexSpace++;
 		};
 	};
+};
+
+void ClickGui::onDisable() {
+	if(Minecraft::GetLocalPlayer() != nullptr) Minecraft::GetClientInstance()->grabMouse();
 };
