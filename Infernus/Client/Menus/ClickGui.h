@@ -26,7 +26,8 @@ void ClickGui::onEnable() {
 
 		int indexSpace = 0;
 		for (auto Category : ClientHandler::GetCategories()) {
-			float toRight = indexSpace * 110;
+			GuiData* Data = Minecraft::GetClientInstance()->GuiData();
+			float toRight = (Data->ScaledResolution.x / (Data->GuiScale() * 3)) * indexSpace;
 
 			VWindow* newWindow = new VWindow(Category->name, Vec4(toRight + 10, 100, toRight + 110, 0), 1.0f, MC_Colour(255, 110, 30), MC_Colour(50, 50, 50), MC_Colour(50, 50, 50), 1.0f, .3f);
 
