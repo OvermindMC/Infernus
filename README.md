@@ -1,3 +1,2 @@
 # Infernus
-Infernus is an internal Utility Mod for Minecraft Bedrock Edition, written in C++
-AND THE BEST CLIENT ON PLANET EARTH EAT SHIT IF U DISAGREE
+Infernus is an **internal** utility mod for __Minecraft Bedrock Edition__ written in C++
