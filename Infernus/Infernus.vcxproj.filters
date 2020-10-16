@@ -191,6 +191,9 @@
     <ClInclude Include="Client\Modules\NoSlowDown.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Modules\CrystalAura.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

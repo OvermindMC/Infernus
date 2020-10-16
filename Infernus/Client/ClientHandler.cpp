@@ -53,6 +53,7 @@ void ClientHandler::InitCategories() {
 #include "Modules/Hitbox.h"
 #include "Modules/Triggerbot.h"
 #include "Modules/Criticals.h"
+#include "Modules/CrystalAura.h"
 /* Movement */
 #include "Modules/AirJump.h"
 #include "Modules/Jetpack.h"
@@ -83,6 +84,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Combat, new Hitbox());
 	PushModule(_Combat, new Triggerbot());
 	PushModule(_Combat, new Criticals());
+	PushModule(_Combat, new CrystalAura());
 	/*Movement*/
 	PushModule(_Movement, new AirJump());
 	PushModule(_Movement, new Jetpack());
