@@ -66,6 +66,7 @@ void ClientHandler::InitCategories() {
 #include "Modules/Velocity.h"
 #include "Modules/Phase.h"
 #include "Modules/NoFall.h"
+#include "Modules/Gamemode.h"
 /* Visuals */
 #include "Menus/TabGui.h"
 #include "Menus/ClickGui.h"
@@ -97,6 +98,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Player, new Velocity());
 	PushModule(_Player, new Phase());
 	PushModule(_Player, new NoFall());
+	PushModule(_Player, new Gamemode());
 	/*Visuals*/
 	PushModule(_Visuals, new TabGui());
 	PushModule(_Visuals, new ClickGui());
