@@ -36,11 +36,12 @@ void TabGui::onRender() {
 				RenderUtils::RenderText(selectedModule == indexYPos ? "> " + Module->name : Module->name, Vec2(categoryBoxWidth + 30, indexYPos * 10 + 20), Module->isEnabled ? MC_Colour(255, 255, 0) : MC_Colour(255, 255, 255), 1.0f, 1.0f);
 				indexYPos++;
 			};
-			float currBoxWidth = RenderUtils::GetTextWidth(Utils::SortArrayOfStrings(ClientHandler::ModulesToString(CurrentModules)).back(), 1.0f);
-			float currCatTxtSize = RenderUtils::GetTextWidth(Categories.at(selectedCategory)->name, 1.0f);
-			float stretched = currBoxWidth > currCatTxtSize ? (categoryBoxWidth + currCatTxtSize) + 55 : (categoryBoxWidth + currBoxWidth) + 40;
+			float largestModWTxt = RenderUtils::GetTextWidth(Utils::SortArrayOfStrings(ClientHandler::ModulesToString(CurrentModules)).back(), 1.0f) + 10;
+			float currentCatWTxt = RenderUtils::GetTextWidth(Categories.at(selectedCategory)->name, 1.0f) + 10;
+			float currBoxWidth = largestModWTxt > currentCatWTxt ? largestModWTxt : currentCatWTxt;
+			float categoryTextWidth = RenderUtils::GetTextWidth(Categories.at(selectedCategory)->name, 1.0f);
 			RenderUtils::RenderText(Categories.at(selectedCategory)->name, Vec2(categoryBoxWidth + 30, 10), MC_Colour(255, 110, 30), 1.0f, 1.0f);
-			RenderUtils::FillRectangle(Vec4(categoryBoxWidth + 30, 10, stretched, CurrentModules.size() * 10 + 20), MC_Colour(50, 50, 50), .3f);
+			RenderUtils::FillRectangle(Vec4(categoryBoxWidth + 30, 10, (categoryBoxWidth + 30) + currBoxWidth, (CurrentModules.size() * 10) + 20), MC_Colour(50, 50, 50), .3f);
 		};
 	};
 
