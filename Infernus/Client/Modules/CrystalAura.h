@@ -1,38 +1,42 @@
 #pragma once
 #include "../../Other/VComponent.h"
 
+typedef void(__thiscall* _CrystalTick)(Actor*);
+_CrystalTick CrystalTick;
+
 class CrystalAura : public VModule {
 public:
 	CrystalAura() : VModule::VModule("CrystalAura", "Automatically blow up ender crystals") {
-		this->addWindowObj(new VWindowSlider(&range, 0.0f, 10.0f, "Range: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider(&range, 0.0f, 5.0f, "Range: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
 		this->addWindowObj(new VWindowButton("AutoPlace", &autoPlace));
 	};
 	void onLoop();
 	void onGmTick();
+	void placeAround(Actor*);
 	void onCrystal(Actor*);
 	void initHook();
 
 	void onEnable() { this->delay = 0; };
 
 	int delay = 0;
-	float range = 6.0;
+	float range = 5.0;
 	bool autoPlace = true;
-	bool currentlyPlacing = false;
 private:
 	bool hookRan = false;
 };
 
-typedef void(__thiscall* _CrystalTick)(Actor*);
-_CrystalTick CrystalTick;
+int _delay = 0;
 
 void CrystalCallback(Actor* C) {
-	CrystalTick(C);
-
-	CrystalAura* CrystalAuraMod = (CrystalAura*)ClientHandler::GetModule(CrystalAura());
-
-	if (CrystalAuraMod->isEnabled) {
-		CrystalAuraMod->onCrystal(C);
+	_delay++;
+	if (_delay > 20) {
+		CrystalAura* CrystalAuraMod = (CrystalAura*)ClientHandler::GetModule(CrystalAura());
+		if (CrystalAuraMod->isEnabled) {
+			CrystalAuraMod->onCrystal(C);
+		};
+		_delay = 0;
 	};
+	CrystalTick(C);
 };
 
 void CrystalAura::onLoop() {
@@ -44,45 +48,52 @@ void CrystalAura::onLoop() {
 
 void CrystalAura::onGmTick() {
 	delay++;
-
-	if (delay >= 5) {
-		delay = 0;
+	if (delay >= 10) {
 		LocalPlayer* Player = Minecraft::GetLocalPlayer();
 		if (autoPlace && Player != nullptr) {
-			Vec3 currPos = *Player->getPos();
 			ItemStack* heldItem = Player->getSelectedItem();
-
 			if (heldItem->StackCount > 0 && (*heldItem->Item)->itemID == 426) {
-				for (int x = (int)currPos.x - range; x < (int)currPos.x + range; x++) {
-					for (int y = (int)currPos.y - range; y < (int)currPos.y + range; y++) {
-						for (int z = (int)currPos.z - range; z < (int)currPos.z + range; z++) {
-							Vec3_i blockPos = Vec3_i(x, y, z);
-							Vec3_i blockAbove = Vec3(x, y + 1, z);
+				auto Entities = Minecraft::FetchPlayers();
+				for (auto Entity : *Entities) {
+					if (Utils::distanceVec3(*Entity->getPos(), *Player->getPos()) < range) {
+						placeAround(Entity);
+					};
+				};
+			};
+		};
+		delay = 0;
+	};
+};
 
-							Block* block = Player->BlockSource->getBlock(blockPos);
-							Block* blockB = Player->BlockSource->getBlock(blockAbove);
+void CrystalAura::placeAround(Actor* Entity) {
+	LocalPlayer* Player = Minecraft::GetLocalPlayer();
+	Vec3 targetPos = *Entity->getPos();
+	for (int x = (int)targetPos.x - range; x < (int)targetPos.x + range; x++) {
+		for (int y = (int)targetPos.y - range; y < (int)targetPos.y + range; y++) {
+			for (int z = (int)targetPos.z - range; z < (int)targetPos.z + range; z++) {
+				Vec3_i blockPos = Vec3_i(x, y, z);
+				Vec3_i blockAbove = Vec3(x, y + 1, z);
 
-							if (block != nullptr) {
-								int ID = block->toLegacy()->blockID;
-								if ((ID == 49 || ID == 7) && blockB->toLegacy()->blockID == 0) {
-									currentlyPlacing = true;
-									Minecraft::GetGameMode()->buildBlock(&blockPos, 0);
-								};
-							};
-						};
+				Block* block = Player->BlockSource->getBlock(blockPos);
+				Block* blockB = Player->BlockSource->getBlock(blockAbove);
+
+				if (block != nullptr) {
+					int ID = block->toLegacy()->blockID;
+					if ((ID == 49 || ID == 7) && blockB->toLegacy()->blockID == 0) {
+						Minecraft::GetGameMode()->buildBlock(&blockPos, 0);
 					};
 				};
 			};
 		};
 	};
-	currentlyPlacing = false;
 };
 
 void CrystalAura::onCrystal(Actor* C) {
 	LocalPlayer* Player = Minecraft::GetLocalPlayer();
+	GameMode* GM = Minecraft::GetGameMode();
 	if (Player != nullptr) {
 		if (Utils::distanceVec3(*C->getPos(), *Player->getPos()) <= range) {
-			Minecraft::GetGameMode()->attack(C);
+			GM->attack(C);
 			Player->swing();
 		};
 	};

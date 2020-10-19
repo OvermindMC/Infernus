@@ -324,6 +324,12 @@ public:
 		return reinterpret_cast<InventoryTransactionManager*>(reinterpret_cast<__int64>(this) + 0x1178); //Extends LocalPlayer?
 	};
 
+	void setFlying(bool value) {
+		uintptr_t _this = reinterpret_cast<uintptr_t>(this);
+		bool* flyingAddr = (bool*)(_this + 0x8B8);
+		*flyingAddr = value;
+	};
+
 }; //Size: 0x0608
 
 class LocalPlayer
@@ -355,8 +361,8 @@ public:
 	char pad_0820[848]; //0x0820
 	class PlayerInventory* PlayerInventory; //0x0B70
 	char pad_0B78[1312]; //0x0B78
-	uint64_t inventoryState; //0x1098
-	char pad_10A0[16]; //0x10A0
+	BYTE* inventoryState; //0x1098
+	/*char pad_10A0[16]; //0x10A0*/
 
 	virtual void Function0();
 	virtual void Function1();

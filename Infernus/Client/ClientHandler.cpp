@@ -68,6 +68,7 @@ void ClientHandler::InitCategories() {
 #include "Modules/Phase.h"
 #include "Modules/NoFall.h"
 #include "Modules/Gamemode.h"
+#include "Modules/Flight.h"
 /* Visuals */
 #include "Menus/TabGui.h"
 #include "Menus/ClickGui.h"
@@ -76,6 +77,7 @@ void ClientHandler::InitCategories() {
 /* World */
 #include "Modules/Scaffold.h"
 #include "Modules/Nuker.h"
+#include "Modules/PlayerWarning.h"
 /* Other */
 #include "Modules/Uninject.h"
 #include "Modules/AntiBot.h"
@@ -101,6 +103,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Player, new Phase());
 	PushModule(_Player, new NoFall());
 	PushModule(_Player, new Gamemode());
+	PushModule(_Player, new Flight());
 	/*Visuals*/
 	PushModule(_Visuals, new TabGui());
 	PushModule(_Visuals, new ClickGui());
@@ -109,6 +112,7 @@ void ClientHandler::InitModules() {
 	/*World*/
 	PushModule(_World, new Scaffold());
 	PushModule(_World, new Nuker());
+	PushModule(_World, new PlayerWarning());
 	/*Other*/
 	PushModule(_Other, new Uninject());
 	PushModule(_Other, new AntiBot());

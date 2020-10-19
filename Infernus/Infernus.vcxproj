@@ -183,6 +183,7 @@
     <ClInclude Include="Client\Modules\AutoSprint.h" />
     <ClInclude Include="Client\Modules\Criticals.h" />
     <ClInclude Include="Client\Modules\CrystalAura.h" />
+    <ClInclude Include="Client\Modules\Flight.h" />
     <ClInclude Include="Client\Modules\Gamemode.h" />
     <ClInclude Include="Client\Modules\HighJump.h" />
     <ClInclude Include="Client\Modules\Hitbox.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Client\Modules\NoWeb.h" />
     <ClInclude Include="Client\Modules\Nuker.h" />
     <ClInclude Include="Client\Modules\Phase.h" />
+    <ClInclude Include="Client\Modules\PlayerWarning.h" />
     <ClInclude Include="Client\Modules\Scaffold.h" />
     <ClInclude Include="Client\Modules\Speed.h" />
     <ClInclude Include="Client\Modules\Surround.h" />
