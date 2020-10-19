@@ -189,6 +189,7 @@
     <ClInclude Include="Client\Modules\Hitbox.h" />
     <ClInclude Include="Client\Modules\Jetpack.h" />
     <ClInclude Include="Client\Modules\Killaura.h" />
+    <ClInclude Include="Client\Modules\Misplace.h" />
     <ClInclude Include="Client\Modules\NoFall.h" />
     <ClInclude Include="Client\Modules\NoSlowDown.h" />
     <ClInclude Include="Client\Modules\NoWeb.h" />

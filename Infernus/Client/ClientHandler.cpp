@@ -55,6 +55,7 @@ void ClientHandler::InitCategories() {
 #include "Modules/Criticals.h"
 #include "Modules/CrystalAura.h"
 #include "Modules/Surround.h"
+#include "Modules/Misplace.h"
 /* Movement */
 #include "Modules/AirJump.h"
 #include "Modules/Jetpack.h"
@@ -90,6 +91,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Combat, new Criticals());
 	PushModule(_Combat, new CrystalAura());
 	PushModule(_Combat, new Surround());
+	PushModule(_Combat, new Misplace());
 	/*Movement*/
 	PushModule(_Movement, new AirJump());
 	PushModule(_Movement, new Jetpack());
