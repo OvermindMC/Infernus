@@ -9,7 +9,7 @@ public:
 	};
 	void onRender();
 	void onKey(uint64_t, bool, bool*);
-	void handleKey(uint64_t);
+	bool handleKey(uint64_t);
 private:
 	bool categorySelected = false, moduleSelected = false;
 	int selectedCategory = 0, selectedModule = 0;
@@ -52,13 +52,21 @@ void TabGui::onRender() {
 void TabGui::onKey(uint64_t key, bool isDown, bool* cancel) {
 	if (isDown) {
 		if (Minecraft::GetLocalPlayer() != nullptr) {
-			if (Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) handleKey(key);
+			if (Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) {
+				if (handleKey(key)) {
+					*cancel = true;
+				};
+			};
 		}
-		else handleKey(key);
+		else {
+			if (handleKey(key)) {
+				*cancel = true;
+			};
+		};
 	};
 };
 
-void TabGui::handleKey(uint64_t WinKey) {
+bool TabGui::handleKey(uint64_t WinKey) {
 	std::vector<VCategory*> Categories = ClientHandler::GetCategories();
 	VModule* Module = Categories.at(selectedCategory)->modules.size() ? Categories.at(selectedCategory)->modules.at(selectedModule) : nullptr;
 
@@ -72,6 +80,7 @@ void TabGui::handleKey(uint64_t WinKey) {
 				categorySelected = false;
 			};
 		};
+		return true;
 	}
 	else if (WinKey == 0x27) { //Right
 		if (!categorySelected) {
@@ -85,6 +94,7 @@ void TabGui::handleKey(uint64_t WinKey) {
 				if (Module != nullptr) Module->isEnabled = !Module->isEnabled;
 			};
 		};
+		return true;
 	}
 	else if (WinKey == 0x26) { //Up
 		if (categorySelected && !moduleSelected) {
@@ -97,6 +107,7 @@ void TabGui::handleKey(uint64_t WinKey) {
 				selectedModule--;
 			};
 		};
+		return true;
 	}
 	else if (WinKey == 0x28) { //Down
 		if (categorySelected && !moduleSelected) {
@@ -109,5 +120,7 @@ void TabGui::handleKey(uint64_t WinKey) {
 				if (selectedModule >= Categories.at(selectedCategory)->modules.size()) selectedModule = 0;
 			};
 		};
+		return true;
 	};
+	return false;
 };
