@@ -8,9 +8,9 @@ public:
 	};
 	void onGmTick();
 	void onLoop() { delay_ms = roundf(delay_ms); };
-private:
+
 	float delay_ms = 0.0f;
-	std::chrono::time_point<std::chrono::steady_clock> savedTime;
+	std::chrono::time_point<std::chrono::steady_clock> savedTime = std::chrono::high_resolution_clock::now();
 };
 
 void Triggerbot::onGmTick() {
@@ -23,5 +23,6 @@ void Triggerbot::onGmTick() {
 				Player->swing();
 			};
 		};
+		savedTime = std::chrono::high_resolution_clock::now();
 	};
 };
