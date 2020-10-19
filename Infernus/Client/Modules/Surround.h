@@ -12,7 +12,7 @@ public:
 	void attemptTask(Vec3);
 private:
 	int delay = 0;
-	float range = 6.0f;
+	float range = 4.0f;
 	Scaffold* ScaffoldMod;
 };
 
@@ -25,11 +25,24 @@ void Surround::onEnable() {
 void Surround::onGmTick() {
 	if (Minecraft::GetLocalPlayer() != nullptr) {
 		std::vector<Actor*>* Players = Minecraft::FetchPlayers();
-		if (Players != nullptr && !Players->empty()) {
+		ItemStack* heldItem = Minecraft::GetLocalPlayer()->getSelectedItem();
+		if (Players != nullptr && !Players->empty() && (heldItem != nullptr && heldItem->Item != nullptr && (*heldItem->Item)->isBlock())) {
+			std::vector<float> distances;
 			for (auto Entity : *Players) {
 				Vec3 entPos = *Entity->getPos();
-				if (Utils::distanceVec3(entPos, *Minecraft::GetLocalPlayer()->getPos()) <= range) {
-					attemptTask(Vec3(entPos.x, entPos.y - ((LocalPlayer*)Entity)->Collision.y, entPos.z));
+				float distance = Utils::distanceVec3(entPos, *Minecraft::GetLocalPlayer()->getPos());
+				if (distance <= range) {
+					distances.push_back(distance);
+				};
+			};
+			std::sort(distances.begin(), distances.end());
+			if (!distances.empty()) {
+				for (auto Entity : *Players) {
+					Vec3 entPos = *Entity->getPos();
+					if (Utils::distanceVec3(entPos, *Minecraft::GetLocalPlayer()->getPos()) == distances.at(0)) {
+						attemptTask(Vec3(entPos.x, entPos.y - (((LocalPlayer*)Entity)->Collision.y + 0.5f), entPos.z));
+						break;
+					};
 				};
 			};
 		};
@@ -48,7 +61,7 @@ void Surround::attemptTask(Vec3 blockPos) {
 	int index = 0;
 	for (auto BlockPos : blockPositions) {
 		index++;
-		for (int y = blockPos.y; y < blockPos.y + 3.0f; y++) {
+		for (int y = BlockPos.y; y < BlockPos.y + 3.0f; y++) {
 			ScaffoldMod->tryBuild(Vec3(BlockPos.x, y, BlockPos.z));
 		};
 
