@@ -8,37 +8,47 @@ public:
 		this->addWindowObj(new VWindowButton("Multi Ents", &this->multiEnts));
 		this->addWindowObj(new VWindowButton("Attack with UI open", &this->menuOpen));
 		this->addWindowObj(new VWindowSlider(&disRange, 0.0f, 12.0f, "Range: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider(&delay_ms, 0, 1000.0f, "Delay (MS): ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
 	};
+	void onLoop() { delay_ms = roundf(delay_ms); };
 	void onGmTick();
 	void onEntityTick(std::vector<Actor*>*);
 
 	void attackPlayers();
 	void attackMobs(std::vector<Actor*>*);
-private:
+
 	bool multiEnts = true;
 	bool menuOpen = true;
 	float disRange = 8.0f;
+	float delay_ms = 0.0f;
+	std::chrono::time_point<std::chrono::steady_clock> savedTime = std::chrono::high_resolution_clock::now();
 };
 
 void Killaura::onGmTick() {
-	if (Minecraft::GetLocalPlayer() != nullptr) {
-		if (menuOpen) {
-			attackPlayers();
-		}
-		else {
-			if (Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) attackPlayers();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - savedTime) >= std::chrono::milliseconds((int)delay_ms)) {
+		if (Minecraft::GetLocalPlayer() != nullptr) {
+			if (menuOpen) {
+				attackPlayers();
+			}
+			else {
+				if (Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) attackPlayers();
+			};
 		};
+		savedTime = std::chrono::high_resolution_clock::now();
 	};
 };
 
 void Killaura::onEntityTick(std::vector<Actor*>* Entities) {
-	if (isEnabled && Minecraft::GetLocalPlayer() != nullptr) {
-		if (menuOpen) {
-			attackMobs(Entities);
-		}
-		else {
-			if (Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) attackMobs(Entities);
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - savedTime) >= std::chrono::milliseconds((int)delay_ms)) {
+		if (isEnabled && Minecraft::GetLocalPlayer() != nullptr) {
+			if (menuOpen) {
+				attackMobs(Entities);
+			}
+			else {
+				if (Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) attackMobs(Entities);
+			};
 		};
+		savedTime = std::chrono::high_resolution_clock::now();
 	};
 };
 
