@@ -14,6 +14,7 @@ private:
 	int savedGamemode;
 	int targetGamemode;
 	float targetGamemodeF = 1.0;
+	bool modified = false;
 };
 
 void Gamemode::onLoop() {
@@ -24,6 +25,7 @@ void Gamemode::onLoop() {
 void Gamemode::onEnable() {
 	if (Minecraft::GetLocalPlayer() != nullptr) {
 		savedGamemode = Minecraft::GetLocalPlayer()->toActor()->currentGameMode();
+		modified = true;
 	};
 };
 
@@ -34,7 +36,8 @@ void Gamemode::onGmTick() {
 };
 
 void Gamemode::onDisable() {
-	if (Minecraft::GetLocalPlayer() != nullptr) {
+	if (Minecraft::GetLocalPlayer() != nullptr && modified) {
 		Minecraft::GetLocalPlayer()->setPlayerGameType(savedGamemode);
+		modified = false;
 	};
 };

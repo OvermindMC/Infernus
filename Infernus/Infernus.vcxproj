@@ -195,6 +195,7 @@
     <ClInclude Include="Client\Modules\Phase.h" />
     <ClInclude Include="Client\Modules\Scaffold.h" />
     <ClInclude Include="Client\Modules\Speed.h" />
+    <ClInclude Include="Client\Modules\Surround.h" />
     <ClInclude Include="Client\Modules\Triggerbot.h" />
     <ClInclude Include="Client\Modules\Uninject.h" />
     <ClInclude Include="Client\Modules\Velocity.h" />
