@@ -4,7 +4,7 @@
 class Gamemode : public VModule {
 public:
 	Gamemode() : VModule::VModule("Gamemode", "Change your client-sided Gamemode") {
-		this->addWindowObj(new VWindowSlider(&targetGamemodeF, 0.0f, 2.0f, "Gamemode: "));
+		this->addWindowObj(new VWindowSlider(&targetGamemodeF, 0.0f, 2.0f, "Gamemode: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
 	};
 	void onLoop();
 	void onEnable();
