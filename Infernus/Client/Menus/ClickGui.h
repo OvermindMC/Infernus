@@ -23,7 +23,7 @@ void ClickGui::onRender() {
 		Window->render();
 	};
 	
-	Minecraft::GetClientInstance()->releaseMouse();
+	//Minecraft::GetClientInstance()->releaseMouse();
 };
 
 void ClickGui::onEnable() {
@@ -48,6 +48,7 @@ void ClickGui::onEnable() {
 			indexSpace++;
 		};
 	};
+	Minecraft::GetClientInstance()->releaseMouse();
 };
 
 void ClickGui::onDisable() {
