@@ -45,7 +45,7 @@ public:
 	virtual void Function21();
 	virtual void Function22();
 	virtual void Function23();
-	virtual void Function24();
+	virtual int getAttackDamage();
 	virtual bool isHandEquipped(void);
 
 public:
@@ -53,6 +53,16 @@ public:
 	bool isBlock() {
 		auto val = *reinterpret_cast<__int64***>(reinterpret_cast<__int64>(this) + 0x170);
 		return val != nullptr && *val != nullptr;
+	};
+
+	bool isTool() {
+		if (getAttackDamage() > 0) //Swords & so on
+			return true;
+		if (itemID == 261 || itemID == 262) //Bow
+			return true;
+		if (itemID == 259) //Flint & Steel
+			return true;
+		return false;
 	};
 
 }; //Size: 0x00E0

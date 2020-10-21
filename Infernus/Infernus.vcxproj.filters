@@ -209,6 +209,12 @@
     <ClInclude Include="Client\Modules\Misplace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Hooks\BlockHooks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Modules\Xray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

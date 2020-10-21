@@ -232,7 +232,7 @@ public:
 	virtual void* Function170();
 	virtual void* Function171();
 	virtual void* Function172();
-	virtual void* Function173();
+	virtual void updateChunkRadius(void);
 	virtual void* Function174();
 	virtual void* Function175();
 	virtual void* Function176();
@@ -318,7 +318,7 @@ public:
 	virtual void* Function256();
 	virtual void* Function257();
 	virtual void* Function258();
-	virtual void* Function259(); //262 - grabMouse
+	virtual void* Function259();
 	virtual void* Function260();
 	virtual void* grabMouse();
 	virtual void* releaseMouse();

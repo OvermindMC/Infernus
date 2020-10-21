@@ -119,7 +119,8 @@ public:
 	static uintptr_t FindSignature(const char* szSignature);
 	static bool usingKey(uint64_t key);
 	static std::vector<std::string> SortArrayOfStrings(std::vector<std::string> stringVecArr);
-	static float distanceVec3(Vec3 A, Vec3 B);
+	static float distanceVec3(Vec3, Vec3);
+	static int distanceVec3_i(Vec3_i, Vec3_i);
 
 	/* Other */
 	static std::map<uint64_t, bool> mouseState;

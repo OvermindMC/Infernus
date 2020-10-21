@@ -18,6 +18,8 @@ UINT64 Packet::MobEquipmentAddr = NULL;
 #include "Hooks/MultiPlayerLevelHook.h"
 #include "Hooks/EntityHooks.h"
 #include "Hooks/NetworkHook.h"
+#include "Hooks/BlockHooks.h"
+#include "Hooks/LevelHooks.h"
 
 void ClientHandler::InitHooks() {
 	if (MH_Initialize() == MH_OK) {
@@ -30,6 +32,8 @@ void ClientHandler::InitHooks() {
 		HooksList.push_back(new MultiPlayerLevelHook());
 		HooksList.push_back(new EntityHooks());
 		HooksList.push_back(new NetworkHook());
+		HooksList.push_back(new BlockHooks());
+		HooksList.push_back(new LevelHooks());
 
 		/* Initialize each hooks functionality */
 		for (auto Hook : HooksList) Hook->Init();
@@ -75,6 +79,7 @@ void ClientHandler::InitCategories() {
 #include "Menus/ClickGui.h"
 #include "Menus/ModuleList.h"
 #include "Menus/HUD.h"
+#include "Modules/Xray.h"
 /* World */
 #include "Modules/Scaffold.h"
 #include "Modules/Nuker.h"
@@ -111,6 +116,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Visuals, new ClickGui());
 	PushModule(_Visuals, new ModuleList());
 	PushModule(_Visuals, new HUD());
+	PushModule(_Visuals, new Xray());
 	/*World*/
 	PushModule(_World, new Scaffold());
 	PushModule(_World, new Nuker());

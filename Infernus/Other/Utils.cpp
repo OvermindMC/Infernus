@@ -133,3 +133,10 @@ float Utils::distanceVec3(Vec3 A, Vec3 B) {
 	float dZ = A.z - B.z;
 	return sqrt(dX * dX + dY * dY + dZ * dZ);
 };
+
+int Utils::distanceVec3_i(Vec3_i A, Vec3_i B) {
+	int dX = A.x - B.x;
+	int dY = A.y - B.y;
+	int dZ = A.z - B.z;
+	return sqrt(dX * dX + dY * dY + dZ * dZ);
+}

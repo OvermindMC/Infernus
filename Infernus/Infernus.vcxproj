@@ -166,6 +166,7 @@
     <ClInclude Include="Client\Categories\Visuals.h" />
     <ClInclude Include="Client\Categories\World.h" />
     <ClInclude Include="Client\ClientHandler.h" />
+    <ClInclude Include="Client\Hooks\BlockHooks.h" />
     <ClInclude Include="Client\Hooks\ClientInstanceHook.h" />
     <ClInclude Include="Client\Hooks\EntityHooks.h" />
     <ClInclude Include="Client\Hooks\GameModeHook.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="Client\Modules\Triggerbot.h" />
     <ClInclude Include="Client\Modules\Uninject.h" />
     <ClInclude Include="Client\Modules\Velocity.h" />
+    <ClInclude Include="Client\Modules\Xray.h" />
     <ClInclude Include="Other\RenderUtils.h" />
     <ClInclude Include="Other\Utils.h" />
     <ClInclude Include="Other\VComponent.h" />
