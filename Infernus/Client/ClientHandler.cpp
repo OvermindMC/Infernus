@@ -19,7 +19,6 @@ UINT64 Packet::MobEquipmentAddr = NULL;
 #include "Hooks/EntityHooks.h"
 #include "Hooks/NetworkHook.h"
 #include "Hooks/BlockHooks.h"
-#include "Hooks/LevelHooks.h"
 
 void ClientHandler::InitHooks() {
 	if (MH_Initialize() == MH_OK) {
