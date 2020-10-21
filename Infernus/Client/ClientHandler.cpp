@@ -32,7 +32,6 @@ void ClientHandler::InitHooks() {
 		HooksList.push_back(new EntityHooks());
 		HooksList.push_back(new NetworkHook());
 		HooksList.push_back(new BlockHooks());
-		HooksList.push_back(new LevelHooks());
 
 		/* Initialize each hooks functionality */
 		for (auto Hook : HooksList) Hook->Init();
