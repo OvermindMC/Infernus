@@ -53,6 +53,7 @@ void ClientHandler::InitCategories() {
 /* Combat */
 #include "Modules/Killaura.h"
 #include "Modules/Hitbox.h"
+#include "Modules/Aimbot.h"
 #include "Modules/Triggerbot.h"
 #include "Modules/Criticals.h"
 #include "Modules/CrystalAura.h"
@@ -90,6 +91,7 @@ void ClientHandler::InitModules() {
 	/*Combat*/
 	PushModule(_Combat, new Killaura());
 	PushModule(_Combat, new Hitbox());
+	PushModule(_Combat, new Aimbot());
 	PushModule(_Combat, new Triggerbot());
 	PushModule(_Combat, new Criticals());
 	PushModule(_Combat, new CrystalAura());

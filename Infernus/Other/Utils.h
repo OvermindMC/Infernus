@@ -29,6 +29,24 @@ struct Vec2 {
 
 	bool operator == (Vec2 compVec) { return compVec.x == x && compVec.y == y; };
 	bool operator != (Vec2 compVec) { return compVec.x != x || compVec.y != y; };
+	
+	Vec2 sub(const Vec2& vec) {
+		return Vec2(x - vec.x, y - vec.y);
+	};
+
+	Vec2 normalAngles() {
+		float x = this->x;
+		float y = this->y;
+		while (x > 90.0f)
+			x -= 180.0f;
+		while (x < -90.0f)
+			x += 180.0f;
+		while (y > 180.0f)
+			y -= 360.0f;
+		while (y < -180.0f)
+			y += 360.0f;
+		return Vec2(x, y);
+	};
 };
 
 struct Vec3 {
@@ -62,6 +80,15 @@ struct Vec3 {
 
 	Vec3 normalize() {
 		return div(magnitude());
+	};
+
+	Vec2 calcAngle(Vec3 vec) {
+		float degreeRadian = 180.0f / PI;
+		Vec3 diff = vec.sub(*this);
+		Vec2 angles;
+		angles.x = asinf(diff.y) * -degreeRadian;
+		angles.y = (float)-atan2f(diff.x, diff.z) * degreeRadian;
+		return angles;
 	};
 };
 

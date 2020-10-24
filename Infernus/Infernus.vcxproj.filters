@@ -215,6 +215,9 @@
     <ClInclude Include="Client\Modules\Xray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Modules\Aimbot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

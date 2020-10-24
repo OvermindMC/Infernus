@@ -179,6 +179,7 @@
     <ClInclude Include="Client\Menus\HUD.h" />
     <ClInclude Include="Client\Menus\ModuleList.h" />
     <ClInclude Include="Client\Menus\TabGui.h" />
+    <ClInclude Include="Client\Modules\Aimbot.h" />
     <ClInclude Include="Client\Modules\AirJump.h" />
     <ClInclude Include="Client\Modules\AntiBot.h" />
     <ClInclude Include="Client\Modules\AutoSprint.h" />

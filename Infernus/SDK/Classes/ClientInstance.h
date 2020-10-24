@@ -49,6 +49,16 @@ public:
 	char pad_0000[16]; //0x0000
 }; //Size: 0x0010
 
+class LevelRenderer
+{
+public:
+	char pad_0000[64]; //0x0000
+public:
+	Vec3 origin() {
+		return *reinterpret_cast<Vec3*>(reinterpret_cast<uintptr_t>(this) + 0x870);
+	};
+}; //Size: 0x0040
+
 class ClientInstance
 {
 public:
@@ -349,6 +359,10 @@ public:
 
 	class LoopbackPacketSender* GetLoopbackPacketSender() {
 		return *reinterpret_cast<class LoopbackPacketSender**>(reinterpret_cast<__int64>(this) + 0xD8);
+	};
+
+	class LevelRenderer* GetLevelRenderer() {
+		return *reinterpret_cast<class LevelRenderer**>(reinterpret_cast<__int64>(this) + 0xC8);
 	};
 
 	bool isValidTarget(class Actor* Entity) {

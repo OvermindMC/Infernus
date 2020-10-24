@@ -278,6 +278,12 @@ public:
 		Crit(this, Entity);
 	};
 
+	void applyTurnDelta(Vec2* angles) {
+		using _ApplyTurn = void(__fastcall*)(Actor*, Vec2*);
+		static _ApplyTurn ApplyTurn = reinterpret_cast<_ApplyTurn>(Utils::FindSignature("48 89 5C 24 ?? 57 48 83 EC ?? 48 8B D9 0F 29 74 24 ?? 48 8B 89 ?? ?? ?? ?? 48 8B ?? 0F 29 7C 24 ?? 44 0F"));
+		ApplyTurn(this, angles);
+	};
+
 	int currentGameMode() {
 		int currGM = 0;
 
@@ -301,23 +307,6 @@ public:
 
 	class MultiPlayerLevel* GetMultiPlayerLevel() {
 		return *reinterpret_cast<class MultiPlayerLevel**>(reinterpret_cast<__int64>(this) + 0x330);
-	};
-
-	Vec2 getRotationsToEnt(class Actor* Target) {
-		Vec3 TargetPos = *Target->getPos();
-		Vec3 CurrentPos = *this->getPos();
-
-		float dX = TargetPos.x - CurrentPos.x;
-		float dY = TargetPos.y - CurrentPos.y;
-		float dZ = TargetPos.z - CurrentPos.z;
-
-		double distance = sqrt(dX * dX + dY * dY + dZ * dZ);
-
-		Vec2 anglesVec;
-		anglesVec.x = -(float)(atan2(dY, distance) * 180.0f / PI);
-		anglesVec.y = (float)(atan2(dZ, dX) * 180.0f / PI) - 90.0f;
-
-		return anglesVec;
 	};
 
 	class InventoryTransactionManager* GetTransactionManager() {
