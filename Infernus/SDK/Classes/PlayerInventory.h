@@ -1,4 +1,5 @@
 #pragma once
+#include "InventoryTransaction.h"
 
 class InventoryMenu
 {
@@ -66,4 +67,18 @@ public:
 	virtual void Function28();
 	virtual void Function29();
 	virtual void CreateTransactionContext(class Inventory*, class ItemStack*);
+public:
+	bool isFull() {
+		int count = 0;
+		for (int I = 0; I < 36; I++) {
+			if (getItem(I)->Item != nullptr) count++;
+		};
+		return count == 36;
+	};
+
+	int getFirstEmptySlot() {
+		for (int I = 0; I < 36; I++) {
+			if (getItem(I)->Item == nullptr) return I;
+		};
+	};
 }; //Size: 0x0048
