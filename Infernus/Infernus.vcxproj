@@ -183,6 +183,7 @@
     <ClInclude Include="Client\Modules\AirJump.h" />
     <ClInclude Include="Client\Modules\AntiBot.h" />
     <ClInclude Include="Client\Modules\AutoSprint.h" />
+    <ClInclude Include="Client\Modules\AutoTotem.h" />
     <ClInclude Include="Client\Modules\Criticals.h" />
     <ClInclude Include="Client\Modules\CrystalAura.h" />
     <ClInclude Include="Client\Modules\Flight.h" />

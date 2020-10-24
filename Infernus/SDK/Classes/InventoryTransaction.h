@@ -8,8 +8,10 @@ public:
 		this->slot = slot;
 		this->sourceType = 0;
 		this->type = type;
-		if (sourceItem != nullptr) this->sourceItem = *sourceItem;
-		if (targetItem != nullptr) this->targetItem = *targetItem;
+		if (sourceItem != nullptr)
+			this->sourceItem = *sourceItem;
+		if (targetItem != nullptr)
+			this->targetItem = *targetItem;
 	};
 public:
 	int type;

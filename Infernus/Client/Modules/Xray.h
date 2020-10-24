@@ -3,7 +3,7 @@
 
 class Xray : public VModule {
 public:
-	Xray() : VModule::VModule("Xray", "See ores through solid blocks") {};
+	Xray() : VModule::VModule("Xray", "See ores through solid blocks", 0x58) {};
 	void onEnable();
 	void onDisable();
 	bool holdingToolOrBlock();

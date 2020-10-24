@@ -73,6 +73,7 @@ void ClientHandler::InitCategories() {
 #include "Modules/NoFall.h"
 #include "Modules/Gamemode.h"
 #include "Modules/Flight.h"
+#include "Modules/AutoTotem.h"
 /* Visuals */
 #include "Menus/TabGui.h"
 #include "Menus/ClickGui.h"
@@ -111,6 +112,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Player, new NoFall());
 	PushModule(_Player, new Gamemode());
 	PushModule(_Player, new Flight());
+	PushModule(_Player, new AutoTotem());
 	/*Visuals*/
 	PushModule(_Visuals, new TabGui());
 	PushModule(_Visuals, new ClickGui());

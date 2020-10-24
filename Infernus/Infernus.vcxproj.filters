@@ -218,6 +218,9 @@
     <ClInclude Include="Client\Modules\Aimbot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Modules\AutoTotem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
