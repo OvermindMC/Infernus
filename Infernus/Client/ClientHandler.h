@@ -25,8 +25,11 @@ enum Categories {
 
 class ClientHandler {
 public:
+	static std::string commandPrefix;
+
 	static void InitHooks();
 	static void InitCategories();
+	static void InitCommands();
 	static void InitModules();
 	static void ModuleBaseTick();
 
@@ -42,8 +45,11 @@ public:
 	static void PushModule(Categories Category, VModule* Module);
 
 	static std::vector<VCategory*> GetCategories();
+	static std::vector<VCommand*> GetCommands();
 	static std::vector<VModule*> GetModules();
 
 	static std::vector<std::string> CategoriesToString(std::vector<VCategory*> CategoryArr);
 	static std::vector<std::string> ModulesToString(std::vector<VModule*> ModulesArr);
+
+	static bool handleCommand(std::string);
 };

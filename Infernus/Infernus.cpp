@@ -5,6 +5,7 @@ void InitInfernus(LPVOID lpParam) {
 	Utils::hModule = (HMODULE)lpParam;
 
 	ClientHandler::InitCategories();
+	ClientHandler::InitCommands();
 	ClientHandler::InitModules();
 	ClientHandler::InitHooks();
 	ClientHandler::ModuleBaseTick();

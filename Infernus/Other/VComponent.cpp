@@ -19,6 +19,13 @@ void VModule::onLoop() {
 
 void VModule::onTick() {};
 
+void VCommand::reply(std::string input) {
+	LocalPlayer* Player = Minecraft::GetLocalPlayer();
+	if (Player != nullptr) {
+		Player->displayTextObjectMessage(&TextHolder(input));
+	};
+};
+
 /* VWindow */
 
 std::vector<VWindow*> VWindow::windows = std::vector<VWindow*>();

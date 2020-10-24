@@ -166,6 +166,7 @@
     <ClInclude Include="Client\Categories\Visuals.h" />
     <ClInclude Include="Client\Categories\World.h" />
     <ClInclude Include="Client\ClientHandler.h" />
+    <ClInclude Include="Client\Commands\TestCommand.h" />
     <ClInclude Include="Client\Hooks\BlockHooks.h" />
     <ClInclude Include="Client\Hooks\ClientInstanceHook.h" />
     <ClInclude Include="Client\Hooks\EntityHooks.h" />

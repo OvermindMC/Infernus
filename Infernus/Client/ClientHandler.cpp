@@ -1,7 +1,10 @@
 #include "ClientHandler.h"
 
+std::string ClientHandler::commandPrefix = ".";
+
 std::vector<VHook*> HooksList;
 std::vector<VCategory*> CategoriesList;
+std::vector<VCommand*> CommandsList;
 std::vector<VModule*> ModulesList;
 
 UINT64 Packet::PlayerAuthInputAddr = NULL;
@@ -9,6 +12,7 @@ UINT64 Packet::MovePlayerAddr = NULL;
 UINT64 Packet::TextAddr = NULL;
 UINT64 Packet::ActorFallAddr = NULL;
 UINT64 Packet::MobEquipmentAddr = NULL;
+UINT64 Packet::InventoryTransactionAddr = NULL;
 
 #include "Hooks/ClientInstanceHook.h"
 #include "Hooks/KeyHook.h"
@@ -48,6 +52,12 @@ void ClientHandler::InitCategories() {
 	CategoriesList.push_back(new Visuals());
 	CategoriesList.push_back(new World());
 	CategoriesList.push_back(new Other());
+};
+
+#include "Commands/TestCommand.h"
+
+void ClientHandler::InitCommands() {
+	CommandsList.push_back(new TestCommand());
 };
 
 /* Combat */
@@ -160,6 +170,10 @@ std::vector<VCategory*> ClientHandler::GetCategories() {
 	return CategoriesList;
 };
 
+std::vector<VCommand*> ClientHandler::GetCommands() {
+	return CommandsList;
+};
+
 std::vector<VModule*> ClientHandler::GetModules() {
 	return ModulesList;
 };
@@ -178,4 +192,36 @@ std::vector<std::string> ClientHandler::ModulesToString(std::vector<VModule*> Mo
 	for (auto Module : ModulesArr) tempArr.push_back(Module->name);
 
 	return tempArr;
+};
+
+bool ClientHandler::handleCommand(std::string input) {
+	if (input.rfind(commandPrefix, 0) == 0) {
+		std::string strInput = input;
+		std::for_each(strInput.begin(), strInput.end(), [](char& c) {
+			c = ::tolower(c);
+		});
+
+		strInput.erase(0, commandPrefix.length());
+
+		std::istringstream iss(strInput);
+		std::vector<std::string> wordsArr(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
+
+		bool wasFound = false;
+		auto Commands = GetCommands();
+		
+		for (int I = 0; I < Commands.size(); I++) {
+			if (Commands.at(I)->input == wordsArr.at(0)) {
+				wasFound = true;
+				Commands.at(I)->execute(strInput, wordsArr);
+			}
+			else {
+				if (Commands.at(I) == Commands.back()) {
+					if (!wasFound) Commands.back()->reply("Unknown Command!");
+					wasFound = false;
+				};
+			};
+		};
+		return true;
+	};
+	return false;
 };

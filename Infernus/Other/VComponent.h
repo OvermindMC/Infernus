@@ -43,6 +43,16 @@ public:
 	virtual void onVButtonClick(VWindowObject*) {};
 };
 
+class VCommand {
+public:
+	std::string input, description;
+	VCommand(std::string input, std::string description) { this->input = input, this->description = description; };
+
+	virtual void execute(std::string input, std::vector<std::string> words) {};
+	virtual void reply(std::string);
+	virtual void emptyReply() { this->reply("\n"); };
+};
+
 class VHook {
 public:
 	virtual void Init() {};

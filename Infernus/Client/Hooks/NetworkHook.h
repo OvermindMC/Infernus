@@ -23,6 +23,9 @@ void SendToServerCallback(LoopbackPacketSender* a1, void* Packet) {
 	}
 	else if (currPacketAddr == (UINT64)Packet::GetTextVTable()) {
 		Type = PacketType::TextPacket;
+
+		TextPacket* currentPacket = (TextPacket*)Packet;
+		if (ClientHandler::handleCommand(currentPacket->message.getText())) cancel = true;
 	}
 	else if (currPacketAddr == (UINT64)Packet::GetActorFallVTable()) {
 		Type = PacketType::ActorFallPacket;
