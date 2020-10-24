@@ -6,7 +6,7 @@ class InventoryAction {
 public:
 	InventoryAction(int slot, class ItemStack* sourceItem, class ItemStack* targetItem, int sourceType = 0, int type = 0) {
 		this->slot = slot;
-		this->sourceType = 0;
+		this->sourceType = sourceType;
 		this->type = type;
 		if (sourceItem != nullptr)
 			this->sourceItem = *sourceItem;
