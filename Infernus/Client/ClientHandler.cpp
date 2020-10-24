@@ -12,7 +12,6 @@ UINT64 Packet::MovePlayerAddr = NULL;
 UINT64 Packet::TextAddr = NULL;
 UINT64 Packet::ActorFallAddr = NULL;
 UINT64 Packet::MobEquipmentAddr = NULL;
-UINT64 Packet::InventoryTransactionAddr = NULL;
 
 #include "Hooks/ClientInstanceHook.h"
 #include "Hooks/KeyHook.h"
