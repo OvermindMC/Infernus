@@ -127,6 +127,12 @@ std::vector<std::string> Utils::SortArrayOfStrings(std::vector<std::string> stri
 	return stringArr;
 };
 
+int Utils::distanceVec2(Vec2 A, Vec2 B) {
+	int dX = A.x - B.x;
+	int dY = A.y - B.y;
+	return sqrt(dX * dX + dY * dY);
+};
+
 float Utils::distanceVec3(Vec3 A, Vec3 B) {
 	float dX = A.x - B.x;
 	float dY = A.y - B.y;
