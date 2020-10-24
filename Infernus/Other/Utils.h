@@ -119,6 +119,7 @@ public:
 	static uintptr_t FindSignature(const char* szSignature);
 	static bool usingKey(uint64_t key);
 	static std::vector<std::string> SortArrayOfStrings(std::vector<std::string> stringVecArr);
+	static int distanceVec2(Vec2, Vec2);
 	static float distanceVec3(Vec3, Vec3);
 	static int distanceVec3_i(Vec3_i, Vec3_i);
 
