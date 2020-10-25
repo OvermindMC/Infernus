@@ -137,12 +137,14 @@ public:
 	/* String/File related bs */
 
 	static std::string DebugEnvirDir();
+	static void ClearDebugFile();
 	static void DebugFileLog(std::string input);
 	static void DebugFHexLog(std::string input, UINT64 inputHex);
 
 	/* Advanced Utility Functions */
 	static void Patch(BYTE* dst, BYTE* src, unsigned int size);
 	static void Nop(BYTE* dst, unsigned int size);
+	static uintptr_t FindAddress(uintptr_t, std::vector<unsigned int>);
 	static uintptr_t FindSignature(const char* szSignature);
 	static bool usingKey(uint64_t key);
 	static std::vector<std::string> SortArrayOfStrings(std::vector<std::string> stringVecArr);

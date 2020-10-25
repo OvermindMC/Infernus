@@ -22,4 +22,9 @@ public:
 		return (entityListEnd - entityListStart) / sizeof(uintptr_t);
 	};
 
+	Vec3_i facingBlockPos() {
+		uintptr_t _this = (uintptr_t)this;
+		return *(Vec3_i*)(_this + 0x948);
+	};
+
 }; //Size: 0x0988

@@ -14,6 +14,13 @@ std::string Utils::DebugEnvirDir() {
 	return NULL;
 };
 
+void Utils::ClearDebugFile() {
+	std::string DirPath = DebugEnvirDir();
+	if (DirPath.length()) {
+		std::remove(std::string(DirPath + std::string("\\Debug.txt")).c_str());
+	};
+};
+
 void Utils::DebugFileLog(std::string input) {
 	std::string DirPath = DebugEnvirDir();
 	if (DirPath.length()) {
@@ -101,7 +108,22 @@ uintptr_t Utils::FindSignature(const char* szSignature) {
 	const char* sig = szSignature;
 #endif
 	return 0u;
-}
+};
+
+uintptr_t Utils::FindAddress(uintptr_t ptrAddr, std::vector<unsigned int> offsets) {
+	uintptr_t addr = NULL;
+	if (ptrAddr != NULL) {
+		addr = ptrAddr;
+		for (unsigned int I = 0; I < offsets.size(); I++) {
+			addr = *(uintptr_t*)(addr += offsets[I]);
+			if (addr == NULL) {
+				Utils::DebugFileLog("Error, Address is NULL at offset index: " + std::to_string(I));
+				break;
+			};
+		};
+	}
+	return addr;
+};
 
 bool Utils::usingKey(uint64_t key) {
 	return keyMapping[key];

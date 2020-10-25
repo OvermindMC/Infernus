@@ -76,26 +76,32 @@ void ClientHandler::InitCommands() {
 #include "Modules/Speed.h"
 #include "Modules/NoWeb.h"
 #include "Modules/NoSlowDown.h"
+#include "Modules/BunnyHop.h"
+#include "Modules/WarpSpeed.h"
 /* Player */
 #include "Modules/Velocity.h"
 #include "Modules/Phase.h"
 #include "Modules/NoFall.h"
-#include "Modules/Gamemode.h"
 #include "Modules/Flight.h"
 #include "Modules/AutoTotem.h"
+#include "Modules/ClickTP.h"
 /* Visuals */
 #include "Menus/TabGui.h"
 #include "Menus/ClickGui.h"
 #include "Menus/ModuleList.h"
 #include "Menus/HUD.h"
 #include "Modules/Xray.h"
+#include "Modules/Fullbright.h"
 /* World */
 #include "Modules/Scaffold.h"
 #include "Modules/Nuker.h"
+#include "Modules/ChestAura.h"
 #include "Modules/PlayerWarning.h"
 /* Other */
 #include "Modules/Uninject.h"
 #include "Modules/AntiBot.h"
+#include "Modules/NoPacket.h"
+#include "Modules/Freecam.h"
 
 void ClientHandler::InitModules() {
 	/*Combat*/
@@ -115,26 +121,32 @@ void ClientHandler::InitModules() {
 	PushModule(_Movement, new Speed());
 	PushModule(_Movement, new NoWeb());
 	PushModule(_Movement, new NoSlowDown());
+	PushModule(_Movement, new BunnyHop());
+	PushModule(_Movement, new WarpSpeed());
 	/*Player*/
 	PushModule(_Player, new Velocity());
 	PushModule(_Player, new Phase());
 	PushModule(_Player, new NoFall());
-	PushModule(_Player, new Gamemode());
 	PushModule(_Player, new Flight());
 	PushModule(_Player, new AutoTotem());
+	PushModule(_Player, new ClickTP());
 	/*Visuals*/
 	PushModule(_Visuals, new TabGui());
 	PushModule(_Visuals, new ClickGui());
 	PushModule(_Visuals, new ModuleList());
 	PushModule(_Visuals, new HUD());
 	PushModule(_Visuals, new Xray());
+	PushModule(_Visuals, new Fullbright());
 	/*World*/
 	PushModule(_World, new Scaffold());
 	PushModule(_World, new Nuker());
+	PushModule(_World, new ChestAura());
 	PushModule(_World, new PlayerWarning());
 	/*Other*/
 	PushModule(_Other, new Uninject());
 	PushModule(_Other, new AntiBot());
+	PushModule(_Other, new NoPacket());
+	PushModule(_Other, new Freecam());
 };
 
 void ClientHandler::ModuleBaseTick() {

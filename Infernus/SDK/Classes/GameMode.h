@@ -19,7 +19,7 @@ public:
 	virtual float getPickRange();
 	virtual void useItem();
 	virtual void useItemOn();
-	virtual void interact();
+	virtual void interact(Actor*, Vec3*);
 	virtual void attack(Actor*);
 	virtual void releaseUsingItem();
 }; //Size: 0x0040

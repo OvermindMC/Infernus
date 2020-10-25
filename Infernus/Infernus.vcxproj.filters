@@ -194,9 +194,6 @@
     <ClInclude Include="Client\Modules\CrystalAura.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Client\Modules\Gamemode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Client\Modules\Surround.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -222,6 +219,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Client\Commands\TestCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Modules\BunnyHop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Modules\ClickTP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Modules\ChestAura.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Modules\WarpSpeed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Modules\Fullbright.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Modules\NoPacket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Modules\Freecam.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
