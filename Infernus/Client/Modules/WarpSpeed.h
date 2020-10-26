@@ -15,7 +15,7 @@ public:
 	void sendPacket(Vec3);
 	void runTask(LocalPlayer*, Vec3);
 private:
-	float speed = .25f;
+	float speed = .45f;
 	bool sendPackets = true;
 	bool onGround = false;
 	BunnyHop* Bhop;

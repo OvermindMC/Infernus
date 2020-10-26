@@ -85,5 +85,6 @@ void BunnyHop::multiplyBy(Vec2* vec, float mult) {
 };
 
 bool BunnyHop::usingKeys() {
+	this->updateKeys();
 	return (bool)(wKey || sKey || aKey || dKey);
 };

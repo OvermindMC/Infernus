@@ -305,6 +305,10 @@ public:
 		return *reinterpret_cast<class InventoryMenu**>(reinterpret_cast<__int64>(this) + 0x1F10);
 	};
 
+	class BlockSource* GetBlockSource() {
+		return *reinterpret_cast<class BlockSource**>(reinterpret_cast<__int64>(this) + 0x320);
+	};
+
 	class MultiPlayerLevel* GetMultiPlayerLevel() {
 		return *reinterpret_cast<class MultiPlayerLevel**>(reinterpret_cast<__int64>(this) + 0x330);
 	};
@@ -317,6 +321,21 @@ public:
 		uintptr_t _this = reinterpret_cast<uintptr_t>(this);
 		bool* flyingAddr = (bool*)(_this + 0x8B8);
 		*flyingAddr = value;
+	};
+
+	bool isCollidedDir() {
+		Vec3 currPos = *this->getPos();
+		float calcYaw = this->lookingVector.y + 90.0f;
+		Vec3 playerVel = Vec3(cos((calcYaw) * (PI / 180.0f)), 0.f, sin((calcYaw) * (PI / 180.0f)));
+		Vec3 blockPos = Vec3(currPos.x + playerVel.x * 1.0f, currPos.y, currPos.z + playerVel.z * 1.0f);
+		Block* block = this->GetBlockSource()->getBlock(blockPos);
+		if (block->toLegacy()->blockID > 0) {
+			return true;
+		}
+		else {
+			block = this->GetBlockSource()->getBlock(Vec3(blockPos.x, blockPos.y - 1.4f, blockPos.z));
+			return block->toLegacy()->blockID > 0;
+		};
 	};
 
 }; //Size: 0x0608

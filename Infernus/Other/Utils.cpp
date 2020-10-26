@@ -14,7 +14,7 @@ std::string Utils::DebugEnvirDir() {
 	return NULL;
 };
 
-void Utils::ClearDebugFile() {
+void Utils::DeleteDebugFile() {
 	std::string DirPath = DebugEnvirDir();
 	if (DirPath.length()) {
 		std::remove(std::string(DirPath + std::string("\\Debug.txt")).c_str());
@@ -167,4 +167,18 @@ int Utils::distanceVec3_i(Vec3_i A, Vec3_i B) {
 	int dY = A.y - B.y;
 	int dZ = A.z - B.z;
 	return sqrt(dX * dX + dY * dY + dZ * dZ);
-}
+};
+
+float Utils::randomFloat(float min, float max) {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<>dis(min, max);
+	return dis(gen);
+};
+
+bool Utils::isStringFloat(std::string str) {
+	std::istringstream iss(str);
+	float f;
+	iss >> std::noskipws >> f;
+	return iss.eof() && !iss.fail();
+};

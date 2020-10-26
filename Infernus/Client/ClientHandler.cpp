@@ -54,9 +54,11 @@ void ClientHandler::InitCategories() {
 };
 
 #include "Commands/TestCommand.h"
+#include "Commands/SpamCommand.h"
 
 void ClientHandler::InitCommands() {
 	CommandsList.push_back(new TestCommand());
+	CommandsList.push_back(new SpamCommand());
 };
 
 /* Combat */
@@ -78,6 +80,8 @@ void ClientHandler::InitCommands() {
 #include "Modules/NoSlowDown.h"
 #include "Modules/BunnyHop.h"
 #include "Modules/WarpSpeed.h"
+#include "Modules/Jesus.h"
+#include "Modules/Spider.h"
 /* Player */
 #include "Modules/Velocity.h"
 #include "Modules/Phase.h"
@@ -85,6 +89,7 @@ void ClientHandler::InitCommands() {
 #include "Modules/Flight.h"
 #include "Modules/AutoTotem.h"
 #include "Modules/ClickTP.h"
+#include "Modules/Spammer.h"
 /* Visuals */
 #include "Menus/TabGui.h"
 #include "Menus/ClickGui.h"
@@ -102,6 +107,7 @@ void ClientHandler::InitCommands() {
 #include "Modules/AntiBot.h"
 #include "Modules/NoPacket.h"
 #include "Modules/Freecam.h"
+#include "Modules/DeathBack.h"
 
 void ClientHandler::InitModules() {
 	/*Combat*/
@@ -123,6 +129,8 @@ void ClientHandler::InitModules() {
 	PushModule(_Movement, new NoSlowDown());
 	PushModule(_Movement, new BunnyHop());
 	PushModule(_Movement, new WarpSpeed());
+	PushModule(_Movement, new Jesus());
+	PushModule(_Movement, new Spider());
 	/*Player*/
 	PushModule(_Player, new Velocity());
 	PushModule(_Player, new Phase());
@@ -130,6 +138,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Player, new Flight());
 	PushModule(_Player, new AutoTotem());
 	PushModule(_Player, new ClickTP());
+	PushModule(_Player, new Spammer());
 	/*Visuals*/
 	PushModule(_Visuals, new TabGui());
 	PushModule(_Visuals, new ClickGui());
@@ -147,6 +156,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Other, new AntiBot());
 	PushModule(_Other, new NoPacket());
 	PushModule(_Other, new Freecam());
+	PushModule(_Other, new DeathBack());
 };
 
 void ClientHandler::ModuleBaseTick() {
@@ -223,7 +233,7 @@ bool ClientHandler::handleCommand(std::string input) {
 		for (int I = 0; I < Commands.size(); I++) {
 			if (Commands.at(I)->input == wordsArr.at(0)) {
 				wasFound = true;
-				Commands.at(I)->execute(strInput, wordsArr);
+				Commands.at(I)->execute(input, wordsArr);
 			}
 			else {
 				if (Commands.at(I) == Commands.back()) {

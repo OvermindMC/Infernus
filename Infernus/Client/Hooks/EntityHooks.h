@@ -70,6 +70,24 @@ void EntityTickCallback(Actor* Entity) {
 	EntityTick(Entity);
 };
 
+typedef bool(__fastcall* _hasRestriction)(Actor* Entity);
+_hasRestriction hasRestriction;
+
+bool hasRestrictionCallback(Actor* Entity) {
+	LocalPlayer* Player = Minecraft::GetLocalPlayer();
+	if (Player != nullptr) {
+		if (Entity != Player->toActor()) {
+			return hasRestriction(Entity);
+		}
+		else {
+			return false;
+		};
+	}
+	else {
+		return hasRestriction(Entity);
+	};
+};
+
 void EntityHooks::Init() {
 	uintptr_t signatureAddr = Utils::FindSignature("48 8D 05 ? ? ? ? 48 89 07 33 C9 48 89 8F ? ? ? ? 48 89 8F ? ? ? ? 48 89 8F ? ? ? ? 48 89 8F ? ? ? ? 48 89 8F ? ? ? ? C6 87 ? ? ? ? ? 48 89 8F ? ? ? ? 48 89 8F ? ? ? ? 48 89 8F ? ? ? ? 48 89 8F ? ? ? ");
 	if (signatureAddr != NULL) {
@@ -102,6 +120,15 @@ void EntityHooks::Init() {
 		}
 		else {
 			Utils::DebugFileLog("Failed to create hook for Entity Base Tick!");
+		};
+
+		void* hasRestrictionAddr = (void*)Utils::FindSignature("F3 0F 10 05 ? ? ? ? 0F 2E 81 ? ? ? ? 74 03 B0 01 ??");
+		if (MH_CreateHook(hasRestrictionAddr, &hasRestrictionCallback, reinterpret_cast<LPVOID*>(&hasRestriction)) == MH_OK) {
+			Utils::DebugFileLog("Successfully created hook for Entity hasRestriction, Enabling hook now...");
+			MH_EnableHook(hasRestrictionAddr);
+		}
+		else {
+			Utils::DebugFileLog("Failed to create hook for Entity hasRestriction!");
 		};
 	}
 	else {

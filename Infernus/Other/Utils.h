@@ -137,7 +137,7 @@ public:
 	/* String/File related bs */
 
 	static std::string DebugEnvirDir();
-	static void ClearDebugFile();
+	static void DeleteDebugFile();
 	static void DebugFileLog(std::string input);
 	static void DebugFHexLog(std::string input, UINT64 inputHex);
 
@@ -151,6 +151,8 @@ public:
 	static int distanceVec2(Vec2, Vec2);
 	static float distanceVec3(Vec3, Vec3);
 	static int distanceVec3_i(Vec3_i, Vec3_i);
+	static float randomFloat(float, float);
+	static bool isStringFloat(std::string);
 
 	/* Other */
 	static std::map<uint64_t, bool> mouseState;

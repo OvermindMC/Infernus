@@ -166,6 +166,7 @@
     <ClInclude Include="Client\Categories\Visuals.h" />
     <ClInclude Include="Client\Categories\World.h" />
     <ClInclude Include="Client\ClientHandler.h" />
+    <ClInclude Include="Client\Commands\SpamCommand.h" />
     <ClInclude Include="Client\Commands\TestCommand.h" />
     <ClInclude Include="Client\Hooks\BlockHooks.h" />
     <ClInclude Include="Client\Hooks\ClientInstanceHook.h" />
@@ -190,9 +191,13 @@
     <ClInclude Include="Client\Modules\ClickTP.h" />
     <ClInclude Include="Client\Modules\Criticals.h" />
     <ClInclude Include="Client\Modules\CrystalAura.h" />
+    <ClInclude Include="Client\Modules\DeathBack.h" />
     <ClInclude Include="Client\Modules\Freecam.h" />
     <ClInclude Include="Client\Modules\Fullbright.h" />
+    <ClInclude Include="Client\Modules\Jesus.h" />
     <ClInclude Include="Client\Modules\NoPacket.h" />
+    <ClInclude Include="Client\Modules\Spammer.h" />
+    <ClInclude Include="Client\Modules\Spider.h" />
     <ClInclude Include="Client\Modules\WarpSpeed.h" />
     <ClInclude Include="Client\Modules\Flight.h" />
     <ClInclude Include="Client\Modules\HighJump.h" />

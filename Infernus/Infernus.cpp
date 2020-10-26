@@ -4,7 +4,7 @@
 void InitInfernus(LPVOID lpParam) {
 	Utils::hModule = (HMODULE)lpParam;
 
-	Utils::ClearDebugFile();
+	Utils::DeleteDebugFile();
 
 	ClientHandler::InitCategories();
 	ClientHandler::InitCommands();
