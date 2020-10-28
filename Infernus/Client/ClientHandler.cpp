@@ -70,6 +70,7 @@ void ClientHandler::InitCommands() {
 #include "Modules/CrystalAura.h"
 #include "Modules/Surround.h"
 #include "Modules/Misplace.h"
+#include "Modules/BoostHit.h"
 /* Movement */
 #include "Modules/AirJump.h"
 #include "Modules/Jetpack.h"
@@ -119,6 +120,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Combat, new CrystalAura());
 	PushModule(_Combat, new Surround());
 	PushModule(_Combat, new Misplace());
+	PushModule(_Combat, new BoostHit());
 	/*Movement*/
 	PushModule(_Movement, new AirJump());
 	PushModule(_Movement, new Jetpack());

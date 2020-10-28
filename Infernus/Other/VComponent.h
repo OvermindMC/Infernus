@@ -36,6 +36,7 @@ public:
 	virtual void onSpeed(float*) {};
 
 	virtual void onDestroyBlock(class GameMode*, Vec3_i*, uint8_t) {};
+	virtual void onAttack(class Actor*, class Actor*) {};
 
 	virtual void onPacket(void*, enum class PacketType, bool*) {};
 

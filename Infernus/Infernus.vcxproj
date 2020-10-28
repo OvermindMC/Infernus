@@ -186,6 +186,7 @@
     <ClInclude Include="Client\Modules\AntiBot.h" />
     <ClInclude Include="Client\Modules\AutoSprint.h" />
     <ClInclude Include="Client\Modules\AutoTotem.h" />
+    <ClInclude Include="Client\Modules\BoostHit.h" />
     <ClInclude Include="Client\Modules\BunnyHop.h" />
     <ClInclude Include="Client\Modules\ChestAura.h" />
     <ClInclude Include="Client\Modules\ClickTP.h" />

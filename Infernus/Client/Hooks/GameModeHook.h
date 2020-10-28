@@ -40,6 +40,16 @@ void StartDestroyBlockCallback(GameMode* GM, Vec3_i* blockPos, uint8_t face, voi
 	StartDestroyBlock(GM, blockPos, face, a4, a5);
 };
 
+typedef void(__fastcall* _Attack)(GameMode*, Actor*);
+_Attack Attack;
+
+void AttackCallback(GameMode* GM, Actor* Victim) {
+	for (auto Module : ClientHandler::GetModules()) {
+		if (Module->isEnabled) Module->onAttack(GM->Player->toActor(), Victim);
+	};
+	Attack(GM, Victim);
+};
+
 void GameModeHook::Init() {
 
 	/* GameMode */
@@ -67,6 +77,15 @@ void GameModeHook::Init() {
 			}
 			else {
 				Utils::DebugFileLog("Failed to create hook for StartDestroyBlock");
+			};
+
+			void* attackAddr = GameModeVTable[14];
+			if (MH_CreateHook(attackAddr, &AttackCallback, reinterpret_cast<LPVOID*>(&Attack)) == MH_OK) {
+				Utils::DebugFileLog("Successfully created attack Hook, Enabling Hook...");
+				MH_EnableHook(attackAddr);
+			}
+			else {
+				Utils::DebugFileLog("Failed to create hook for attack");
 			};
 		}
 		else {
