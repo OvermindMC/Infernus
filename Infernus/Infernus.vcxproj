@@ -198,8 +198,8 @@
     <ClInclude Include="Client\Modules\HitTP.h" />
     <ClInclude Include="Client\Modules\Instabreak.h" />
     <ClInclude Include="Client\Modules\Jesus.h" />
+    <ClInclude Include="Client\Modules\Nametags.h" />
     <ClInclude Include="Client\Modules\NoPacket.h" />
-    <ClInclude Include="Client\Modules\Radar.h" />
     <ClInclude Include="Client\Modules\Spammer.h" />
     <ClInclude Include="Client\Modules\Spider.h" />
     <ClInclude Include="Client\Modules\TPAura.h" />

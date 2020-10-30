@@ -26,3 +26,42 @@ void RenderUtils::DrawRectangle(Vec4 position, MC_Colour colour, float alpha, fl
 	FillRectangle(Vec4(position.z - lineWidth, position.y, position.z + lineWidth, position.w), colour, alpha);
 	FillRectangle(Vec4(position.x - lineWidth, position.w - lineWidth, position.z + lineWidth, position.w + lineWidth), colour, alpha);
 };
+
+void RenderUtils::DrawNametag(class Actor* Entity, float textSize, class ClientInstance* instance) {
+	/*Vec2 textPos;
+	Vec4 rectPos;
+	auto  text = Entity->getNameTag()->getText();
+	float textWidth = GetTextWidth(text, textSize);
+	Vec3 origin = instance->GetLevelRenderer()->origin();
+	Vec2 scale = instance->GuiData()->ScaledResolution;
+	Vec2 fov = instance->getFov();
+	glmatrixf* badrefdef = instance->getViewMatrix();
+	std::shared_ptr<glmatrixf> matrixPtr = std::shared_ptr<glmatrixf>(badrefdef->correct());
+
+	if (matrixPtr->OWorldToScreen(origin, Entity->getEyePos().add(0, 0.5f, 0), textPos, fov, scale)) {
+		textPos.y -= 10.0f * textSize;
+		textPos.x -= textWidth / 2.f;
+		RenderText(text, textPos, MC_Colour(255, 255, 255), textSize, 1.0f);
+	};*/
+
+	Vec2 textPos;
+	Vec4 rectPos;
+	std::string text = Entity->getNameTag()->getText();
+
+	float textWidth = GetTextWidth(text, textSize);
+	float textHeight = 10.0f * textSize;
+
+	Vec3 eyePos = Entity->getEyePos().add(0, 0.5f, 0);
+	Vec3 origin = instance->GetLevelRenderer()->origin();
+	Vec2 scale = instance->GuiData()->ScaledResolution;
+	Vec2 fov = instance->getFov();
+
+	glmatrixf* badrefdef = instance->getViewMatrix();
+	std::shared_ptr<glmatrixf> matrixPtr = std::shared_ptr<glmatrixf>(badrefdef->correct());
+
+	if (matrixPtr->OWorldToScreen(origin, eyePos, textPos, fov, scale)) {
+		textPos.y -= textHeight;
+		textPos.x -= textWidth / 2.f;
+		RenderText(text, textPos, MC_Colour(255, 255, 255), textSize, 1.0f);
+	};
+};

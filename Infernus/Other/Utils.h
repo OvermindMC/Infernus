@@ -74,6 +74,10 @@ struct Vec3 {
 		return Vec3(x - compVec.x, y - compVec.y, z - compVec.z);
 	};
 
+	Vec3 add(float x1, float y1, float z1) {
+		return Vec3(this->x + x1, this->y + y1, this->z + z1);
+	};
+
 	float magnitude() const { return sqrtf(x * x + y * y + z * z); };
 	float magnitudexy() const { return sqrtf(x * x + y * y); };
 	float magnitudexz() const { return sqrtf(x * x + z * z); };
@@ -158,4 +162,177 @@ public:
 	static std::map<uint64_t, bool> mouseState;
 	static std::map<uint64_t, bool> keyMapping;
 	static HMODULE hModule;
+};
+
+
+/* View Matrix Stuff */
+
+struct glmatrixf {
+	union {
+		float v[16];
+		float v_nested[4][4];
+	};
+
+	__forceinline float operator[](int i) const { return v[i]; }
+	__forceinline float& operator[](int i) { return v[i]; }
+
+#define MULMAT(row, col) v[col + row] = x[row] * y[col] + x[row + 4] * y[col + 1] + x[row + 8] * y[col + 2] + x[row + 12] * y[col + 3];
+
+	template <class XT, class YT>
+	void mul(const XT x[16], const YT y[16]) {
+		MULMAT(0, 0);
+		MULMAT(1, 0);
+		MULMAT(2, 0);
+		MULMAT(3, 0);
+		MULMAT(0, 4);
+		MULMAT(1, 4);
+		MULMAT(2, 4);
+		MULMAT(3, 4);
+		MULMAT(0, 8);
+		MULMAT(1, 8);
+		MULMAT(2, 8);
+		MULMAT(3, 8);
+		MULMAT(0, 12);
+		MULMAT(1, 12);
+		MULMAT(2, 12);
+		MULMAT(3, 12);
+	}
+
+#undef MULMAT
+
+	glmatrixf* correct() {
+		glmatrixf* newMatPtr = new glmatrixf;
+
+		for (int i = 0; i < 4; i++) {
+			newMatPtr->v[i * 4 + 0] = v[0 + i];
+			newMatPtr->v[i * 4 + 1] = v[4 + i];
+			newMatPtr->v[i * 4 + 2] = v[8 + i];
+			newMatPtr->v[i * 4 + 3] = v[12 + i];
+		}
+		return newMatPtr;
+	};
+
+	inline bool OWorldToScreen(Vec3 origin, Vec3 pos, Vec2& screen, Vec2 fov, Vec2 displaySize) {
+		pos = pos.sub(origin);
+
+		float x = transformx(pos);
+		float y = transformy(pos);
+		float z = transformz(pos);
+
+		if (z > 0)
+			return false;
+
+		float mX = (float)displaySize.x / 2.0F;
+		float mY = (float)displaySize.y / 2.0F;
+
+		screen.x = mX + (mX * x / -z * fov.x);
+		screen.y = mY - (mY * y / -z * fov.y);
+
+		return true;
+	}
+
+	inline void mul(const glmatrixf& x, const glmatrixf& y) {
+		mul(x.v, y.v);
+	}
+
+	inline void translate(float x, float y, float z) {
+		v[12] += x;
+		v[13] += y;
+		v[14] += z;
+	}
+
+	inline void translate(const Vec3& o) {
+		translate(o.x, o.y, o.z);
+	}
+
+	inline void scale(float x, float y, float z) {
+		v[0] *= x;
+		v[1] *= x;
+		v[2] *= x;
+		v[3] *= x;
+		v[4] *= y;
+		v[5] *= y;
+		v[6] *= y;
+		v[7] *= y;
+		v[8] *= z;
+		v[9] *= z;
+		v[10] *= z;
+		v[11] *= z;
+	}
+
+	inline void invertnormal(Vec3& dir) const {
+		Vec3 n(dir);
+		dir.x = n.x * v[0] + n.y * v[1] + n.z * v[2];
+		dir.y = n.x * v[4] + n.y * v[5] + n.z * v[6];
+		dir.z = n.x * v[8] + n.y * v[9] + n.z * v[10];
+	}
+
+	inline void invertvertex(Vec3& pos) const {
+		Vec3 p(pos);
+		p.x -= v[12];
+		p.y -= v[13];
+		p.z -= v[14];
+		pos.x = p.x * v[0] + p.y * v[1] + p.z * v[2];
+		pos.y = p.x * v[4] + p.y * v[5] + p.z * v[6];
+		pos.z = p.x * v[8] + p.y * v[9] + p.z * v[10];
+	}
+
+	inline void transform(const Vec3& in, Vec4& out) const {
+		out.x = transformx(in);
+		out.y = transformy(in);
+		out.z = transformz(in);
+		out.w = transformw(in);
+	}
+
+	__forceinline float transformx(const Vec3& p) const {
+		return p.x * v[0] + p.y * v[4] + p.z * v[8] + v[12];
+	}
+
+	__forceinline float transformy(const Vec3& p) const {
+		return p.x * v[1] + p.y * v[5] + p.z * v[9] + v[13];
+	}
+
+	__forceinline float transformz(const Vec3& p) const {
+		return p.x * v[2] + p.y * v[6] + p.z * v[10] + v[14];
+	}
+
+	__forceinline float transformw(const Vec3& p) const {
+		return p.x * v[3] + p.y * v[7] + p.z * v[11] + v[15];
+	}
+
+	__forceinline Vec3 gettranslation() const {
+		return Vec3(v[12], v[13], v[14]);
+	}
+
+	//assault cube world2screen
+	Vec3 transform(glmatrixf* matrix, Vec3& totransform) {
+		return Vec3(matrix->transformx(totransform),
+			matrix->transformy(totransform),
+			matrix->transformz(totransform))
+			.div(matrix->transformw(totransform));
+	}
+
+	///pos should be the exact center of the enemy model for scaling to work properly
+	Vec3 WorldToScreen(Vec3 pos, int width, int height) {
+		//Matrix-vector Product, multiplying world(eye) coordinates by projection matrix = clipCoords
+		Vec4 clipCoords;
+		clipCoords.x = pos.x * v[0] + pos.y * v[4] + pos.z * v[8] + v[12];
+		clipCoords.y = pos.x * v[1] + pos.y * v[5] + pos.z * v[9] + v[13];
+		clipCoords.z = pos.x * v[2] + pos.y * v[6] + pos.z * v[10] + v[14];
+		clipCoords.w = pos.x * v[3] + pos.y * v[7] + pos.z * v[11] + v[15];
+
+		//perspective division, dividing by clip.W = Normalized Device Coordinates
+		Vec3 NDC;
+		NDC.x = clipCoords.x / clipCoords.w;
+		NDC.y = clipCoords.y / clipCoords.w;
+		NDC.z = clipCoords.z / clipCoords.w;
+
+		//viewport tranform to screenCooords
+
+		Vec3 playerscreen;
+		playerscreen.x = (width / 2 * NDC.x) + (NDC.x + width / 2);
+		playerscreen.y = -(height / 2 * NDC.y) + (NDC.y + height / 2);
+
+		return playerscreen;
+	}
 };

@@ -340,7 +340,7 @@ public:
 
 	Vec3 getEyePos() {
 		uintptr_t _this = reinterpret_cast<uintptr_t>(this);
-		return *reinterpret_cast<Vec3*>(this + 0x120);
+		return *reinterpret_cast<Vec3*>(_this + 0x120);
 	};
 
 }; //Size: 0x0608

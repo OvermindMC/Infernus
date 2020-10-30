@@ -269,7 +269,7 @@
     <ClInclude Include="Client\Modules\TPAura.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Client\Modules\Radar.h">
+    <ClInclude Include="Client\Modules\Nametags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
