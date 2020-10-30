@@ -47,5 +47,15 @@ void RenderUtils::DrawNametag(class Actor* Entity, float textSize, class ClientI
 		textPos.y -= textHeight;
 		textPos.x -= textWidth / 2.f;
 		RenderText(text, textPos, MC_Colour(255, 255, 255), textSize, 1.0f);
+
+		rectPos.x = textPos.x - 1.f * textSize;
+		rectPos.y = textPos.y - 1.f * textSize;
+		rectPos.z = textPos.x + textWidth + 1.f * textSize;
+		rectPos.w = textPos.y + textHeight + 2.f * textSize;
+		Vec4 subRectPos = rectPos;
+		subRectPos.y = subRectPos.w - 2.f * textSize;
+
+		FillRectangle(rectPos, MC_Colour(50, 50, 50), 0.7f);
+		FillRectangle(subRectPos, MC_Colour(30, 160, 200), 1);
 	};
 };
