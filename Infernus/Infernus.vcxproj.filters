@@ -272,6 +272,9 @@
     <ClInclude Include="Client\Modules\Nametags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Modules\StackableItems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
