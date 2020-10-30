@@ -168,8 +168,8 @@ public:
 	Vec4 position;
 	Vec2 scale;
 	MC_Colour textColour, backgroundColour, titleBarColour;
-	float textSize, textAlpha, backgroundAlpha;
-	bool isHidden = false, isHoveringOver = false, isHoveringOverTitle = false, isBeingDragged = false, canBeDragged = false;
+	float textSize, textAlpha, backgroundAlpha, titleAlpha;
+	bool isHidden = false, isHoveringOver = false, isHoveringOverTitle = false, isBeingDragged = false, canBeDragged = false, cancelMouse = true;
 	std::vector<VWindowObject*> windowObjects;
 	std::chrono::time_point<std::chrono::steady_clock> lastTicked;
 
@@ -183,6 +183,7 @@ public:
 		this->textAlpha = textAlpha;
 		this->backgroundAlpha = backgroundAlpha;
 		this->titleBarColour = titleBarColour;
+		this->titleAlpha = 1.0f;
 		this->isHidden = false, this->isBeingDragged = false, this->canBeDragged = true;
 	};
 

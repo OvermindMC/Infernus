@@ -37,7 +37,7 @@ public:
 	virtual void Function11();
 	virtual void setPos(Vec3*);
 	virtual Vec3* getPos();
-	virtual void Function14();
+	virtual Vec3* getPosOld();
 	virtual void Function15();
 	virtual void Function16();
 	virtual void Function17();
@@ -338,6 +338,11 @@ public:
 		};
 	};
 
+	Vec3 getEyePos() {
+		uintptr_t _this = reinterpret_cast<uintptr_t>(this);
+		return *reinterpret_cast<Vec3*>(this + 0x120);
+	};
+
 }; //Size: 0x0608
 
 class LocalPlayer
@@ -386,7 +391,7 @@ public:
 	virtual void Function11();
 	virtual void setPos(Vec3*);
 	virtual Vec3* getPos();
-	virtual void Function14();
+	virtual Vec3* getPosOld();
 	virtual void Function15();
 	virtual void Function16();
 	virtual void Function17();

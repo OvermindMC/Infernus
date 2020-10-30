@@ -61,7 +61,7 @@ void VWindow::render() {
 
 		RenderUtils::RenderText(name, Vec2(position.x, position.y), textColour, textSize, textAlpha);
 		RenderUtils::FillRectangle(position, backgroundColour, backgroundAlpha);
-		RenderUtils::FillRectangle(Vec4(position.x, position.y, position.z, position.y + 10), titleBarColour, 1.0f);
+		RenderUtils::FillRectangle(Vec4(position.x, position.y, position.z, position.y + 10), titleBarColour, titleAlpha);
 
 		Vec2 currMousePos = mousePos();
 		isHoveringOver = posWithinWindow(currMousePos);

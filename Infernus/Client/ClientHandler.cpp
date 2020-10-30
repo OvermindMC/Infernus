@@ -71,6 +71,8 @@ void ClientHandler::InitCommands() {
 #include "Modules/Surround.h"
 #include "Modules/Misplace.h"
 #include "Modules/BoostHit.h"
+#include "Modules/HitTP.h"
+#include "Modules/TPAura.h"
 /* Movement */
 #include "Modules/AirJump.h"
 #include "Modules/Jetpack.h"
@@ -101,6 +103,7 @@ void ClientHandler::InitCommands() {
 /* World */
 #include "Modules/Scaffold.h"
 #include "Modules/Nuker.h"
+#include "Modules/Instabreak.h"
 #include "Modules/ChestAura.h"
 #include "Modules/PlayerWarning.h"
 /* Other */
@@ -121,6 +124,8 @@ void ClientHandler::InitModules() {
 	PushModule(_Combat, new Surround());
 	PushModule(_Combat, new Misplace());
 	PushModule(_Combat, new BoostHit());
+	PushModule(_Combat, new HitTP());
+	PushModule(_Combat, new TPAura());
 	/*Movement*/
 	PushModule(_Movement, new AirJump());
 	PushModule(_Movement, new Jetpack());
@@ -151,6 +156,7 @@ void ClientHandler::InitModules() {
 	/*World*/
 	PushModule(_World, new Scaffold());
 	PushModule(_World, new Nuker());
+	PushModule(_World, new Instabreak());
 	PushModule(_World, new ChestAura());
 	PushModule(_World, new PlayerWarning());
 	/*Other*/

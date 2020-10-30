@@ -365,6 +365,17 @@ public:
 		return *reinterpret_cast<class LevelRenderer**>(reinterpret_cast<__int64>(this) + 0xC8);
 	};
 
+	/*glmatrixf* getViewMatrix() {
+		uintptr_t _this = reinterpret_cast<uintptr_t>(this);
+		return reinterpret_cast<glmatrixf*>(_this + 0x2E8);
+	};*/
+
+	Vec2 getFov() {
+		uintptr_t _this = reinterpret_cast<uintptr_t>(this);
+		float x = *reinterpret_cast<float*>(_this + 0x650);
+		float y = *reinterpret_cast<float*>(_this + 0x664);
+	};
+
 	bool isValidTarget(class Actor* Entity) {
 		if (Entity == nullptr) {
 			return false;
