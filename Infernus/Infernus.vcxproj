@@ -203,6 +203,7 @@
     <ClInclude Include="Client\Modules\Spammer.h" />
     <ClInclude Include="Client\Modules\Spider.h" />
     <ClInclude Include="Client\Modules\StackableItems.h" />
+    <ClInclude Include="Client\Modules\TorchBreaker.h" />
     <ClInclude Include="Client\Modules\TPAura.h" />
     <ClInclude Include="Client\Modules\WarpSpeed.h" />
     <ClInclude Include="Client\Modules\Flight.h" />

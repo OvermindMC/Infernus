@@ -108,6 +108,7 @@ void ClientHandler::InitCommands() {
 #include "Modules/Instabreak.h"
 #include "Modules/ChestAura.h"
 #include "Modules/PlayerWarning.h"
+#include "Modules/TorchBreaker.h"
 /* Other */
 #include "Modules/Uninject.h"
 #include "Modules/AntiBot.h"
@@ -163,6 +164,7 @@ void ClientHandler::InitModules() {
 	PushModule(_World, new Instabreak());
 	PushModule(_World, new ChestAura());
 	PushModule(_World, new PlayerWarning());
+	PushModule(_World, new TorchBreaker());
 	/*Other*/
 	PushModule(_Other, new Uninject());
 	PushModule(_Other, new AntiBot());
