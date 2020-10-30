@@ -8,15 +8,20 @@ public:
 };
 
 void Nametags::onRender() {
-	auto Entities = Minecraft::FetchPlayers();
-	if (Entities != nullptr && !Entities->empty()) {
-		ClientInstance* instance = Minecraft::GetClientInstance();
-		for (auto Entity : *Entities) {
-			if (instance->isValidTarget(Entity)) {
-				float distance = Utils::distanceVec3(*Entity->getPos(), *instance->LocalPlayer()->getPos());
-				RenderUtils::DrawNametag(Entity, fmax(0.6f, 3.f / distance), instance);
+	if (Minecraft::GetClientInstance() != nullptr) {
+		LocalPlayer* Player = Minecraft::GetLocalPlayer();
+		if (Player != nullptr && Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) {
+			auto Entities = Minecraft::FetchPlayers();
+			if (Entities != nullptr && !Entities->empty()) {
+				ClientInstance* instance = Minecraft::GetClientInstance();
+				for (auto Entity : *Entities) {
+					if (instance->isValidTarget(Entity)) {
+						float distance = Utils::distanceVec3(*Entity->getPos(), *instance->LocalPlayer()->getPos());
+						RenderUtils::DrawNametag(Entity, fmax(0.6f, 3.f / distance), instance);
+					};
+				};
+				RenderUtils::FlushText();
 			};
 		};
-		RenderUtils::FlushText();
 	};
 };
