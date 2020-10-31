@@ -5,7 +5,7 @@ class Nuker : public VModule {
 public:
 	Nuker() : VModule::VModule("Nuker", "Destroy large amount of blocks simultaneously") {
 		this->addWindowObj(new VWindowButton("Vein-Miner", &this->veinMiner));
-		this->addWindowObj(new VWindowSlider(&this->radius, 0.0f, 10.0f, "Range: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Range: ", &this->radius));
 	};
 	void onLoop() { radius = roundf(radius); nukerRadius = (int)radius; };
 	void onDestroyBlock(GameMode*, Vec3_i*, uint8_t);

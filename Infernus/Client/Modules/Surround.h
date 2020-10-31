@@ -5,8 +5,8 @@
 class Surround : public VModule {
 public:
 	Surround() : VModule::VModule("Surround", "Surround players in blocks") {
-		this->addWindowObj(new VWindowSlider(&range, 0.0f, 8.0, "Range: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
-		this->addWindowObj(new VWindowSlider(&boxSize, 0.0f, 4.0, "Box Size: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Range: ", &range));
+		this->addWindowObj(new VWindowSlider("Box Size: ", &boxSize));
 	};
 	void onEnable();
 	void onGmTick();

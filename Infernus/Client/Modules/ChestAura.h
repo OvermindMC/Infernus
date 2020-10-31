@@ -4,7 +4,7 @@
 class ChestAura : public VModule {
 public:
 	ChestAura() : VModule::VModule("ChestAura", "Automatically open nearby Chests") {
-		this->addWindowObj(new VWindowSlider(&range, 0.0f, 4.0f, "Range: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Range: ", &range));
 		this->addWindowObj(new VWindowButton("Trapped Chests", &trappedChests));
 		this->addWindowObj(new VWindowButton("Ender Chests", &enderChests));
 	};

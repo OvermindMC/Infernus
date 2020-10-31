@@ -4,7 +4,7 @@
 class Aimbot : public VModule {
 public:
 	Aimbot() : VModule::VModule("Aimbot", "Automatically aim your crosshair at other entities") {
-		this->addWindowObj(new VWindowSlider(&this->distance, 0.0f, 20.0f, "Distance: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Distance: ", &this->distance));
 	};
 	void onGmTick();
 	void aimAt(Actor*);

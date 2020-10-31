@@ -4,7 +4,7 @@
 class Spider : public VModule {
 public:
 	Spider() : VModule::VModule("Spider", "Automatically ascend upwards on contact with surfaces") {
-		this->addWindowObj(new VWindowSlider(&this->speed, 0, 5.0f, "Y Speed: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Y Speed: ", &this->speed));
 	};
 	void onGmTick();
 private:

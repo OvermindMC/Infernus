@@ -141,9 +141,11 @@ public:
 	/* String/File related bs */
 
 	static std::string DebugEnvirDir();
+	static std::string ModuleDir();
 	static void DeleteDebugFile();
 	static void DebugFileLog(std::string input);
 	static void DebugFHexLog(std::string input, UINT64 inputHex);
+	static bool FileExists(const std::string&);
 
 	/* Advanced Utility Functions */
 	static void Patch(BYTE* dst, BYTE* src, unsigned int size);
@@ -159,6 +161,7 @@ public:
 	static bool isStringFloat(std::string);
 
 	/* Other */
+	static Vec2 mousePos;
 	static std::map<uint64_t, bool> mouseState;
 	static std::map<uint64_t, bool> keyMapping;
 	static HMODULE hModule;

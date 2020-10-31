@@ -2,9 +2,10 @@
 #include "RenderUtils.h"
 #include "../Client/ClientHandler.h"
 
-std::vector<VWindow*> StoredWindows;
+//std::vector<VWindow*> StoredWindows;
 
-void VModule::onLoop() {
+void VModule::onBaseTick() {
+	this->onLoop();
 	if (this->wasEnabled != this->isEnabled) {
 		if (this->isEnabled) {
 			this->onEnable();
@@ -12,12 +13,11 @@ void VModule::onLoop() {
 		else {
 			this->onDisable();
 		};
+		ClientHandler::SaveModuleState(this);
 		this->wasEnabled = this->isEnabled;
 	};
 	if (this->isEnabled) this->onTick();
 };
-
-void VModule::onTick() {};
 
 void VCommand::reply(std::string input) {
 	LocalPlayer* Player = Minecraft::GetLocalPlayer();
@@ -28,7 +28,7 @@ void VCommand::reply(std::string input) {
 
 /* VWindow */
 
-std::vector<VWindow*> VWindow::windows = std::vector<VWindow*>();
+/*std::vector<VWindow*> VWindow::windows = std::vector<VWindow*>();
 
 Vec2 VWindow::mousePos() {
 	GuiData* GuiData = Minecraft::GetClientInstance()->GuiData();
@@ -170,4 +170,4 @@ void VWindowObject::updateSlider() {
 float VWindowObject::getPixelValue() {
 	float div = std::abs(min) + std::abs(max);
 	return div / (position.z - position.x);
-};
+};*/

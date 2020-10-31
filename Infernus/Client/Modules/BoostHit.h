@@ -4,7 +4,7 @@
 class BoostHit : public VModule {
 public:
 	BoostHit() : VModule::VModule("BoostHit", "Boost yourself forward when attacking entities") {
-		this->addWindowObj(new VWindowSlider(&this->boost, 0.0f, 10.0f, "Boost: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Boost: ", &this->boost));
 	};
 	void onAttack(Actor*, Actor*);
 	Vec2 getRotationsToEnt(LocalPlayer*, Actor*);

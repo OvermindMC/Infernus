@@ -1,12 +1,24 @@
 #include "Utils.h"
 
+Vec2 Utils::mousePos(0, 0);
 std::map<uint64_t, bool> Utils::mouseState;
 std::map<uint64_t, bool> Utils::keyMapping;
 HMODULE Utils::hModule;
 
 std::string Utils::DebugEnvirDir() {
-	std::string filePath = getenv("APPDATA") + std::string("\\..\\Local\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\RoamingState\\\Infernus");
+	std::string filePath = getenv("APPDATA") + std::string("\\..\\Local\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\RoamingState\\Infernus");
 	if (filePath.length()) {
+		if (CreateDirectoryA(filePath.c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError()) {
+			return filePath;
+		};
+	};
+	return NULL;
+};
+
+std::string Utils::ModuleDir() {
+	std::string filePath = DebugEnvirDir();
+	if (filePath.length()) {
+		filePath += "\\Modules";
 		if (CreateDirectoryA(filePath.c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError()) {
 			return filePath;
 		};
@@ -37,6 +49,11 @@ void Utils::DebugFHexLog(std::string input, UINT64 inputHex) {
 	std::stringstream strm;
 	strm << input << " " << std::hex << inputHex;
 	Utils::DebugFileLog(strm.str());
+};
+
+bool Utils::FileExists(const std::string& filePath) {
+	struct stat buffer;
+	return (stat(filePath.c_str(), &buffer) == 0);
 };
 
 void Utils::Patch(BYTE* dst, BYTE* src, unsigned int size)

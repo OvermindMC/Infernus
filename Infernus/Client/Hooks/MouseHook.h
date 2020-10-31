@@ -21,7 +21,7 @@ Vec2 scaledPos(int a1, int a2) {
 Vec2 scaledMousePos = Vec2();
 bool alreadyDraggingWindow = false;
 
-void handleVObject(VWindowObject* VObj, char action, bool isDown) {
+/*void handleVObject(VWindowObject* VObj, char action, bool isDown) {
 	
 	if (VObj->hoveringOver && action && isDown) {
 		if (action == 2) {
@@ -56,23 +56,28 @@ void handleVObject(VWindowObject* VObj, char action, bool isDown) {
 			};
 		break;
 	};
-};
+};*/
 
 void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint64_t a5, short a6, short a7, byte a8) {
+	bool cancel = false;
 	if (action) {
 		if (Utils::mouseState[action] != isDown) {
 			Utils::mouseState[action] = isDown;
 
-			for (auto Module : ClientHandler::GetModules()) if (Module->isEnabled) Module->onMouse(action, isDown);
+			for (auto Module : ClientHandler::GetModules()) {
+				if (Module->isEnabled) Module->onMouse(action, isDown, &cancel);
+			};
 		};
-	}
-	else {
-		for (auto Module : ClientHandler::GetModules()) if (Module->isEnabled) Module->onMouseMove();
+	};
+
+	Utils::mousePos = Vec2(a4, a5);
+	for (auto Module : ClientHandler::GetModules()) {
+		if (Module->isEnabled) Module->onMouseMove(&cancel);
 	};
 
 	/* VWindow Stuff */
 
-	bool returnOrigin = true;
+	/*bool returnOrigin = true;
 
 	for (auto Window : VWindow::FetchWindows()) {
 		if (Window->wasRenderedRecently()) {
@@ -127,9 +132,9 @@ void MouseCallback(uint64_t a1, char action, uint64_t isDown, uint64_t a4, uint6
 			};
 			if(Window->cancelMouse) returnOrigin = false;
 		};
-	};
+	};*/
 
-	if(returnOrigin) InputMouse(a1, action, isDown, a4, a5, a6, a7, a8);
+	if(!cancel) InputMouse(a1, action, isDown, a4, a5, a6, a7, a8);
 }
 
 void MouseHook::Init() {

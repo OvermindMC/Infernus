@@ -4,7 +4,7 @@
 class HitTP : public VModule {
 public:
 	HitTP() : VModule::VModule("HitTP", "Teleport to the entity you're attacking") {
-		this->addWindowObj(new VWindowSlider(&this->yUp, 0, 10.0f, "Teleport Y: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Teleport Y: ", &this->yUp));
 	};
 	void onAttack(Actor* attacker, Actor* victim);
 private:

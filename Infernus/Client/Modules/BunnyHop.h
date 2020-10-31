@@ -4,7 +4,7 @@
 class BunnyHop : public VModule {
 public:
 	BunnyHop() : VModule::VModule("Bunny-Hop", "Automatically jump around like a bunny") {
-		this->addWindowObj(new VWindowSlider(&this->speed, 0, 5.0f, "Speed: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Speed: ", &this->speed));
 	};
 	void onGmTick();
 	void updateKeys();

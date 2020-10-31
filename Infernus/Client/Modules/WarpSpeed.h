@@ -4,9 +4,8 @@
 
 class WarpSpeed : public VModule {
 public:
-	WarpSpeed() : VModule::VModule("WarpSpeed", "Warp forward", 0x43) {
-		this->addWindowObj(new VWindowSlider(&speed, 0, 5.0f, "Speed: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
-		this->addWindowObj(new VWindowButton("On Ground", &onGround));
+	WarpSpeed() : VModule::VModule("WarpSpeed", "Warp forward") {
+		this->addWindowObj(new VWindowSlider("Speed: ", &speed));
 		this->addWindowObj(new VWindowButton("Send Packets", &sendPackets));
 	};
 	void onGmTick();
@@ -17,8 +16,7 @@ public:
 private:
 	float speed = .45f;
 	bool sendPackets = true;
-	bool onGround = false;
-	BunnyHop* Bhop;
+	BunnyHop* Bhop = nullptr;
 };
 
 void WarpSpeed::onGmTick() {
@@ -30,14 +28,7 @@ void WarpSpeed::onGmTick() {
 			Vec3 currPos = *Player->getPos();
 			Vec3 blockPos = Vec3(currPos.x + playerVel.x * 1.0f, currPos.y, currPos.z + playerVel.z * 1.0f);
 			if (!isColliding(blockPos)) {
-				if (onGround) {
-					if (Player->onGround) {
-						runTask(Player, blockPos);
-					};
-				}
-				else {
-					runTask(Player, blockPos);
-				};
+				runTask(Player, blockPos);
 			};
 		};
 	};

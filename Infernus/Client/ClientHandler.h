@@ -51,7 +51,9 @@ public:
 	static std::vector<std::string> CategoriesToString(std::vector<VCategory*> CategoryArr);
 	static std::vector<std::string> ModulesToString(std::vector<VModule*> ModulesArr);
 
-	static void SortModules();
+	static void SaveModuleState(VModule*);
+	static bool ModuleIsSaved(VModule*);
+	static bool ModuleFileState(VModule*);
 
 	static bool handleCommand(std::string);
 };

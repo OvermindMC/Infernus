@@ -5,7 +5,7 @@
 class Misplace : public VModule {
 public:
 	Misplace() : VModule::VModule("Misplace", "Spoof Entity Positions for attacking") {
-		this->addWindowObj(new VWindowSlider(&range, 0.0f, 8.0f, "Range: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Range: ", &range));
 	};
 	void onGmTick();
 	void positionEntity(Actor*);

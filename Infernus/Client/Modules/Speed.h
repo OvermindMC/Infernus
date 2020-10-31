@@ -4,7 +4,7 @@
 class Speed : public VModule {
 public:
 	Speed() : VModule::VModule("Speed", "Move faster than others") {
-		this->addWindowObj(new VWindowSlider(&this->speed, 0, 5.0f, "Speed: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Speed: ", &this->speed));
 	};
 	void onGmTick();
 public:

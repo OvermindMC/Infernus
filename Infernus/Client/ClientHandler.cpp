@@ -171,13 +171,22 @@ void ClientHandler::InitModules() {
 	PushModule(_Other, new NoPacket());
 	PushModule(_Other, new Freecam());
 	PushModule(_Other, new DeathBack());
+
+	for (auto Module : ModulesList) {
+		if (ModuleIsSaved(Module)) {
+			Module->isEnabled = ModuleFileState(Module);
+		}
+		else {
+			SaveModuleState(Module);
+		};
+	};
 };
 
 void ClientHandler::ModuleBaseTick() {
-	while (true) {
+	for (;;) {
 		for (auto Category : CategoriesList) {
 			for (auto Module : Category->modules) {
-				Module->onLoop();
+				Module->onBaseTick();
 			};
 		};
 	};
@@ -259,4 +268,54 @@ bool ClientHandler::handleCommand(std::string input) {
 		return true;
 	};
 	return false;
+};
+
+void ClientHandler::SaveModuleState(VModule* Module) {
+	std::string dirPath = Utils::ModuleDir();
+	std::string fileName = dirPath + "\\" + Module->name;
+
+	if (dirPath.length()) {
+		if (Utils::FileExists(fileName)) {
+			std::ofstream outfile;
+			outfile.open(fileName.c_str(), std::ofstream::trunc);
+			outfile << Module->isEnabled;
+			outfile.close();
+		}
+		else {
+			CloseHandle(CreateFileA(fileName.c_str(), GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL));
+			std::ofstream outfile;
+			outfile.open(fileName.c_str(), std::ofstream::trunc);
+			outfile << Module->isEnabled;
+			outfile.close();
+		};
+	}
+	else {
+		return;
+	};
+};
+
+bool ClientHandler::ModuleIsSaved(VModule* Module) {
+	std::string dirPath = Utils::ModuleDir();
+	std::string fileName = dirPath + "\\" + Module->name;
+	return Utils::FileExists(fileName);
+};
+
+bool ClientHandler::ModuleFileState(VModule* Module) {
+	if (ModuleIsSaved(Module)) {
+		std::string dirPath = Utils::ModuleDir();
+		std::string fileName = dirPath + "\\" + Module->name;
+		std::ifstream file;
+		file.open(fileName);
+		std::string str;
+		std::getline(file, str);
+
+		std::istringstream iss(str);
+		std::vector<std::string> split(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
+		
+		return split.at(0) == "1";
+		file.close();
+	}
+	else {
+		return false;
+	};
 };

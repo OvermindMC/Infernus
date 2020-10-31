@@ -4,8 +4,8 @@
 class TPAura : public VModule {
 public:
 	TPAura() : VModule::VModule("TPAura", "Teleports around the entity that you're attacking") {
-		this->addWindowObj(new VWindowSlider(&this->tpRange, 0.0f, 20.0f, "Range: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
-		this->addWindowObj(new VWindowSlider(&this->delay_ms, 0.0f, 20.0f, "Delay (MS): ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Range: ", &this->tpRange));
+		this->addWindowObj(new VWindowSlider("Delay (MS): ", &this->delay_ms));
 		this->addWindowObj(new VWindowButton("Send Move Packets", &this->sendPackets));
 	};
 	void onAttack(Actor*, Actor*);

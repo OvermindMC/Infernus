@@ -4,7 +4,7 @@
 class TorchBreaker : public VModule {
 public:
 	TorchBreaker() : VModule::VModule("TorchBreaker", "Break nearby torches automatically") {
-		this->addWindowObj(new VWindowSlider(&range, 0.0f, 8.0, "Range: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Range: ", &this->range));
 	};
 	void onGmTick();
 private:

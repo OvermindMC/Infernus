@@ -7,7 +7,7 @@ _CrystalTick CrystalTick;
 class CrystalAura : public VModule {
 public:
 	CrystalAura() : VModule::VModule("CrystalAura", "Automatically blow up ender crystals") {
-		this->addWindowObj(new VWindowSlider(&range, 0.0f, 5.0f, "Range: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Range: ", &range));
 		this->addWindowObj(new VWindowButton("AutoPlace", &autoPlace));
 	};
 	void onLoop();

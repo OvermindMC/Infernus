@@ -7,8 +7,8 @@ public:
 	Killaura() : VModule::VModule("Killaura", "Automatically attack nearby entities") {
 		this->addWindowObj(new VWindowButton("Multi Ents", &this->multiEnts));
 		this->addWindowObj(new VWindowButton("Attack with UI open", &this->menuOpen));
-		this->addWindowObj(new VWindowSlider(&disRange, 0.0f, 12.0f, "Range: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
-		this->addWindowObj(new VWindowSlider(&delay_ms, 0, 1000.0f, "Delay (MS): ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Range: ", &disRange));
+		this->addWindowObj(new VWindowSlider("Delay (MS): ", &delay_ms));
 	};
 	void onLoop() { delay_ms = roundf(delay_ms); };
 	void onGmTick();

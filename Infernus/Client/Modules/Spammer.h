@@ -4,7 +4,7 @@
 class Spammer : public VModule {
 public:
 	Spammer() : VModule::VModule("Spammer", "Automatically Spam in the Chat") {
-		this->addWindowObj(new VWindowSlider(&delay_ms, 0.0f, 20.0f, "Delay (MS): ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
+		this->addWindowObj(new VWindowSlider("Delay (MS): ", &delay_ms));
 	};
 	void onGmTick();
 public:
