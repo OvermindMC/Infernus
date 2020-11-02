@@ -48,7 +48,7 @@ void EntityTickCallback(Actor* Entity) {
 		if (Entity->GetRuntimeID() == Player->toActor()->GetRuntimeID()) {
 			if (!TickedEntities->empty()) {
 				for (auto Module : ClientHandler::GetModules()) {
-					Module->onEntityTick(TickedEntities);
+					if(Module->isEnabled) Module->onEntityTick(TickedEntities);
 				};
 				TickedEntities->clear();
 			};
