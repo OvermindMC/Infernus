@@ -367,7 +367,11 @@ public:
 
 	glmatrixf* getViewMatrix() {
 		uintptr_t _this = reinterpret_cast<uintptr_t>(this);
-		return reinterpret_cast<glmatrixf*>(_this + 0x2E8);
+		__int64 matrixAddr = (__int64)(_this + 0x2E8);
+		if (matrixAddr != NULL) {
+			return reinterpret_cast<glmatrixf*>(matrixAddr);
+		}
+		else return nullptr;
 	};
 
 	Vec2 getFov() {
@@ -379,6 +383,9 @@ public:
 
 	bool isValidTarget(class Actor* Entity) {
 		if (Entity == nullptr) {
+			return false;
+		}
+		if (Entity->outOfWorld()) {
 			return false;
 		}
 		if (Entity->isInvisible() || !Entity->isAlive() || Entity->isImmobile()) {
