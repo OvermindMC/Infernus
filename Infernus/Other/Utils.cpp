@@ -211,7 +211,7 @@ bool Utils::isStringFloat(std::string str) {
 	return iss.eof() && !iss.fail();
 };
 
-std::string strToUpper(std::string str) {
+std::string Utils::strToUpper(std::string str) {
 	if (str.length() > 0) {
 		str[0] = std::toupper(str[0]);
 	};
