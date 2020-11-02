@@ -163,3 +163,19 @@ public:
 		};
 	};
 };
+
+class ActorFallPacket {
+public:
+	UINT64 VTable; //0x0000
+	char pad_0008[32]; //0x0008
+	UINT64 entityId; //0x0028
+	float fallDistance;
+	bool isInVoid;
+public:
+	ActorFallPacket(class Actor* Entity, float fallDistance, bool isInVoid = false) {
+		this->VTable = Packet::GetActorFallVTable();
+		this->entityId = Entity->EntityID;
+		this->fallDistance = fallDistance;
+		this->isInVoid = isInVoid;
+	};
+};

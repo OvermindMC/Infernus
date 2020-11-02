@@ -141,6 +141,7 @@ public:
 	/* String/File related bs */
 
 	static std::string DebugEnvirDir();
+	static std::string PacketsDir();
 	static std::string ModuleDir();
 	static void DeleteDebugFile();
 	static void DebugFileLog(std::string input);

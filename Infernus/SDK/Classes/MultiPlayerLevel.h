@@ -27,4 +27,9 @@ public:
 		return *(Vec3_i*)(_this + 0x948);
 	};
 
+	int getBlockFace() {
+		uintptr_t _this = (uintptr_t)this;
+		return *reinterpret_cast<int*>(_this + 0x944);
+	};
+
 }; //Size: 0x0988

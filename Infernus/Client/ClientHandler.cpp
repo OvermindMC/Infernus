@@ -115,6 +115,7 @@ void ClientHandler::InitCommands() {
 #include "Modules/NoPacket.h"
 #include "Modules/Freecam.h"
 #include "Modules/DeathBack.h"
+#include "Modules/TestModule.h"
 
 void ClientHandler::InitModules() {
 	/*Combat*/
@@ -171,6 +172,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Other, new NoPacket());
 	PushModule(_Other, new Freecam());
 	PushModule(_Other, new DeathBack());
+	PushModule(_Other, new TestModule());
 
 	for (auto Module : ModulesList) {
 		if (ModuleIsSaved(Module)) {

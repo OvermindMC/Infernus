@@ -343,6 +343,10 @@ public:
 		return *reinterpret_cast<Vec3*>(_this + 0x120);
 	};
 
+	void setFallDistance(float fallDistance) {
+		*reinterpret_cast<float*>(reinterpret_cast<__int64>(this) + 0x19C) = fallDistance;
+	};
+
 }; //Size: 0x0608
 
 class LocalPlayer
@@ -747,8 +751,8 @@ public:
 	virtual void Function367();
 	virtual void Function368();
 	virtual void setPermissions(int);
-	virtual void Function370();
-	virtual void Function371();
+	virtual void startDestroying(void);
+	virtual void stopDestroying(void);
 	virtual void Function372();
 	virtual void Function373();
 	virtual void Function374();

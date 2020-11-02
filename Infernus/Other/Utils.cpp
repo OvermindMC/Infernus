@@ -15,6 +15,17 @@ std::string Utils::DebugEnvirDir() {
 	return NULL;
 };
 
+std::string Utils::PacketsDir() {
+	std::string filePath = DebugEnvirDir();
+	if (filePath.length()) {
+		filePath += "\\Packets";
+		if (CreateDirectoryA(filePath.c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError()) {
+			return filePath;
+		};
+	};
+	return NULL;
+};
+
 std::string Utils::ModuleDir() {
 	std::string filePath = DebugEnvirDir();
 	if (filePath.length()) {
