@@ -83,8 +83,43 @@ void ClickGui::onRender() {
 };
 
 void ClickGui::onKey(uint64_t key, bool isDown, bool* cancel) {
-	if (key == VK_ESCAPE) {
-		isEnabled = false;
+	if (applyingKey) {
+		if (key != VK_ESCAPE) {
+			for (auto Window : windows) {
+				for (auto Obj : Window->objects) {
+					if (Obj->modulePtr != nullptr) {
+						for (auto obj : Obj->modulePtr->WindowObjects) {
+							if (obj->changingKey && obj->type == VObjectType::Key) {
+								std::string hexified = Utils::hexify(key);
+								if (!hexified.empty() && hexified != std::string("-")) {
+									Obj->modulePtr->key = key;
+									obj->changingKey = false;
+									applyingKey = false;
+									ClientHandler::UpdateModuleFileData(Obj->modulePtr);
+								};
+							};
+						};
+					};
+				};
+			};
+		}
+		else {
+			for (auto Window : windows) {
+				for (auto Obj : Window->objects) {
+					if (Obj->modulePtr != nullptr) {
+						for (auto obj : Obj->modulePtr->WindowObjects) {
+							obj->changingKey = false;
+						};
+					};
+				};
+			};
+			applyingKey = false;
+		};
+	}
+	else {
+		if (key == VK_ESCAPE) {
+			isEnabled = false;
+		};
 	};
 	*cancel = true;
 };
@@ -95,7 +130,7 @@ void ClickGui::onEnable() {
 		for (auto Category : ClientHandler::GetCategories()) {
 			Window* window = new Window(Category->name, Vec2(0, 0));
 			for (auto Module : Category->modules) {
-				Module->addWindowObj(new VWindowKey(Module->key));
+				Module->addWindowObj(new VWindowKey(&Module->key));
 				window->objects.push_back(new VWindowModuleContainer(Module));
 			};
 			windows.push_back(window);
@@ -106,7 +141,12 @@ void ClickGui::onEnable() {
 };
 
 void ClickGui::onDisable() {
-	if (Minecraft::GetLocalPlayer() != nullptr) Minecraft::GetClientInstance()->grabMouse();
+	if (applyingKey) {
+		isEnabled = true;
+	}
+	else {
+		if (Minecraft::GetLocalPlayer() != nullptr) Minecraft::GetClientInstance()->grabMouse();
+	};
 };
 
 void ClickGui::renderWindow(Window* window) {
@@ -183,8 +223,13 @@ void ClickGui::renderObject(Window* window, VWindowObject* Obj, int* count) {
 		RenderUtils::FillRectangle(Vec4(Obj->rectPos.x, Obj->rectPos.y - 2, Obj->rectPos.x + Obj->drawnWidth, Obj->rectPos.w + 2), MC_Colour(200, 200, 200), .3f);
 	}
 	else if (Obj->type == VObjectType::Key) {
-		Obj->text = "Keybind: ";
-		Obj->text += Obj->key != NULL ? Utils::convert_ASCII(Obj->key) : "NONE";
+		if (Obj->changingKey) {
+			Obj->text = "Listening for key...";
+		}
+		else {
+			Obj->text = "Keybind: ";
+			Obj->text += *Obj->key != NULL ? Utils::convert_ASCII(*Obj->key) : "NONE";
+		};
 	};
 	RenderUtils::RenderText(Obj->text, Obj->position, textColour, .95f, 1.0f);
 	*count = *count + 1;
@@ -336,6 +381,12 @@ void ClickGui::onMouse(char action, bool isDown, bool* cancel) {
 									if (obj->withinRectPos(scaledPos(Utils::mousePos.x, Utils::mousePos.y))) {
 										if (obj->type == VObjectType::Button) {
 											*obj->toggle = !*obj->toggle;
+										}
+										else if (obj->type == VObjectType::Key) {
+											if (!applyingKey) {
+												obj->changingKey = true;
+												applyingKey = true;
+											};
 										};
 										clicked = true;
 									};
