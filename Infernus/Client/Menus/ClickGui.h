@@ -41,6 +41,7 @@ public:
 	void onMouse(char, bool, bool*);
 	Vec2 scaledPos(int, int);
 private:
+	bool applyingKey = false;
 	bool dragging = false;
 	bool setPositions = false;
 	std::vector<Window*> windows;
@@ -94,6 +95,7 @@ void ClickGui::onEnable() {
 		for (auto Category : ClientHandler::GetCategories()) {
 			Window* window = new Window(Category->name, Vec2(0, 0));
 			for (auto Module : Category->modules) {
+				Module->addWindowObj(new VWindowKey(Module->key));
 				window->objects.push_back(new VWindowModuleContainer(Module));
 			};
 			windows.push_back(window);
@@ -179,6 +181,10 @@ void ClickGui::renderObject(Window* window, VWindowObject* Obj, int* count) {
 	else if (Obj->type == VObjectType::Slider) {
 		Obj->updateSlider();
 		RenderUtils::FillRectangle(Vec4(Obj->rectPos.x, Obj->rectPos.y - 2, Obj->rectPos.x + Obj->drawnWidth, Obj->rectPos.w + 2), MC_Colour(200, 200, 200), .3f);
+	}
+	else if (Obj->type == VObjectType::Key) {
+		Obj->text = "Keybind: ";
+		Obj->text += Obj->key != NULL ? Utils::convert_ASCII(Obj->key) : "NONE";
 	};
 	RenderUtils::RenderText(Obj->text, Obj->position, textColour, .95f, 1.0f);
 	*count = *count + 1;
