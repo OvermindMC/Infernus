@@ -4,6 +4,7 @@
 MinecraftUIRenderContext* Context;
 
 void RenderUtils::SetCtx(MinecraftUIRenderContext* Ctx) { Context = Ctx; };
+bool RenderUtils::canUseRenderUtils() { return Context != nullptr; };
 void RenderUtils::FlushText() { Context->flushText(0); };
 
 BitmapFont* RenderUtils::GetFont() { return Minecraft::GetClientInstance()->MinecraftGame->Font1; };
@@ -27,10 +28,10 @@ void RenderUtils::DrawRectangle(Vec4 position, MC_Colour colour, float alpha, fl
 	FillRectangle(Vec4(position.x - lineWidth, position.w - lineWidth, position.z + lineWidth, position.w + lineWidth), colour, alpha);
 };
 
-void RenderUtils::DrawNametag(class Actor* Entity, float textSize, class ClientInstance* instance) {
+void RenderUtils::DrawNametag(class Actor* Entity, MC_Colour textColour, MC_Colour backgroundColour, MC_Colour underlineColour, float textSize, class ClientInstance* instance) {
 	Vec2 textPos;
 	Vec4 rectPos;
-	std::string text = Entity->getNameTag()->getText();
+	std::string text = Entity->getEntityTypeId() == 63 ? Entity->getNameTag()->getText() : Utils::strToUpper(Entity->type);
 
 	float textWidth = GetTextWidth(text, textSize);
 	float textHeight = 10.0f * textSize;
@@ -46,7 +47,7 @@ void RenderUtils::DrawNametag(class Actor* Entity, float textSize, class ClientI
 	if (matrixPtr->OWorldToScreen(origin, eyePos, textPos, fov, scale)) {
 		textPos.y -= textHeight;
 		textPos.x -= textWidth / 2.f;
-		RenderText(text, textPos, MC_Colour(255, 255, 255), textSize, 1.0f);
+		RenderText(text, textPos, textColour, textSize, 1.0f);
 
 		rectPos.x = textPos.x - 1.f * textSize;
 		rectPos.y = textPos.y - 1.f * textSize;
@@ -55,7 +56,7 @@ void RenderUtils::DrawNametag(class Actor* Entity, float textSize, class ClientI
 		Vec4 subRectPos = rectPos;
 		subRectPos.y = subRectPos.w - 2.f * textSize;
 
-		FillRectangle(rectPos, MC_Colour(50, 50, 50), 0.7f);
-		FillRectangle(subRectPos, MC_Colour(30, 160, 200), 1);
+		FillRectangle(rectPos, backgroundColour, 0.7f);
+		FillRectangle(subRectPos, underlineColour, 1);
 	};
 };
