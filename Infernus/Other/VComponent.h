@@ -91,6 +91,7 @@ public:
 
 	bool expanded;
 	bool dragging = false;
+	bool changingKey = false;
 
 	Vec2 position;
 	Vec4 rectPos;
