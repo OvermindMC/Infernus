@@ -28,39 +28,36 @@ void RenderUtils::DrawRectangle(Vec4 position, MC_Colour colour, float alpha, fl
 	FillRectangle(Vec4(position.x - lineWidth, position.w - lineWidth, position.z + lineWidth, position.w + lineWidth), colour, alpha);
 };
 
-void RenderUtils::DrawNametag(class Actor* Entity, MC_Colour textColour, MC_Colour backgroundColour, MC_Colour underlineColour, float textSize, class ClientInstance* instance) {
+void RenderUtils::DrawNametag(class Actor* Entity, float textSize, class ClientInstance* instance) {
 	Vec2 textPos;
 	Vec4 rectPos;
-	std::string text = Entity->getNameTag()->getTextLength() > 0 ? Entity->getNameTag()->getText() : Utils::strToUpper(Entity->GetEntityType());
+	std::string text = Entity->getNameTag()->getText();
 
-	float textWidth = GetTextWidth(text, textSize);
+	float textWidth = GetTextWidth(text, textSize) + 5;
 	float textHeight = 10.0f * textSize;
 
+	Vec3 eyePos = Entity->getEyePos().add(0, 0.5f, 0);
+	Vec3 origin = instance->GetLevelRenderer()->origin();
+	Vec2 scale = instance->GuiData()->ScaledResolution;
+	Vec2 fov = instance->getFov();
+
 	glmatrixf* badrefdef = instance->getViewMatrix();
-	std::shared_ptr<glmatrixf> matrixPtr;
+	std::shared_ptr<glmatrixf> matrixPtr = std::shared_ptr<glmatrixf>(badrefdef->correct());
 
-	if (badrefdef != nullptr) {
-		matrixPtr = std::shared_ptr<glmatrixf>(badrefdef->correct());
-		
-		Vec3 eyePos = Entity->getEyePos().add(0, 0.5f, 0);
-		Vec3 origin = instance->GetLevelRenderer()->origin();
-		Vec2 scale = instance->GuiData()->ScaledResolution;
-		Vec2 fov = instance->getFov();
+	if (matrixPtr->OWorldToScreen(origin, eyePos, textPos, fov, scale)) {
+		textPos.y -= textHeight;
+		textPos.x -= textWidth / 2.f;
+		RenderText(text, textPos, MC_Colour(255, 255, 255), textSize, 1.0f);
 
-		if (matrixPtr->OWorldToScreen(origin, eyePos, textPos, fov, scale)) {
-			textPos.y -= textHeight;
-			textPos.x -= textWidth / 2.f;
-			RenderText(text, textPos, textColour, textSize, 1.0f);
+		rectPos.x = textPos.x - 1.f * textSize;
+		rectPos.y = textPos.y - 1.f * textSize;
+		rectPos.z = textPos.x + textWidth + 1.f * textSize;
+		rectPos.w = textPos.y + textHeight + 2.f * textSize;
+		Vec4 subRectPos = rectPos;
+		subRectPos.y = subRectPos.w - 2.f * textSize;
 
-			rectPos.x = textPos.x - 1.f * textSize;
-			rectPos.y = textPos.y - 1.f * textSize;
-			rectPos.z = textPos.x + textWidth + 1.f * textSize;
-			rectPos.w = textPos.y + textHeight + 2.f * textSize;
-			Vec4 subRectPos = rectPos;
-			subRectPos.y = subRectPos.w - 2.f * textSize;
-
-			FillRectangle(rectPos, backgroundColour, 0.7f);
-			FillRectangle(subRectPos, underlineColour, 1);
-		};
-	};
+		FillRectangle(rectPos, MC_Colour(50, 50, 50), 0.7f);
+		FillRectangle(subRectPos, MC_Colour(30, 160, 200), 1);
+	}
+	else return;
 };

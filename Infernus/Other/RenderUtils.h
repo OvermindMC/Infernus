@@ -73,5 +73,5 @@ public:
 	static void RenderText(std::string text, Vec2 position, MC_Colour colour, float textSize, float transparency);
 	static void FillRectangle(Vec4 position, MC_Colour colour, float alpha);
 	static void DrawRectangle(Vec4 position, MC_Colour colour, float alpha, float lineWidth);
-	static void DrawNametag(class Actor* Entity, MC_Colour textColour, MC_Colour backgroundColour, MC_Colour underlineColour, float textSize, class ClientInstance* instance);
+	static void DrawNametag(class Actor* Entity, float textSize, class ClientInstance* instance);
 };
