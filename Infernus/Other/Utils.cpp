@@ -37,6 +37,17 @@ std::string Utils::ModuleDir() {
 	return NULL;
 };
 
+std::string Utils::KeybindsDir() {
+	std::string filePath = DebugEnvirDir();
+	if (filePath.length()) {
+		filePath += "\\Keybinds";
+		if (CreateDirectoryA(filePath.c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError()) {
+			return filePath;
+		};
+	};
+	return NULL;
+};
+
 void Utils::DeleteDebugFile() {
 	std::string DirPath = DebugEnvirDir();
 	if (DirPath.length()) {

@@ -143,6 +143,7 @@ public:
 	static std::string DebugEnvirDir();
 	static std::string PacketsDir();
 	static std::string ModuleDir();
+	static std::string KeybindsDir();
 	static void DeleteDebugFile();
 	static void DebugFileLog(std::string input);
 	static void DebugFHexLog(std::string input, UINT64 inputHex);

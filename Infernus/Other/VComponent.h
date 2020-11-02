@@ -7,8 +7,8 @@ class VModule {
 public:
 	std::string name, description;
 	bool isEnabled = false, wasEnabled = false;
-	uint64_t key;
-	VModule(std::string name, std::string description, uint64_t key = NULL) { this->name = name, this->description = description; this->key = key; };
+	UINT64 key;
+	VModule(std::string name, std::string description, UINT64 key = NULL) { this->name = name, this->description = description; this->key = key; };
 
 	std::vector<class VWindowObject*> WindowObjects;
 

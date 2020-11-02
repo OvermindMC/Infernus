@@ -10,6 +10,7 @@ void InitInfernus(LPVOID lpParam) {
 	ClientHandler::InitCommands();
 	ClientHandler::InitModules();
 	ClientHandler::InitHooks();
+	ClientHandler::InitModuleFiles();
 	ClientHandler::ModuleBaseTick();
 };
 

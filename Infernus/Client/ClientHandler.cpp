@@ -173,15 +173,6 @@ void ClientHandler::InitModules() {
 	PushModule(_Other, new Freecam());
 	PushModule(_Other, new DeathBack());
 	PushModule(_Other, new TestModule());
-
-	for (auto Module : ModulesList) {
-		if (ModuleIsSaved(Module)) {
-			Module->isEnabled = ModuleFileState(Module);
-		}
-		else {
-			SaveModuleState(Module);
-		};
-	};
 };
 
 void ClientHandler::ModuleBaseTick() {
@@ -272,52 +263,67 @@ bool ClientHandler::handleCommand(std::string input) {
 	return false;
 };
 
-void ClientHandler::SaveModuleState(VModule* Module) {
-	std::string dirPath = Utils::ModuleDir();
-	std::string fileName = dirPath + "\\" + Module->name;
+void ClientHandler::InitModuleFiles() {
+	for (auto Module : ModulesList) {
+		bool enabledModule = GetModuleStateFromFile(Module);
 
-	if (dirPath.length()) {
-		if (Utils::FileExists(fileName)) {
-			std::ofstream outfile;
-			outfile.open(fileName.c_str(), std::ofstream::trunc);
-			outfile << Module->isEnabled;
-			outfile.close();
-		}
-		else {
-			CloseHandle(CreateFileA(fileName.c_str(), GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL));
-			std::ofstream outfile;
-			outfile.open(fileName.c_str(), std::ofstream::trunc);
-			outfile << Module->isEnabled;
-			outfile.close();
-		};
-	}
-	else {
-		return;
+		if (enabledModule) Module->onEnable();
+
+		Module->wasEnabled = Module->isEnabled = enabledModule;
+		Module->key = GetModuleKeyFromFile(Module);
 	};
 };
 
-bool ClientHandler::ModuleIsSaved(VModule* Module) {
-	std::string dirPath = Utils::ModuleDir();
-	std::string fileName = dirPath + "\\" + Module->name;
-	return Utils::FileExists(fileName);
+void ClientHandler::UpdateModuleFileData(VModule* Module) {
+	std::string moduleFilePath = std::string(Utils::ModuleDir() + "\\" + Module->name);
+	std::string keyFilePath = std::string(Utils::KeybindsDir() + "\\" + Module->name);
+	
+	CloseHandle(CreateFileA(moduleFilePath.c_str(), GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL));
+	CloseHandle(CreateFileA(keyFilePath.c_str(), GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL));
+
+	std::ofstream moduleFile;
+	moduleFile.open(moduleFilePath.c_str(), std::ofstream::trunc);
+	moduleFile << Module->isEnabled;
+	moduleFile.close();
+
+	std::ofstream keyFile;
+	keyFile.open(keyFilePath.c_str());
+	keyFile << std::hex << Module->key;
+	keyFile.close();
 };
 
-bool ClientHandler::ModuleFileState(VModule* Module) {
-	if (ModuleIsSaved(Module)) {
-		std::string dirPath = Utils::ModuleDir();
-		std::string fileName = dirPath + "\\" + Module->name;
+bool ClientHandler::GetModuleStateFromFile(VModule* Module) {
+	std::string filePath = std::string(Utils::ModuleDir() + "\\" + Module->name);
+	if (Utils::FileExists(filePath)) {
 		std::ifstream file;
-		file.open(fileName);
+		file.open(filePath);
 		std::string str;
 		std::getline(file, str);
 
 		std::istringstream iss(str);
 		std::vector<std::string> split(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
-		
+
 		return split.at(0) == "1";
 		file.close();
 	}
 	else {
-		return false;
+		UpdateModuleFileData(Module);
+		return Module->isEnabled;
 	};
+};
+
+uint64_t ClientHandler::GetModuleKeyFromFile(VModule* Module) {
+	std::string filePath = std::string(Utils::KeybindsDir() + "\\" + Module->name);
+	if (Utils::FileExists(filePath)) {
+		UINT64 value;
+		std::ifstream file;
+		file.open(filePath);
+		file >> std::hex >> value;
+		file.close();
+		return value;
+	}
+	else {
+		UpdateModuleFileData(Module);
+	};
+	return Module->key;
 };
