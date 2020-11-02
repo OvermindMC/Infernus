@@ -102,7 +102,7 @@ public:
 	float drawnWidth = 0;
 
 	VModule* modulePtr;
-	uint64_t key;
+	UINT64 key;
 
 	bool withinRectPos(Vec2 pos) {
 		return rectPos.x < pos.x && rectPos.y < pos.y && rectPos.z > pos.x && rectPos.w > pos.y;
@@ -155,7 +155,7 @@ public:
 
 class VWindowKey : public VWindowObject {
 public:
-	VWindowKey(uint64_t key) {
+	VWindowKey(UINT64 key) {
 		this->key = key;
 		this->type = VObjectType::Key;
 	};
