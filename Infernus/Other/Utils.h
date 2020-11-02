@@ -160,6 +160,7 @@ public:
 	static int distanceVec3_i(Vec3_i, Vec3_i);
 	static float randomFloat(float, float);
 	static bool isStringFloat(std::string);
+	static std::string strToUpper(std::string);
 
 	/* Other */
 	static Vec2 mousePos;
