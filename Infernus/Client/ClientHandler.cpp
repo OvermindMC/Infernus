@@ -271,6 +271,10 @@ void ClientHandler::InitModuleFiles() {
 
 		Module->wasEnabled = Module->isEnabled = enabledModule;
 		Module->key = GetModuleKeyFromFile(Module);
+
+		if (Module->key != NULL) {
+			Utils::DebugFileLog(Module->name + " : " + Utils::convert_ASCII(Module->key));
+		};
 	};
 };
 

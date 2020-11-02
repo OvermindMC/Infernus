@@ -79,6 +79,7 @@ enum class VObjectType {
 	ModuleContainer,
 	Button,
 	Slider,
+	Key,
 	Unknown
 };
 
@@ -101,6 +102,7 @@ public:
 	float drawnWidth = 0;
 
 	VModule* modulePtr;
+	uint64_t key;
 
 	bool withinRectPos(Vec2 pos) {
 		return rectPos.x < pos.x && rectPos.y < pos.y && rectPos.z > pos.x && rectPos.w > pos.y;
@@ -148,5 +150,13 @@ public:
 		this->sliderText = text;
 		this->value = value;
 		this->type = VObjectType::Slider;
+	};
+};
+
+class VWindowKey : public VWindowObject {
+public:
+	VWindowKey(uint64_t key) {
+		this->key = key;
+		this->type = VObjectType::Key;
 	};
 };

@@ -227,4 +227,32 @@ std::string Utils::strToUpper(std::string str) {
 		str[0] = std::toupper(str[0]);
 	};
 	return str;
-}
+};
+
+std::string Utils::hexify(unsigned int n) {
+	std::string res;
+
+	do {
+		res += "0123456789ABCDEF"[n % 16];
+		n >>= 4;
+	} while (n);
+
+	return std::string(res.rbegin(), res.rend());
+};
+
+std::string Utils::convert_ASCII(unsigned int integer) {
+	std::string hex = hexify(integer);
+	std::string ascii = "";
+	for (size_t i = 0; i < hex.length(); i += 2) {
+		std::string part = hex.substr(i, 2);
+		char ch = std::stoul(part, nullptr, 16);
+		ascii += ch;
+	};
+	if (integer == 0x09) {
+		ascii = "TAB";
+	}
+	if (integer == 0x2d) {
+		ascii = "INS";
+	};
+	return ascii;
+};

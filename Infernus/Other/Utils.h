@@ -162,6 +162,8 @@ public:
 	static float randomFloat(float, float);
 	static bool isStringFloat(std::string);
 	static std::string strToUpper(std::string);
+	static std::string hexify(unsigned int);
+	static std::string convert_ASCII(unsigned int);
 
 	/* Other */
 	static Vec2 mousePos;
