@@ -347,6 +347,17 @@ public:
 		*reinterpret_cast<float*>(reinterpret_cast<__int64>(this) + 0x19C) = fallDistance;
 	};
 
+	std::string GetEntityType() {
+		uintptr_t _this = reinterpret_cast<uintptr_t>(this);
+		__int64 typeAddr = reinterpret_cast<__int64>(this) + 0x3B0;
+		if (typeAddr != NULL) {
+			return *reinterpret_cast<std::string*>(typeAddr);
+		}
+		else {
+			return std::string("Unknown");
+		};
+	};
+
 }; //Size: 0x0608
 
 class LocalPlayer
