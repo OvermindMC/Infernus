@@ -31,7 +31,7 @@ void RenderUtils::DrawRectangle(Vec4 position, MC_Colour colour, float alpha, fl
 void RenderUtils::DrawNametag(class Actor* Entity, MC_Colour textColour, MC_Colour backgroundColour, MC_Colour underlineColour, float textSize, class ClientInstance* instance) {
 	Vec2 textPos;
 	Vec4 rectPos;
-	std::string text = Entity->getEntityTypeId() == 63 ? Entity->getNameTag()->getText() : "Mob";
+	std::string text = Entity->getEntityTypeId() == 63 ? Entity->getNameTag()->getText() : Utils::strToUpper(Entity->type);
 
 	float textWidth = GetTextWidth(text, textSize);
 	float textHeight = 10.0f * textSize;
