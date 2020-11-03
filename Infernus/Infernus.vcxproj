@@ -226,6 +226,7 @@
     <ClInclude Include="Client\Modules\Uninject.h" />
     <ClInclude Include="Client\Modules\Velocity.h" />
     <ClInclude Include="Client\Modules\Xray.h" />
+    <ClInclude Include="Client\Modules\FOV.h" />
     <ClInclude Include="Other\RenderUtils.h" />
     <ClInclude Include="Other\Utils.h" />
     <ClInclude Include="Other\VComponent.h" />
