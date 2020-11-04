@@ -30,8 +30,44 @@ struct Vec2 {
 	bool operator == (Vec2 compVec) { return compVec.x == x && compVec.y == y; };
 	bool operator != (Vec2 compVec) { return compVec.x != x || compVec.y != y; };
 	
-	Vec2 sub(const Vec2& vec) {
-		return Vec2(x - vec.x, y - vec.y);
+	Vec2 sub(float f) {
+		return Vec2(x - f, y - f);
+	};
+	
+	Vec2 sub(float ox, float oy) {
+		return Vec2(x - ox, y - oy);
+	};
+
+	Vec2 div(float f) {
+		return Vec2(x / f, y / f);
+	};
+
+	Vec2 div(const Vec2& o) {
+		return Vec2(x / o.x, y / o.y);
+	};
+
+	Vec2 mul(const Vec2& o) {
+		return Vec2(x * o.x, y * o.y);
+	};
+
+	Vec2 mul(float f) {
+		return Vec2(x * f, y * f);
+	};
+
+	Vec2 sub(const Vec2& o) {
+		return Vec2(x - o.x, y - o.y);
+	};
+
+	Vec2 add(const Vec2& o) {
+		return Vec2(x + o.x, y + o.y);
+	};
+
+	Vec2 add(float o) {
+		return Vec2(x + o, y + o);
+	};
+
+	Vec2 add(float ox, float oy) {
+		return Vec2(x + ox, y + oy);
 	};
 
 	Vec2 normalAngles() {

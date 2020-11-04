@@ -41,6 +41,7 @@ public:
 	void onMouse(char, bool, bool*);
 	Vec2 scaledPos(int, int);
 private:
+	Vec2 dragStart;
 	bool applyingKey = false;
 	bool dragging = false;
 	bool setPositions = false;
@@ -240,13 +241,17 @@ void ClickGui::onMouseMove(bool* cancel) {
 	std::vector<Window*> reversed = windows;
 	std::reverse(reversed.begin(), reversed.end());
 
+	Vec2 mousePos = scaledPos(Utils::mousePos.x, Utils::mousePos.y);
+
 	/* Window Dragging */
 
 	if (Utils::mouseState[1]) {
 		if (dragging) {
 			for (auto Window : reversed) {
 				if (Window->dragging) {
-					Window->position = scaledPos(Utils::mousePos.x, Utils::mousePos.y);
+					Vec2 diff = Vec2(mousePos).sub(dragStart);
+					Window->position = Window->position.add(diff);
+					dragStart = mousePos;
 					break;
 				};
 			};
@@ -290,6 +295,8 @@ void ClickGui::onMouse(char action, bool isDown, bool* cancel) {
 	std::vector<Window*> reversed = windows;
 	std::reverse(reversed.begin(), reversed.end());
 
+	Vec2 mousePos = scaledPos(Utils::mousePos.x, Utils::mousePos.y);
+
 	/* Window Dragging */
 
 	if (action == 1) {
@@ -299,6 +306,7 @@ void ClickGui::onMouse(char action, bool isDown, bool* cancel) {
 					if (Window->withinWindowBar(scaledPos(Utils::mousePos.x, Utils::mousePos.y))) {
 						Window->dragging = true;
 						dragging = true;
+						dragStart = mousePos;
 					};
 				};
 			};
