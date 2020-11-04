@@ -84,42 +84,44 @@ void ClickGui::onRender() {
 };
 
 void ClickGui::onKey(uint64_t key, bool isDown, bool* cancel) {
-	if (applyingKey) {
-		if (key != VK_ESCAPE) {
-			for (auto Window : windows) {
-				for (auto Obj : Window->objects) {
-					if (Obj->modulePtr != nullptr) {
-						for (auto obj : Obj->modulePtr->WindowObjects) {
-							if (obj->changingKey && obj->type == VObjectType::Key) {
-								std::string hexified = Utils::hexify(key);
-								if (!hexified.empty() && hexified != std::string("-")) {
-									Obj->modulePtr->key = key;
-									obj->changingKey = false;
-									applyingKey = false;
-									ClientHandler::UpdateModuleFileData(Obj->modulePtr);
+	if (isDown) {
+		if (applyingKey) {
+			if (key != VK_ESCAPE) {
+				for (auto Window : windows) {
+					for (auto Obj : Window->objects) {
+						if (Obj->modulePtr != nullptr) {
+							for (auto obj : Obj->modulePtr->WindowObjects) {
+								if (obj->changingKey && obj->type == VObjectType::Key) {
+									std::string hexified = Utils::hexify(key);
+									if (!hexified.empty() && hexified != std::string("-")) {
+										Obj->modulePtr->key = key;
+										obj->changingKey = false;
+										applyingKey = false;
+										ClientHandler::UpdateModuleFileData(Obj->modulePtr);
+									};
 								};
 							};
 						};
 					};
 				};
-			};
-		}
-		else {
-			for (auto Window : windows) {
-				for (auto Obj : Window->objects) {
-					if (Obj->modulePtr != nullptr) {
-						for (auto obj : Obj->modulePtr->WindowObjects) {
-							obj->changingKey = false;
+			}
+			else {
+				for (auto Window : windows) {
+					for (auto Obj : Window->objects) {
+						if (Obj->modulePtr != nullptr) {
+							for (auto obj : Obj->modulePtr->WindowObjects) {
+								obj->changingKey = false;
+							};
 						};
 					};
 				};
+				applyingKey = false;
 			};
-			applyingKey = false;
-		};
-	}
-	else {
-		if (key == VK_ESCAPE) {
-			isEnabled = false;
+		}
+		else {
+			if (key == VK_ESCAPE) {
+				isEnabled = false;
+			};
 		};
 	};
 	*cancel = true;
