@@ -59,7 +59,7 @@ void ClickGui::onRender() {
 	int yDown = 0;
 	for (auto window : windows) {
 		if (!setPositions) {
-			window->position = Vec2(count > 0 ? windows.at(count - 1)->position.x + RenderUtils::GetTextWidth(windows.at(count - 1)->name, 1.0f) + 130 : 10, window->position.y = count > 0 ? counter >= 3 ? windows.at(count - 1)->position.y + 200 : windows.at(count - 1)->position.y : 0);
+			window->position = Vec2(count > 0 ? windows.at(count - 1)->position.x + RenderUtils::GetTextWidth(windows.at(count - 1)->name, 1.0f) + 120 : 10, window->position.y = count > 0 ? counter >= 3 ? windows.at(count - 1)->position.y + 100 : windows.at(count - 1)->position.y : 0);
 			if (counter >= 3) {
 				window->position.x = 10;
 				counter = 0;
