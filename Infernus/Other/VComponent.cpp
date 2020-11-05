@@ -17,6 +17,12 @@ void VModule::onBaseTick() {
 	if (this->isEnabled) this->onTick();
 };
 
+void VModule::addWindowObj(VWindowObject* Obj) {
+	objCount++;
+	Obj->ID = objCount;
+	this->WindowObjects.push_back(Obj);
+};
+
 void VCommand::reply(std::string input) {
 	LocalPlayer* Player = Minecraft::GetLocalPlayer();
 	if (Player != nullptr) {

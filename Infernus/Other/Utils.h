@@ -10,6 +10,8 @@
 #include <chrono>
 #include <map>
 #include <MinHook.h>
+#include <nlohmann/json.hpp>
+using JSON = nlohmann::json;
 
 #define INRANGE(x,a,b)   (x >= a && x <= b)
 #define GET_BYTE( x )    (GET_BITS(x[0]) << 4 | GET_BITS(x[1]))
@@ -180,10 +182,11 @@ public:
 	static std::string PacketsDir();
 	static std::string ModuleDir();
 	static std::string KeybindsDir();
+	static std::string ModuleDataDir();
 	static void DeleteDebugFile();
 	static void DebugFileLog(std::string input);
 	static void DebugFHexLog(std::string input, UINT64 inputHex);
-	static bool FileExists(const std::string&);
+	static bool DoesFileExists(const std::string&);
 
 	/* Advanced Utility Functions */
 	static void Patch(BYTE* dst, BYTE* src, unsigned int size);

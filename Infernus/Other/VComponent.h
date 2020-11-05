@@ -12,9 +12,9 @@ public:
 
 	std::vector<class VWindowObject*> WindowObjects;
 
-	void addWindowObj(VWindowObject* Obj) {
-		this->WindowObjects.push_back(Obj);
-	};
+	int objCount = 0;
+
+	void addWindowObj(VWindowObject*);
 
 	/* Events */
 	virtual void onBaseTick(); //For ticking each module and handling the onEnable & onDisable events
@@ -101,6 +101,8 @@ public:
 
 	float min = 0, max = 10;
 	float drawnWidth = 0;
+
+	int ID = 0;
 
 	VModule* modulePtr;
 	UINT64* key;

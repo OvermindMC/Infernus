@@ -278,6 +278,7 @@ void ClickGui::onMouseMove(bool* cancel) {
 										newVal += obj->min;
 										*obj->value = newVal;
 										draggingSlider = true;
+										ClientHandler::UpdateModuleData(Obj->modulePtr);
 										break;
 									};
 								} else break;
@@ -346,6 +347,7 @@ void ClickGui::onMouse(char action, bool isDown, bool* cancel) {
 							if (Obj->withinRectPos(scaledPos(Utils::mousePos.x, Utils::mousePos.y))) {
 								if (Obj->modulePtr != nullptr) {
 									Obj->modulePtr->isEnabled = !Obj->modulePtr->isEnabled;
+									ClientHandler::UpdateModuleData(Obj->modulePtr);
 								};
 								clicked = true;
 							};
@@ -398,6 +400,7 @@ void ClickGui::onMouse(char action, bool isDown, bool* cancel) {
 												applyingKey = true;
 											};
 										};
+										ClientHandler::UpdateModuleData(Obj->modulePtr);
 										clicked = true;
 									};
 								};

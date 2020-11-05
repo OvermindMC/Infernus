@@ -52,11 +52,15 @@ public:
 	static std::vector<std::string> ModulesToString(std::vector<VModule*> ModulesArr);
 
 	static void InitModuleFiles();
-
 	static void UpdateModuleFileData(VModule*);
-
 	static bool GetModuleStateFromFile(VModule*);
 	static uint64_t GetModuleKeyFromFile(VModule*);
+
+	static std::string ModuleDataDir(VModule*);
+	static void InitModuleData(VModule*);
+	static void UpdateModuleData(VModule*);
+
+	static void DataFromJson(const JSON& json, VWindowObject& Obj);
 
 	static bool handleCommand(std::string);
 };

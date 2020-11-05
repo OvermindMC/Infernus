@@ -273,6 +273,8 @@ void ClientHandler::InitModuleFiles() {
 
 		Module->wasEnabled = Module->isEnabled = enabledModule;
 		Module->key = GetModuleKeyFromFile(Module);
+
+		InitModuleData(Module);
 	};
 };
 
@@ -296,7 +298,7 @@ void ClientHandler::UpdateModuleFileData(VModule* Module) {
 
 bool ClientHandler::GetModuleStateFromFile(VModule* Module) {
 	std::string filePath = std::string(Utils::ModuleDir() + "\\" + Module->name);
-	if (Utils::FileExists(filePath)) {
+	if (Utils::DoesFileExists(filePath)) {
 		std::ifstream file;
 		file.open(filePath);
 		std::string str;
@@ -316,7 +318,7 @@ bool ClientHandler::GetModuleStateFromFile(VModule* Module) {
 
 uint64_t ClientHandler::GetModuleKeyFromFile(VModule* Module) {
 	std::string filePath = std::string(Utils::KeybindsDir() + "\\" + Module->name);
-	if (Utils::FileExists(filePath)) {
+	if (Utils::DoesFileExists(filePath)) {
 		UINT64 value;
 		std::ifstream file;
 		file.open(filePath);
@@ -328,4 +330,79 @@ uint64_t ClientHandler::GetModuleKeyFromFile(VModule* Module) {
 		UpdateModuleFileData(Module);
 	};
 	return Module->key;
+};
+
+std::string ClientHandler::ModuleDataDir(VModule* Module) {
+	std::string filePath = Utils::ModuleDataDir();
+	if (filePath.length()) {
+		filePath += "\\" + Module->name;
+		if (CreateDirectoryA(filePath.c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError()) {
+			return filePath;
+		};
+	};
+	return NULL;
+};
+
+void ClientHandler::InitModuleData(VModule* Module) {
+	auto Objects = Module->WindowObjects;
+	if (!Objects.empty()) {
+		std::string filePath;
+
+		if (!(Objects.size() == 1 && Objects.at(0)->type == VObjectType::Key)) {
+			filePath = ModuleDataDir(Module);
+			for (auto Obj : Objects) {
+				std::string path = filePath + "\\" + std::to_string(Obj->ID);
+				if (Utils::DoesFileExists(path)) {
+					std::ifstream File(path);
+					JSON jsonData = JSON::parse(File);
+					std::string fetchedID = jsonData.at("ID").dump();
+
+					if (fetchedID == std::to_string(Obj->ID)) {
+						if (Obj->type == VObjectType::Button) {
+							*Obj->toggle = jsonData.at("state").dump() == "1" ? true : false;
+						};
+						if (Obj->type == VObjectType::Slider) {
+							*Obj->value = std::atof(jsonData.at("value").dump().c_str());
+						};
+					}
+					else {
+						Utils::DebugFileLog("Incorrect ID, Recreating Data Save");
+						UpdateModuleData(Module);
+						break;
+					};
+				}
+				else {
+					Utils::DebugFileLog("Save does not exist");
+					UpdateModuleData(Module);
+					break;
+				};
+			};
+		};
+	};
+};
+
+void ClientHandler::UpdateModuleData(VModule* Module) {
+	auto Objects = Module->WindowObjects;
+	if (!Objects.empty()) {
+		std::string filePath;
+		if (!(Objects.size() == 1 && Objects.at(0)->type == VObjectType::Key)) {
+			filePath = ModuleDataDir(Module);
+			for (auto Obj : Objects) {
+				std::string path = filePath + "\\" + std::to_string(Obj->ID);
+				JSON jsonData;
+				jsonData["type"] = Obj->type;
+				jsonData["ID"] = Obj->ID;
+				jsonData["state"] = Obj->toggle != nullptr ? *Obj->toggle : false;
+				jsonData["value"] = Obj->value != nullptr ? *Obj->value : 0;
+				std::ofstream File;
+				File.open(path, std::ofstream::trunc);
+				File << jsonData;
+				File.close();
+			};
+		};
+	};
+};
+
+void ClientHandler::DataFromJson(const JSON& json, VWindowObject& Obj) {
+	json.at("type").get_to(Obj.type);
 };

@@ -48,6 +48,17 @@ std::string Utils::KeybindsDir() {
 	return NULL;
 };
 
+std::string Utils::ModuleDataDir() {
+	std::string filePath = DebugEnvirDir();
+	if (filePath.length()) {
+		filePath += "\\Data";
+		if (CreateDirectoryA(filePath.c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError()) {
+			return filePath;
+		};
+	};
+	return NULL;
+};
+
 void Utils::DeleteDebugFile() {
 	std::string DirPath = DebugEnvirDir();
 	if (DirPath.length()) {
@@ -73,7 +84,7 @@ void Utils::DebugFHexLog(std::string input, UINT64 inputHex) {
 	Utils::DebugFileLog(strm.str());
 };
 
-bool Utils::FileExists(const std::string& filePath) {
+bool Utils::DoesFileExists(const std::string& filePath) {
 	struct stat buffer;
 	return (stat(filePath.c_str(), &buffer) == 0);
 };
