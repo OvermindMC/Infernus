@@ -8,11 +8,5 @@ public:
 };
 
 void TestCommand::execute(std::string input, std::vector<std::string> words) {
-	this->reply("Hello, World!");
-	LocalPlayer* Player = Minecraft::GetLocalPlayer();
-	if (Player != nullptr) {
-		Player->displayTextObjectMessage(&TextHolder("Sending movement packet.."));
-		MovePlayerPacket newPacket(Player->toActor(), *Player->getPos(), Player->lookingVector, Player->onGround);
-		Minecraft::GetClientInstance()->LoopbackPacketSender->sendToServer(&newPacket);
-	};
+	this->reply("This is the test command!");
 };

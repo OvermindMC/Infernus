@@ -167,6 +167,7 @@
     <ClInclude Include="Client\Categories\World.h" />
     <ClInclude Include="Client\ClientHandler.h" />
     <ClInclude Include="Client\Commands\SpamCommand.h" />
+    <ClInclude Include="Client\Commands\TeleportCommand.h" />
     <ClInclude Include="Client\Commands\TestCommand.h" />
     <ClInclude Include="Client\Hooks\BlockHooks.h" />
     <ClInclude Include="Client\Hooks\ClientInstanceHook.h" />

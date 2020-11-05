@@ -284,6 +284,9 @@
     <ClInclude Include="Client\Modules\FOV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Commands\TeleportCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

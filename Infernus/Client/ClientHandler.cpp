@@ -55,10 +55,12 @@ void ClientHandler::InitCategories() {
 
 #include "Commands/TestCommand.h"
 #include "Commands/SpamCommand.h"
+#include "Commands/TeleportCommand.h"
 
 void ClientHandler::InitCommands() {
 	CommandsList.push_back(new TestCommand());
 	CommandsList.push_back(new SpamCommand());
+	CommandsList.push_back(new TeleportCommand());
 };
 
 /* Combat */

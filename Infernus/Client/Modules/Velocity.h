@@ -9,6 +9,9 @@ public:
 		expandableText->addExpandedItem(new VWindowSlider(&modifyY, 0.0f, 5.0f, "Y: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
 		expandableText->addExpandedItem(new VWindowSlider(&modifyZ, 0.0f, 5.0f, "Z: ", MC_Colour(255, 255, 255), 1.0f, 1.0f, MC_Colour(255, 110, 30), .7f));
 		this->addWindowObj(expandableText);*/
+		this->addWindowObj(new VWindowSlider("Knockback X: ", &modifyX));
+		this->addWindowObj(new VWindowSlider("Knockback Y: ", &modifyY));
+		this->addWindowObj(new VWindowSlider("Knockback Z: ", &modifyZ));
 	};
 	void onLerpMotion(Vec3*);
 private:
@@ -16,5 +19,7 @@ private:
 };
 
 void Velocity::onLerpMotion(Vec3* Vel) {
-	Vel->x *= modifyX, Vel->y *= modifyY = modifyZ, Vel->z = 0.0f;
+	if (Minecraft::GetLocalPlayer() != nullptr) {
+		Vel->x *= modifyX, Vel->y *= modifyY = modifyZ, Vel->z = 0.0f;
+	};
 };

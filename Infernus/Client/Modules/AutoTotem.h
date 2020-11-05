@@ -11,7 +11,7 @@ private:
 
 void AutoTotem::onGmTick() {
 	LocalPlayer* Player = Minecraft::GetLocalPlayer();
-	if (Player != nullptr) {
+	if (Player != nullptr && Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) {
 		PlayerInventory* PlayerInv = Player->toActor()->GetInventory();
 		Inventory* Inv = PlayerInv->Inventory;
 		InventoryTransactionManager* manager = Player->toActor()->GetTransactionManager();
