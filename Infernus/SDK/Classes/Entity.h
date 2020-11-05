@@ -278,12 +278,6 @@ public:
 		Crit(this, Entity);
 	};
 
-	void applyTurnDelta(Vec2* angles) {
-		using _ApplyTurn = void(__fastcall*)(Actor*, Vec2*);
-		static _ApplyTurn ApplyTurn = reinterpret_cast<_ApplyTurn>(Utils::FindSignature("48 89 5C 24 ?? 57 48 83 EC ?? 48 8B D9 0F 29 74 24 ?? 48 8B 89 ?? ?? ?? ?? 48 8B ?? 0F 29 7C 24 ?? 44 0F"));
-		ApplyTurn(this, angles);
-	};
-
 	int currentGameMode() {
 		int currGM = 0;
 
