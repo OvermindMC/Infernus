@@ -60,7 +60,5 @@ public:
 	static void InitModuleData(VModule*);
 	static void UpdateModuleData(VModule*);
 
-	static void DataFromJson(const JSON& json, VWindowObject& Obj);
-
 	static bool handleCommand(std::string);
 };

@@ -359,7 +359,7 @@ void ClientHandler::InitModuleData(VModule* Module) {
 
 					if (fetchedID == std::to_string(Obj->ID)) {
 						if (Obj->type == VObjectType::Button) {
-							*Obj->toggle = jsonData.at("state").dump() == "1" ? true : false;
+							*Obj->toggle = jsonData.at("state").dump() == "true" ? true : false;
 						};
 						if (Obj->type == VObjectType::Slider) {
 							*Obj->value = std::atof(jsonData.at("value").dump().c_str());
@@ -401,8 +401,4 @@ void ClientHandler::UpdateModuleData(VModule* Module) {
 			};
 		};
 	};
-};
-
-void ClientHandler::DataFromJson(const JSON& json, VWindowObject& Obj) {
-	json.at("type").get_to(Obj.type);
 };
