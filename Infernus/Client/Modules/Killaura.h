@@ -9,7 +9,7 @@ public:
 		this->addWindowObj(new VWindowButton("Attack with UI open", &this->menuOpen));
 		this->addWindowObj(new VWindowSlider("Range: ", &disRange));
 		VWindowSlider* delaySlider = new VWindowSlider("Delay (MS): ", &delay_ms);
-		delaySlider->max = 5000.f;
+		delaySlider->max = 50.f;
 		this->addWindowObj(delaySlider);
 	};
 	void onLoop() { delay_ms = roundf(delay_ms); };
