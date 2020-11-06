@@ -8,7 +8,9 @@ public:
 		this->addWindowObj(new VWindowButton("Multi Ents", &this->multiEnts));
 		this->addWindowObj(new VWindowButton("Attack with UI open", &this->menuOpen));
 		this->addWindowObj(new VWindowSlider("Range: ", &disRange));
-		this->addWindowObj(new VWindowSlider("Delay (MS): ", &delay_ms));
+		VWindowSlider* delaySlider = new VWindowSlider("Delay (MS): ", &delay_ms);
+		delaySlider->max = 5000.f;
+		this->addWindowObj(delaySlider);
 	};
 	void onLoop() { delay_ms = roundf(delay_ms); };
 	void onGmTick();
