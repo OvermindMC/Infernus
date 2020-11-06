@@ -30,7 +30,9 @@ public:
 
 class ClickGui : public VModule {
 public:
-	ClickGui() : VModule::VModule("ClickGui", "Renders a UI which can be used to manage modules", 0x2D) {};
+	ClickGui() : VModule::VModule("ClickGui", "Renders a UI which can be used to manage modules", 0x2D) {
+		this->addWindowObj(new VWindowButton("Show Tooltips", &this->showTooltips));
+	};
 	void onRender();
 	void onKey(uint64_t, bool, bool*);
 	void onEnable();
@@ -42,6 +44,7 @@ public:
 	Vec2 scaledPos(int, int);
 private:
 	Vec2 dragStart;
+	bool showTooltips = true;
 	bool applyingKey = false;
 	bool dragging = false;
 	bool setPositions = false;
@@ -187,6 +190,23 @@ void ClickGui::renderWindow(Window* window) {
 			Obj->rectPos = Vec4(windowPos.x + 2, windowPos.y + (count * 15) + 20, window->rectPos.z, Obj->position.y + 10);
 			renderObject(window, Obj, &count);
 		};
+
+		if (showTooltips && !dragging) {
+			for (auto Obj : window->objects) {
+				if (Obj->withinRectPos(scaledPos(Utils::mousePos.x, Utils::mousePos.y))) {
+					VModule* module = Obj->modulePtr;
+					if (module != nullptr && module->description.length()) {
+						Vec2 scaled = Minecraft::GetClientInstance()->GuiData()->ScaledResolution;
+						Vec4 tipRect = Vec4(10, scaled.y - 20, RenderUtils::GetTextWidth(module->description, 1.f) + 12, scaled.y - 10);
+						RenderUtils::FillRectangle(tipRect, MC_Colour(70, 70, 70), 1.0f);
+						RenderUtils::DrawRectangle(tipRect, MC_Colour(255, 255, 255), 1.0f, 1.f);
+						RenderUtils::RenderText(module->description, Vec2(12, scaled.y - 20), MC_Colour(255, 255, 255), 1.0f, 1.0f);
+					};
+					break;
+				};
+			};
+		};
+
 	};
 	RenderUtils::FlushText();
 };
