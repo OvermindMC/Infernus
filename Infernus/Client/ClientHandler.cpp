@@ -96,6 +96,7 @@ void ClientHandler::InitCommands() {
 #include "Modules/Spammer.h"
 #include "Modules/StackableItems.h"
 #include "Modules/FOV.h"
+#include "Modules/Gamemode.h"
 /* Visuals */
 #include "Menus/TabGui.h"
 #include "Menus/ClickGui.h"
@@ -153,6 +154,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Player, new Spammer());
 	PushModule(_Player, new StackableItems());
 	PushModule(_Player, new FOV());
+	PushModule(_Player, new Gamemode());
 	/*Visuals*/
 	PushModule(_Visuals, new TabGui());
 	PushModule(_Visuals, new ClickGui());
