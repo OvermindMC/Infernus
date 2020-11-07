@@ -385,9 +385,6 @@ public:
 		if (Entity == nullptr) {
 			return false;
 		}
-		if (Entity->outOfWorld()) {
-			return false;
-		}
 		if (Entity->isInvisible() || !Entity->isAlive() || Entity->isImmobile()) {
 			return false;
 		}
@@ -403,26 +400,10 @@ public:
 		return true;
 	};
 
-	bool isValidMob(class Actor* Entity) {
-		if (Entity == nullptr) {
-			return false;
-		}
-		if (Entity->isInvisible() || !Entity->isAlive() || Entity->isImmobile()) {
-			return false;
-		}
-		if (Entity->GetEntityType().empty()) {
-			return false;
-		}
-		if (!(this->LocalPlayer()->canAttack(Entity, false))) {
-			return false;
-		}
-		return true;
-	};
-
 	void clientMessage(std::string input) {
 		if (this != nullptr && this->LocalPlayer() != nullptr) {
 			this->LocalPlayer()->displayTextObjectMessage(&TextHolder(input));
 		};
 	};
 
-}; //Size: 0x00F8
+};

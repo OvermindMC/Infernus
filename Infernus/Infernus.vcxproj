@@ -193,6 +193,7 @@
     <ClInclude Include="Client\Modules\Criticals.h" />
     <ClInclude Include="Client\Modules\CrystalAura.h" />
     <ClInclude Include="Client\Modules\DeathBack.h" />
+    <ClInclude Include="Client\Modules\ESP.h" />
     <ClInclude Include="Client\Modules\Freecam.h" />
     <ClInclude Include="Client\Modules\Fullbright.h" />
     <ClInclude Include="Client\Modules\Gamemode.h" />

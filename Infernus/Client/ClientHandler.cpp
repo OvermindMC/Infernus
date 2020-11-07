@@ -105,6 +105,7 @@ void ClientHandler::InitCommands() {
 #include "Modules/Xray.h"
 #include "Modules/Fullbright.h"
 #include "Modules/Nametags.h"
+#include "Modules/ESP.h"
 /* World */
 #include "Modules/Scaffold.h"
 #include "Modules/Nuker.h"
@@ -163,6 +164,7 @@ void ClientHandler::InitModules() {
 	PushModule(_Visuals, new Xray());
 	PushModule(_Visuals, new Fullbright());
 	PushModule(_Visuals, new Nametags());
+	PushModule(_Visuals, new ESP());
 	/*World*/
 	PushModule(_World, new Scaffold());
 	PushModule(_World, new Nuker());

@@ -61,3 +61,29 @@ void RenderUtils::DrawNametag(class Actor* Entity, float textSize, class ClientI
 	}
 	else return;
 };
+
+void RenderUtils::DrawBoxAroundEnt(class Actor* Entity, float lineWidth, class ClientInstance* instance) {
+	Vec2 originPos;
+	Vec4 rectPos;
+
+	Vec3 eyePos = Entity->getEyePos().sub(Vec3(0, .5, 0));
+	Vec3 origin = instance->GetLevelRenderer()->origin();
+	Vec2 scale = instance->GuiData()->ScaledResolution;
+	Vec2 fov = instance->getFov();
+
+	glmatrixf* badrefdef = instance->getViewMatrix();
+	std::shared_ptr<glmatrixf> matrixPtr = std::shared_ptr<glmatrixf>(badrefdef->correct());
+
+	if (matrixPtr->OWorldToScreen(origin, eyePos, originPos, fov, scale)) {
+		float distance = Utils::distanceVec3(*Entity->getPos(), *instance->LocalPlayer()->getPos());
+		Vec2 collision = Minecraft::GetLocalPlayer()->Collision;
+
+		rectPos.x = originPos.x - collision.x / distance * 125;
+		rectPos.y = originPos.y - collision.y / distance * 80;
+		rectPos.z = originPos.x + collision.x / distance * 125;
+		rectPos.w = originPos.y + collision.y / distance * 80;
+
+		DrawRectangle(rectPos, MC_Colour(120, 180, 230), 1.f, lineWidth);
+	}
+	else return;
+};
