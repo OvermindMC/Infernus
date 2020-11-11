@@ -113,7 +113,11 @@ void ClickGui::onKey(uint64_t key, bool isDown, bool* cancel) {
 					for (auto Obj : Window->objects) {
 						if (Obj->modulePtr != nullptr) {
 							for (auto obj : Obj->modulePtr->WindowObjects) {
-								obj->changingKey = false;
+								if (obj->changingKey) { //Nullify binds
+									Obj->modulePtr->key = NULL;
+									obj->changingKey = false;
+									ClientHandler::UpdateModuleFileData(Obj->modulePtr);
+								};
 							};
 						};
 					};
@@ -415,6 +419,11 @@ void ClickGui::onMouse(char action, bool isDown, bool* cancel) {
 											*obj->toggle = !*obj->toggle;
 										}
 										else if (obj->type == VObjectType::Key) {
+											for (auto OObj : Window->objects) {
+												for (auto oobj : OObj->modulePtr->WindowObjects) { //Check to see if moduleptr isn't null is done already
+													oobj->changingKey = false; //Make sure you aren't binding two keys at once
+												};
+											}
 											if (!applyingKey) {
 												obj->changingKey = true;
 												applyingKey = true;
