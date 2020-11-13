@@ -5,8 +5,9 @@
 class Killaura : public VModule {
 public:
 	Killaura() : VModule::VModule("Killaura", "Automatically attack nearby entities") {
-		this->addWindowObj(new VWindowButton("Multi Ents", &this->multiEnts));
+		this->addWindowObj(new VWindowButton("Multi-Ents", &this->multiEnts));
 		this->addWindowObj(new VWindowButton("Attack with UI open", &this->menuOpen));
+		this->addWindowObj(new VWindowButton("Send Server Rotations", &this->sendRotations));
 		this->addWindowObj(new VWindowSlider("Range: ", &disRange));
 		VWindowSlider* delaySlider = new VWindowSlider("Delay (MS): ", &delay_ms);
 		delaySlider->max = 50.f;
@@ -14,16 +15,21 @@ public:
 	};
 	void onLoop() { delay_ms = roundf(delay_ms); };
 	void onGmTick();
-	void onEntityTick(std::vector<Actor*>*);
 
 	void attackPlayers();
-	void attackMobs(std::vector<Actor*>*);
+	void attackEnt(Actor*);
+
+	void onPacket(void* Packet, PacketType type, bool* cancel);
 
 	bool multiEnts = true;
 	bool menuOpen = true;
+	bool sendRotations = true;
 	float disRange = 8.0f;
 	float delay_ms = 0.0f;
 	std::chrono::time_point<std::chrono::steady_clock> savedTime = std::chrono::high_resolution_clock::now();
+
+	Vec2 storedAngles;
+	bool writePacket = false;
 };
 
 void Killaura::onGmTick() {
@@ -33,21 +39,9 @@ void Killaura::onGmTick() {
 				attackPlayers();
 			}
 			else {
-				if (Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) attackPlayers();
-			};
-		};
-		savedTime = std::chrono::high_resolution_clock::now();
-	};
-};
-
-void Killaura::onEntityTick(std::vector<Actor*>* Entities) {
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - savedTime) >= std::chrono::milliseconds((int)delay_ms)) {
-		if (isEnabled && Minecraft::GetLocalPlayer() != nullptr) {
-			if (menuOpen) {
-				attackMobs(Entities);
-			}
-			else {
-				if (Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) attackMobs(Entities);
+				if (Minecraft::GetClientInstance()->MinecraftGame->canUseKeys) {
+					attackPlayers();
+				};
 			};
 		};
 		savedTime = std::chrono::high_resolution_clock::now();
@@ -55,53 +49,54 @@ void Killaura::onEntityTick(std::vector<Actor*>* Entities) {
 };
 
 void Killaura::attackPlayers() {
-	GameMode* GM = Minecraft::GetGameMode();
 	LocalPlayer* Player = Minecraft::GetLocalPlayer();
 	std::vector<Actor*>* Players = Minecraft::FetchPlayers();
 	bool antiBot = ClientHandler::GetModule(AntiBot())->isEnabled;
 
 	if (!Players->empty()) {
+		Vec3 currPos = *Player->getPos();
 		if (multiEnts) {
-			for (auto Entity : *Players) {
-				if (Utils::distanceVec3(*Entity->getPos(), *Player->getPos()) <= disRange) {
-					if (antiBot) {
-						if (Minecraft::GetClientInstance()->isValidTarget(Entity) && Entity->movedTick > 1) {
-							GM->attack(Entity);
-							Player->swing();
+			if (antiBot) {
+				for (auto ent : *Players) {
+					if (Utils::distanceVec3(*ent->getPos(), currPos) <= disRange) {
+						if (Minecraft::GetClientInstance()->isValidTarget(ent)) {
+							attackEnt(ent);
 						};
-					}
-					else {
-						GM->attack(Entity);
-						Player->swing();
 					};
 				};
-			};
+			}
+			else {
+				for (auto ent : *Players) {
+					if (Utils::distanceVec3(*ent->getPos(), currPos) <= disRange) {
+						attackEnt(ent);
+					};
+				};
+			}
 		}
 		else {
-			std::vector<float> distances;
+			std::vector<float> distances = std::vector<float>();
 
-			for (auto Entity : *Players) {
-				float distance = Utils::distanceVec3(*Entity->getPos(), *Player->getPos());
-				if (antiBot) {
-					if (Minecraft::GetClientInstance()->isValidTarget(Entity) && Entity->movedTick > 1 && distance <= disRange) {
-						distances.push_back(distance);
-					};
-				}
-				else {
-					if (distance <= disRange) {
-						distances.push_back(distance);
-					};
+			for (auto ent : *Players) {
+				float distance = Utils::distanceVec3(*ent->getPos(), currPos);
+				if (distance <= disRange) {
+					distances.push_back(distance);
 				};
 			};
 
-			std::sort(distances.begin(), distances.end());
+			if (!distances.empty()) {
+				std::sort(distances.begin(), distances.end());
 
-			if (multiEnts) {
-				for (auto Entity : *Players) {
-					float distance = Utils::distanceVec3(*Entity->getPos(), *Player->getPos());
-					if (distance == distances[0]) {
-						Minecraft::GetGameMode()->attack(Entity);
-						Player->swing();
+				for (auto ent : *Players) {
+					float distance = Utils::distanceVec3(*ent->getPos(), currPos);
+					if (distance == distances.at(0)) {
+						if (antiBot) {
+							if (Minecraft::GetClientInstance()->isValidTarget(ent)) {
+								attackEnt(ent);
+							};
+						}
+						else {
+							attackEnt(ent);
+						};
 						break;
 					};
 				};
@@ -110,34 +105,32 @@ void Killaura::attackPlayers() {
 	};
 };
 
-void Killaura::attackMobs(std::vector<Actor*>* Entities) {
+void Killaura::attackEnt(Actor* entity) {
+	GameMode* GM = Minecraft::GetGameMode();
 	LocalPlayer* Player = Minecraft::GetLocalPlayer();
-	if (multiEnts) {
-		for (auto Entity : *Entities) {
-			if (Utils::distanceVec3(*Entity->getPos(), *Player->getPos()) <= disRange) {
-				Minecraft::GetGameMode()->attack(Entity);
-				Player->swing();
+
+	if (Player != nullptr && GM != nullptr) {
+		writePacket = true;
+		storedAngles = Player->getRotationsToEnt(entity);
+		GM->attack(entity);
+		Player->swing();
+	};
+};
+
+void Killaura::onPacket(void* Packet, PacketType type, bool* cancel) {
+	if (sendRotations) {
+		if (type == PacketType::MovePlayerPacket) {
+			if (writePacket) {
+				MovePlayerPacket* currentPacket = (MovePlayerPacket*)Packet;
+				currentPacket->rotation = storedAngles;
+				writePacket = false;
 			};
-		};
-	}
-	else {
-		std::vector<float> distances;
-
-		for (auto Entity : *Entities) {
-			float distance = Utils::distanceVec3(*Entity->getPos(), *Player->getPos());
-			if (distance <= disRange) {
-				distances.push_back(distance);
-			};
-		};
-
-		std::sort(distances.begin(), distances.end());
-
-		for (auto Entity : *Entities) {
-			float distance = Utils::distanceVec3(*Entity->getPos(), *Player->getPos());
-			if (distance == distances[0]) {
-				Minecraft::GetGameMode()->attack(Entity);
-				Player->swing();
-				break;
+		}
+		else if (type == PacketType::PlayerAuthInput) {
+			if (writePacket) {
+				PlayerAuthInputPacket* currentPacket = (PlayerAuthInputPacket*)Packet;
+				currentPacket->lookingVector = storedAngles;
+				writePacket = false;
 			};
 		};
 	};
