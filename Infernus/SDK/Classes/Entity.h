@@ -801,4 +801,17 @@ public:
 public:
 
 	Actor* toActor() { return (Actor*)this; };
+
+	Vec2 getRotationsToEnt(Actor* ent) {
+		Vec3 currPos = *this->getPos();
+		Vec3 entPos = *ent->getPos();
+
+		float dX = currPos.x - entPos.x;
+		float dY = currPos.y - entPos.y;
+		float dZ = currPos.z - entPos.z;
+
+		double distance = sqrt(dX * dX + dY * dY + dZ * dZ);
+
+		return Vec2((float)(atan2(dY, distance) * 180.0f / PI), (float)(atan2(dZ, dX) * 180.0f / PI) + 90.0f);
+	};
 };
