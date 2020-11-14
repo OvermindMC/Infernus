@@ -20,7 +20,7 @@ public:
 	virtual void Function7();
 	virtual void Function8();
 	virtual void Function9();
-	virtual Vec3* GetAABB(void);
+	virtual AABB* GetAABB(void);
 	virtual void Function11();
 	virtual void Function12();
 	virtual void Function13();
@@ -150,6 +150,11 @@ public:
 		using InitBlock = void* (__fastcall*)(BlockLegacy*);
 		static InitBlock _Init = reinterpret_cast<InitBlock>(Utils::FindSignature("0F 57 C0 0F 2F 81 ? ? ? ? 76 10 48 8B 81 ? ? ? ? 8B 50 0C 89 91 ? ? ? ? "));
 		_Init(this);
+	};
+
+	AABB BlockAABB() {
+		uintptr_t _this = reinterpret_cast<uintptr_t>(this);
+		return *(AABB*)(_this + 0x118);
 	};
 }; //Size: 0x0011C
 
