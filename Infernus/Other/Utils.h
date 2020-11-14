@@ -174,6 +174,40 @@ struct Vec4 {
 	bool operator != (Vec4 compVec) { return compVec.z != x || compVec.y == y || compVec.z == z || compVec.w == w; };
 };
 
+struct AABB {
+	Vec3 lower;
+	Vec3 upper;
+	bool isZero = false;
+	char padding[3];
+	AABB() {}
+	AABB(Vec3 l, Vec3 h) : lower(l), upper(h) {};
+	AABB(const AABB& aabb) {
+		lower = Vec3(aabb.lower);
+		upper = Vec3(aabb.upper);
+	};
+
+	AABB(Vec3 lower, float width, float height, float eyeHeight) {
+		lower = lower.sub(Vec3(width, eyeHeight * 2, width).div(2));
+		this->lower = lower;
+		this->upper = { lower.x + width, lower.y + height, lower.z + width };
+	};
+
+	bool intersects(AABB aabb) {
+		return aabb.upper.x > lower.x && upper.x > aabb.lower.x &&
+			aabb.upper.y > lower.y && upper.y > aabb.lower.y &&
+			aabb.upper.z > lower.z && upper.z > aabb.lower.z;
+	};
+
+	bool intersectsXZ(AABB aabb) {
+		return aabb.upper.x > lower.x && upper.x > aabb.lower.x &&
+			aabb.upper.z > lower.z && upper.z > aabb.lower.z;
+	};
+
+	bool intersects(Vec3 point) {
+		return (point.x >= lower.x && point.x <= upper.x) && (point.y >= lower.y && point.y <= upper.y) && (point.z >= lower.z && point.z <= upper.z);
+	};
+};
+
 class Utils {
 public:
 	/* String/File related bs */
