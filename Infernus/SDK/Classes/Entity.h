@@ -311,6 +311,11 @@ public:
 		return reinterpret_cast<InventoryTransactionManager*>(reinterpret_cast<__int64>(this) + 0x1178); //Extends LocalPlayer?
 	};
 
+	AABB GetAABB() {
+		uintptr_t _this = reinterpret_cast<uintptr_t>(this);
+		return *(AABB*)(_this + 0x458);
+	};
+
 	void setFlying(bool value) {
 		uintptr_t _this = reinterpret_cast<uintptr_t>(this);
 		bool* flyingAddr = (bool*)(_this + 0x8B8);
