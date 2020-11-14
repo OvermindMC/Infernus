@@ -10,13 +10,3 @@ public:
 private:
 	float speed = 0.3f;
 };
-
-void Spider::onGmTick() {
-	BunnyHop* BhopMod = (BunnyHop*)ClientHandler::GetModule(BunnyHop());
-	LocalPlayer* Player = Minecraft::GetLocalPlayer();
-	if (Player != nullptr) {
-		if (Player->toActor()->isCollidedDir() && BhopMod->usingKeys()) {
-			Player->Velocity.y = speed;
-		};
-	};
-};
