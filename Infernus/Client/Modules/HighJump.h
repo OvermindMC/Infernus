@@ -10,3 +10,7 @@ public:
 private:
 	float jumpValue = 0.6f;
 };
+
+void HighJump::onJump(float* jumpHeight) {
+	*jumpHeight = jumpValue;
+};
